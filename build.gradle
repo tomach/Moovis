@@ -12,5 +12,4 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:1.1.7.RELEASE")
     compile("org.facebook4j:facebook4j-core:1.1.4")
     compile("com.omertron:themoviedbapi:3.9")
-
 }

@@ -14,9 +14,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="TEST" name="Gradle: junit-4.11" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: hamcrest-core-1.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-boot-starter-web-1.1.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: facebook4j-core-1.1.4" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: themoviedbapi-3.9" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-boot-starter-1.1.7.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-boot-starter-tomcat-1.1.7.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: jackson-databind-2.3.4" level="project" />
@@ -24,6 +24,8 @@
     <orderEntry type="library" exported="" name="Gradle: spring-core-4.0.7.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-web-4.0.7.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-webmvc-4.0.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: jackson-annotations-2.3.0" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: api-common-1.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-boot-1.1.7.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-boot-autoconfigure-1.1.7.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-boot-starter-logging-1.1.7.RELEASE" level="project" />
@@ -31,8 +33,6 @@
     <orderEntry type="library" exported="" name="Gradle: tomcat-embed-core-7.0.55" level="project" />
     <orderEntry type="library" exported="" name="Gradle: tomcat-embed-el-7.0.55" level="project" />
     <orderEntry type="library" exported="" name="Gradle: tomcat-embed-logging-juli-7.0.55" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: jackson-annotations-2.3.0" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: jackson-core-2.3.4" level="project" />
     <orderEntry type="library" exported="" name="Gradle: validation-api-1.1.0.Final" level="project" />
     <orderEntry type="library" exported="" name="Gradle: jboss-logging-3.1.1.GA" level="project" />
     <orderEntry type="library" exported="" name="Gradle: classmate-1.0.0" level="project" />
@@ -40,15 +40,23 @@
     <orderEntry type="library" exported="" name="Gradle: spring-beans-4.0.7.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-context-4.0.7.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-expression-4.0.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: commons-lang3-3.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: commons-dbcp-1.4" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: commons-pool-1.6" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: commons-codec-1.8" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: httpclient-4.2.6" level="project" />
     <orderEntry type="library" exported="" name="Gradle: jcl-over-slf4j-1.7.7" level="project" />
     <orderEntry type="library" exported="" name="Gradle: jul-to-slf4j-1.7.7" level="project" />
     <orderEntry type="library" exported="" name="Gradle: log4j-over-slf4j-1.7.7" level="project" />
     <orderEntry type="library" exported="" name="Gradle: logback-classic-1.1.2" level="project" />
     <orderEntry type="library" exported="" name="Gradle: aopalliance-1.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-logging-1.1.3" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: slf4j-api-1.7.7" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: httpcore-4.2.5" level="project" />
     <orderEntry type="library" exported="" name="Gradle: logback-core-1.1.2" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: facebook4j-core-1.1.4" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: slf4j-api-1.7.7" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: jackson-core-2.3.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: junit-4.11" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: hamcrest-core-1.3" level="project" />
   </component>
 </module>
 
