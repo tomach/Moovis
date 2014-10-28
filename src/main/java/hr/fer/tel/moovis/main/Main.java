@@ -9,11 +9,10 @@ import hr.fer.tel.moovis.apis.FacebookAPI;
  */
 public class Main {
 
-    public static void main(String[]args)
-    {
+    public static void main(String[] args) {
         Facebook f = new FacebookAPI().getFacebook();
         try {
-            f.getUserLikes();
+            f.getFriends();
         } catch (FacebookException e) {
             e.printStackTrace();
         }
