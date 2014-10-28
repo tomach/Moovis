@@ -13,6 +13,4 @@ dependencies {
     compile("org.facebook4j:facebook4j-core:1.1.4")
     compile("com.omertron:themoviedbapi:3.9")
     compile("com.omertron:rottentomatoesapi:1.4")
-    compile("com.twitter:hbc-core:2.2.0")
-    compile("com.twitter:hbc-twitter4j:2.2.0")
 }
