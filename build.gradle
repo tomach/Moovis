@@ -13,4 +13,5 @@ dependencies {
     compile("org.facebook4j:facebook4j-core:1.1.4")
     compile("com.omertron:themoviedbapi:3.9")
     compile("com.omertron:rottentomatoesapi:1.4")
+    compile("com.moviejukebox:api-imdb:1.2")
 }
