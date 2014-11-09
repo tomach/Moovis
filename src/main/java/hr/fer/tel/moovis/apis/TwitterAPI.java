@@ -6,6 +6,6 @@ package hr.fer.tel.moovis.apis;
 public class TwitterAPI {
 
     public TwitterAPI() {
-        
+
     }
 }
