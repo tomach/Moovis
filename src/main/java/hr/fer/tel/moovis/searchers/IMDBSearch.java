@@ -20,10 +20,19 @@ public class IMDBSearch implements Runnable {
     private static int SLEEP_TIME = 100 * 60;
 
     public IMDBSearch() throws UnknownHostException {
-        mongo = new MongoClient("localhost", 10);
+        mongo = new MongoClient("localhost", 27017);
         dbMoovis = mongo.getDB("moovis");
         imdbSearchQueue = dbMoovis.getCollection("IMDBSearchQueue");
         movies = dbMoovis.getCollection("movies");
+        DBObject objM = new BasicDBObject().append("movieKey", "goneGirlSmreki");
+        movies.remove(objM);
+        movies.insert(objM);
+        Cursor beforeM = movies.find();
+        while (beforeM.hasNext()){
+            System.out.println("Before movies " + beforeM.next());
+        }
+        DBObject obj = new BasicDBObject().append("movieKey", "goneGirlSmreki").append("imdbId", "tt2267998");
+        imdbSearchQueue.insert(obj);
     }
     @Override
     public void run() {
@@ -48,18 +57,24 @@ public class IMDBSearch implements Runnable {
 
         if (objects.size() > 0){
             for (DBObject ob : objects) {
+                System.out.println("IMDBSearchQueue " + ob);
                 String imdbId = (String) ob.get("imdbId");
                 String key = (String) ob.get("movieKey");
                 ImdbMovieDetails movie = ImdbApi.getFullDetails(imdbId);
+                System.out.println("imdbMovie found " + movie);
                 DBObject imdbMovieDetails = new BasicDBObject().append("imdbId", movie.getImdbId()).append("title", movie.getTitle()).append("rating", movie.getRating());
-                DBObject imdbMovie = new BasicDBObject().append("imdb", imdbMovieDetails);
+
                 DBObject searchOldMovie = new BasicDBObject().append("movieKey", key);
                 Cursor oldMovieCursor = movies.find(searchOldMovie);
                 if (oldMovieCursor.hasNext()){
                     BasicDBObject oldMovieObject = (BasicDBObject) oldMovieCursor.next();
                     BasicDBObject newMovieObject = (BasicDBObject) oldMovieObject.copy();
-                    newMovieObject.append("imdb", imdbMovie);
-                    movies.update(oldMovieObject, newMovieObject, true, true);
+                    newMovieObject.append("imdb", imdbMovieDetails);
+                    movies.update(oldMovieObject, newMovieObject);
+                }
+                Cursor movisC = movies.find();
+                while (movisC.hasNext()){
+                    System.out.println("After movies " + movisC.next());
                 }
             }
         }
