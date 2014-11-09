@@ -72,7 +72,6 @@ public class TMDBSearch implements Runnable {
         }
     }
 
-
     public static void main(String[] args) throws Exception {
         System.out.println(Thread.currentThread().getId());
         new Thread(new TMDBSearch()).start();
