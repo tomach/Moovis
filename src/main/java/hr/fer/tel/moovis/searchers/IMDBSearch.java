@@ -33,6 +33,7 @@ public class IMDBSearch implements Runnable {
         }
         DBObject obj = new BasicDBObject().append("movieKey", "goneGirlSmreki").append("imdbId", "tt2267998");
         imdbSearchQueue.insert(obj);
+        beforeM.close();
     }
     public void run() {
         while(true){
@@ -53,6 +54,7 @@ public class IMDBSearch implements Runnable {
             objects.add(ob);
             imdbSearchQueue.remove(ob);
         }
+        c.close();
 
         if (objects.size() > 0){
             for (DBObject ob : objects) {
@@ -71,10 +73,12 @@ public class IMDBSearch implements Runnable {
                     newMovieObject.append("imdb", imdbMovieDetails);
                     movies.update(oldMovieObject, newMovieObject);
                 }
+                oldMovieCursor.close();
                 Cursor movisC = movies.find();
                 while (movisC.hasNext()){
                     System.out.println("After movies " + movisC.next());
                 }
+                movisC.close();
             }
         }
     }

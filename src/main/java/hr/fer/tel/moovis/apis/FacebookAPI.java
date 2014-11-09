@@ -93,6 +93,7 @@ public class FacebookAPI {
                 listMovies.add(movie);
                 */
             }
+            checkExists.close();;
         }
        // System.out.println(listMovies);
       // u.setLikedMovies(listMovies);
