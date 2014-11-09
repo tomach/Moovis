@@ -57,4 +57,7 @@ public class Movie {
         this.description = description;
     }
 
+    public String toString(){
+        return "title = " + title + ", description = " + description;
+    }
 }

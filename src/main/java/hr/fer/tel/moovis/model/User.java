@@ -1,5 +1,6 @@
 package hr.fer.tel.moovis.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,10 +14,13 @@ public class User {
     private String facebookAccessToken;
     private String twitterAccessToken;
     private List<Movie> likedMovies;
+    private List<Movie> friendsLikedMovies;
 
     public User(String name, String surname){
         this.name = name;
         this.surname = surname;
+        this.likedMovies = new ArrayList<Movie>();
+        this.friendsLikedMovies = new ArrayList<Movie>();
     }
 
     public String getName() {
@@ -57,5 +61,21 @@ public class User {
 
     public void setLikedMovies(List<Movie> likedMovies) {
         this.likedMovies = likedMovies;
+    }
+
+    public void addLikedMovies(List<Movie> likedMovies){
+        this.likedMovies.addAll(likedMovies);
+    }
+
+    public List<Movie> getFriendsLikedMovies() {
+        return friendsLikedMovies;
+    }
+
+    public void setFriendsLikedMovies(List<Movie> friendsLikedMovies) {
+        this.friendsLikedMovies = friendsLikedMovies;
+    }
+
+    public void addFriendsLikedMovies(List<Movie> friendsLikedMovies) {
+        this.friendsLikedMovies.addAll(friendsLikedMovies);
     }
 }
