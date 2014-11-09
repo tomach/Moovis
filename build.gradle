@@ -15,4 +15,5 @@ dependencies {
     compile("com.omertron:rottentomatoesapi:1.4")
     compile("com.twitter:hbc-core:2.2.0")
     compile("com.twitter:hbc-twitter4j:2.2.0")
+    compile("com.moviejukebox:api-imdb:1.2")
 }
