@@ -1,7 +1,9 @@
 package hr.fer.tel.moovis.searchers;
 
-import com.mongodb.*;
-import com.sun.xml.internal.txw2.Document;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
 
 import java.net.UnknownHostException;
 
@@ -18,21 +20,37 @@ public class TestMongo {
 
         DB db = mongo.getDB("moovis");
 
-        DBCollection table = db.getCollection("users");
+        DBCollection table = db.getCollection("THDBSearchQueue");
         BasicDBObject document = new BasicDBObject();
-        document.put("id","1234");
-        document.put("name", "caja");
-        document.put("age", 22);
+        document.put("movieKey", "Django Unchained2012");
+        document.put("name", "Django Unchained");
+        document.put("year", "2012");
+
         table.insert(document);
 
-        DBCursor cursor = table.find();
+        document = new BasicDBObject();
+        document.put("movieKey", "Django Unchained2012");
+        document.put("name", "Django Unchained");
+        document.put("year", "2012");
+
+        table.insert(document);
+
+        document = new BasicDBObject();
+        document.put("movieKey", "Django Unchained2012");
+        document.put("name", "Django Unchained");
+        document.put("year", "2012");
+
+        table.insert(document);
+
+
+        /*DBCursor cursor = table.find();
         try {
             while(cursor.hasNext()) {
                 System.out.println(cursor.next());
             }
         } finally {
             cursor.close();
-        }
+        }*/
 
     }
 }
