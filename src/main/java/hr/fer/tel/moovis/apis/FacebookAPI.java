@@ -1,10 +1,13 @@
 package hr.fer.tel.moovis.apis;
 
+import com.mongodb.MongoClient;
 import com.moviejukebox.imdbapi.ImdbApi;
 import com.moviejukebox.imdbapi.model.ImdbMovie;
 import com.moviejukebox.imdbapi.model.ImdbMovieDetails;
 import com.moviejukebox.imdbapi.model.ImdbSearchResult;
 import com.moviejukebox.imdbapi.search.SearchObject;
+import com.omertron.rottentomatoesapi.RottenTomatoesApi;
+import com.omertron.themoviedbapi.TheMovieDbApi;
 import facebook4j.*;
 import facebook4j.Movie;
 import facebook4j.auth.AccessToken;
@@ -48,6 +51,7 @@ public class FacebookAPI {
         User u = new User(f.getName(),"");
         ResponseList<Movie> likedMovies = f.getMovies();
         System.out.println(likedMovies);
+
         List<hr.fer.tel.moovis.model.Movie> listMovies = new ArrayList<hr.fer.tel.moovis.model.Movie>();
         for (Movie fbM : likedMovies){
 
@@ -64,7 +68,6 @@ public class FacebookAPI {
         //System.out.println(ImdbApi.getUserReviews("tt2267998"));
         System.out.println(ImdbApi.getFullDetails("tt2267998").getRating());
         System.out.println(ImdbApi.getFullDetails("tt2267998").getTrailer());
-
 
     }
 }
