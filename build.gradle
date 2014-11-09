@@ -17,4 +17,6 @@ dependencies {
     compile("com.twitter:hbc-core:2.2.0")
     compile("com.twitter:hbc-twitter4j:2.2.0")
     compile("com.moviejukebox:api-imdb:1.2")
+    compile("com.google.api-client:google-api-client:1.18.0-rc")
+
 }
