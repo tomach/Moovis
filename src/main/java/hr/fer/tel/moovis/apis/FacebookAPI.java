@@ -38,7 +38,6 @@ public class FacebookAPI {
 
         MongoClient mongo;
         DB dbMoovis;
-        DBCollection imdbSearchQueue;
         DBCollection rottenSearchQueue;
         DBCollection tmdbSearchQueue;
         DBCollection ytbSearchQueue;
@@ -47,7 +46,6 @@ public class FacebookAPI {
 
         mongo = new MongoClient("localhost", 27017);
         dbMoovis = mongo.getDB("moovis");
-        imdbSearchQueue = dbMoovis.getCollection("IMDBSearchQueue");
         rottenSearchQueue = dbMoovis.getCollection("RottenSearchQueue");
         tmdbSearchQueue = dbMoovis.getCollection("TMDBSearchQueue");
         ytbSearchQueue = dbMoovis.getCollection("YTSearchQueue");
@@ -81,20 +79,5 @@ public class FacebookAPI {
             }
             checkExists.close();
         }
-        // System.out.println(listMovies);
-        // u.setLikedMovies(listMovies);
-
-
-        //System.out.println(ImdbApi.getSearch("gone girl"));
-        //System.out.println(ImdbApi.getUserReviews("tt2267998"));
-        //System.out.println(ImdbApi.getFullDetails("tt2267998").getRating());
-        //System.out.println(ImdbApi.getFullDetails("tt2267998").getTrailer());
-
-        try {
-            new Thread(new IMDBSearcher()).start();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-
     }
 }
