@@ -67,9 +67,15 @@ public class RottenTomatoesImpl extends GenericSearch {
 
         if (movie.getAlternateIds().containsKey("imdb")) {
 
+            DB db = getDb();
+
             BasicDBObject imdbObject = new BasicDBObject()
                     .append(MOVIE_KEY, movieKey)
                     .append("imdbId", movie.getAlternateIds().get("imdb"));
+
+            DBCollection table = db.getCollection("IMDBSearchQueue");
+            table.insert(imdbObject);
+            System.out.println("IMDB queue filled");
         }
     }
 
