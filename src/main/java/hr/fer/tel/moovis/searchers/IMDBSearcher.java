@@ -39,20 +39,27 @@ public class IMDBSearcher extends GenericSearch {
         ImdbMovieDetails movie = ImdbApi.getFullDetails(imdbId);
         System.out.println(movie);
 
-        DBObject plot = new BasicDBObject().append("summary", movie.getPlot().getSummary())
-                .append("author", movie.getPlot().getAuthor()).append("text", movie.getPlot().getText());
+        DBObject plot = new BasicDBObject()
+                .append("outline", movie.getBestPlot().getOutline())
+                .append("summary", movie.getBestPlot().getSummary())
+                .append("author", movie.getBestPlot().getAuthor())
+                .append("text", movie.getBestPlot().getText());
         BasicDBList cast = new BasicDBList();
         for (ImdbCast ca : movie.getCast()){
-            cast.add(ca.getPerson().getName());
+            cast.add(new BasicDBObject().append("id", ca.getPerson().getActorId()).append("name", ca.getPerson().getName()));
         }
 
+        BasicDBList genres = new BasicDBList();
+        for (String g : movie.getGenres()){
+            genres.add(g);
+        }
         DBObject movieDetails = new BasicDBObject().append("imdbId", movie.getImdbId())
                 .append("title", movie.getTitle())
                 .append("rating", movie.getRating())
                 .append("year", movie.getYear())
                 .append("cast", cast)
-                .append("plot", plot);
-
+                .append("plot", plot)
+                .append("genres", genres);
         newMovieObject.append("imdb", movieDetails);
 
     }

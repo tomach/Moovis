@@ -66,8 +66,11 @@ public class IMDBSearch implements Runnable {
                 String key = (String) ob.get("movieKey");
                 ImdbMovieDetails movie = ImdbApi.getFullDetails(imdbId);
                 System.out.println("imdbMovie found " + movie);
-                DBObject plot = new BasicDBObject().append("summary", movie.getPlot().getSummary())
-                        .append("author", movie.getPlot().getAuthor()).append("text", movie.getPlot().getText());
+                DBObject plot = new BasicDBObject()
+                        .append("outline", movie.getBestPlot().getOutline())
+                        .append("summary", movie.getBestPlot().getSummary())
+                        .append("author", movie.getBestPlot().getAuthor())
+                        .append("text", movie.getBestPlot().getText());
                 BasicDBList cast = new BasicDBList();
                 for (ImdbCast ca : movie.getCast()){
                     cast.add(ca.getPerson().getName());
