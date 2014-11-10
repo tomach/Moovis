@@ -3,104 +3,88 @@ package hr.fer.tel.moovis.searchers;
 import com.mongodb.*;
 import com.omertron.rottentomatoesapi.RottenTomatoesApi;
 import com.omertron.rottentomatoesapi.RottenTomatoesException;
+import com.omertron.rottentomatoesapi.model.RTCast;
 import com.omertron.rottentomatoesapi.model.RTMovie;
 
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Set;
 
 /**
- * Created by Damjan on 9.11.2014..
+ * Created by Damjan on 10.11.2014..
  */
-public class RottenTomatoesSearch implements Runnable {
+public class RottenTomatoesSearch extends GenericSearch {
 
     private static final String API_KEY = "sdsque4c4t6gynrtv8znmrrz";
-    private static final String SERVER = "localhost";
-    private static final String DATABASE_NAME = "moovis";
     private static final String ROTTEN_COLLECTION = "RottenSearchQueue";
+
     private static final String MOVIE_KEY = "movieKey";
     private static final String MOVIE_NAME = "name";
-    //private static final String MOVIE_YEAR = "year";
-    private static final int PORT = 27017;
-    private static final int SLEEP_TIME = 100 * 60;
+    private static final String ROTTEN_MOVIE_ID = "rottenid";
+    private static final String ROTTEN_MOVIE_TITLE = "rottentitle";
+    private static final String ROTTEN_MOVIE_YEAR = "rottenyear";
+    private static final String ROTTEN_MOVIE_CRITICS = "rottencritics";
+    private static final String ROTTEN_MOVIE_CAST = "rottencast";
+    private static final String ROTTEN_MOVIE_GENRES = "rottengenres";
+
 
     private RottenTomatoesApi rottenApi;
-    //private MongoClient mongoClient;
-    //private DB mongoDB;
-    private DBCollection rottenSearchQueue;
 
 
-    public RottenTomatoesSearch() throws RottenTomatoesException, UnknownHostException {
-
+    public RottenTomatoesSearch() throws UnknownHostException, RottenTomatoesException {
+        super();
         rottenApi = new RottenTomatoesApi(API_KEY);
-        MongoClient mongoClient = new MongoClient(SERVER, PORT);
-        DB mongoDB = mongoClient.getDB(DATABASE_NAME);
-        rottenSearchQueue = mongoDB.getCollection(ROTTEN_COLLECTION);
-        addMockEntry();
     }
 
-    private void addMockEntry() {
+    @Override
+    protected void processMovie(DBObject obj, BasicDBObject newMovieObject) {
 
-        DBObject dbObject = new BasicDBObject().append(MOVIE_KEY, "Gone Girl2014").append(MOVIE_NAME, "Gone Girl");
-        rottenSearchQueue.insert(dbObject);
+        String movieKey = obj.get(MOVIE_KEY).toString();
+        String movieName = obj.get(MOVIE_NAME).toString();
+        //String movieYear = dbObject.get(MOVIE_YEAR).toString();
 
-        dbObject = new BasicDBObject().append(MOVIE_KEY, "The Edge of Tommorow2014")
-                .append(MOVIE_NAME, "The Edge of Tommorow");
+        System.out.println(movieKey);
+        System.out.println(movieName);
+        //System.out.println(movieYear);
 
-        rottenSearchQueue.insert(dbObject);
-    }
+        List<RTMovie> movieList = searchMoviesOnRotten(movieName);
 
+        if (null != movieList) {
+            if (movieList.size() > 0) {
+                RTMovie movie = movieList.get(0);
 
-    public void run() {
+                //fill IMDBQueue
+                fillIMDBQueue(movieKey, movie);
 
-        while (true) {
-
-            //execute main job
-            searchProcess();
-
-            try {
-                Thread.sleep(SLEEP_TIME);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                DBObject movieDetails = setMovieData(movie);
+                newMovieObject.append("rotten", movieDetails);
             }
         }
     }
 
+    private void fillIMDBQueue(String movieKey, RTMovie movie) {
 
-    private void searchProcess() {
+        System.out.println(movie.getAlternateIds().toString());
 
-        DBCursor dbCursor = rottenSearchQueue.find();
-        String movieKey;
-        String movieName;
-        //String movieYear;
+        if (movie.getAlternateIds().containsKey("imdb")) {
 
+            DB db = getDb();
 
-        while (dbCursor.hasNext()) {
+            BasicDBObject imdbObject = new BasicDBObject()
+                    .append(MOVIE_KEY, movieKey)
+                    .append("imdbId", "tt" + movie.getAlternateIds().get("imdb"));
 
-            DBObject dbObject = dbCursor.next();
-
-            movieKey = dbObject.get(MOVIE_KEY).toString();
-            movieName = dbObject.get(MOVIE_NAME).toString();
-            //    movieYear = dbObject.get(MOVIE_YEAR).toString();
-
-            rottenSearchQueue.remove(dbObject);
-
-            //    System.out.println(movieKey);
-            //    System.out.println(movieName);
-            //    System.out.println(movieYear);
-
-            List<RTMovie> movieList = searchMoviesOnRotten(movieName);
-
-            if (null != movieList) {
-
-                for (RTMovie movie : movieList) {
-                    System.out.println("Movie ID: " + movie.getId());
-                    System.out.println("Movie title" + movie.getTitle());
-                    System.out.println("Movie year: " + movie.getYear());
-                }
-            }
+            DBCollection table = db.getCollection("IMDBSearchQueue");
+            table.insert(imdbObject);
+            System.out.println("IMDB queue filled");
         }
+    }
 
 
+    @Override
+    protected DBCollection getQueue(DB db) {
+
+        return db.getCollection(ROTTEN_COLLECTION);
     }
 
 
@@ -109,17 +93,43 @@ public class RottenTomatoesSearch implements Runnable {
         List<RTMovie> movieList = null;
 
         try {
-
             movieList = rottenApi.getMoviesSearch(movieName);
-
 
         } catch (RottenTomatoesException e) {
             e.printStackTrace();
         }
-
         return movieList;
     }
 
+    private DBObject setMovieData(RTMovie movie) {
+
+        Set<RTCast> castList = movie.getCast();
+        BasicDBList cast = new BasicDBList();
+
+        if (null != castList) {
+            for (RTCast castPerson : castList) {
+                cast.add(castPerson.getCastName());
+            }
+        }
+
+        Set<String> genresList = movie.getGenres();
+        BasicDBList genres = new BasicDBList();
+
+        if (null != genresList) {
+            for (String genre : genresList) {
+                genres.add(genre);
+            }
+        }
+
+        //TODO directors, ratings i popravi ovo gore
+        return new BasicDBObject()
+                .append(ROTTEN_MOVIE_ID, movie.getId())
+                .append(ROTTEN_MOVIE_TITLE, movie.getTitle())
+                .append(ROTTEN_MOVIE_YEAR, movie.getYear())
+                .append(ROTTEN_MOVIE_CRITICS, movie.getCriticsConsensus());
+        //       .append(ROTTEN_MOVIE_CAST, castList)
+        //       .append(ROTTEN_MOVIE_GENRES, genres);
+    }
 
     public static void main(String[] args) throws Exception {
 
