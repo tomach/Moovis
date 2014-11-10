@@ -52,11 +52,13 @@ public class TMDBMovieFinder implements Runnable {
 
                 MovieDb movieInfo = theMovieDbApi.getMovieInfo(counter, null);
                 if (movieInfo != null) {
-                    DBObject dbMovie = new BasicDBObject().append("movieKey", movieInfo.getOriginalTitle());
+                    DBObject dbMovie = new BasicDBObject().append("movieKey", movieInfo.getOriginalTitle()).append("name", movieInfo.getOriginalTitle());
                     Cursor checkExists = movies.find(dbMovie);
 
                     if (!checkExists.hasNext()) {
                         System.out.println(movieInfo.getId() + ";" + movieInfo.getOriginalTitle());
+                        movies.insert(dbMovie);
+
                         ytbSearchQueue.insert(dbMovie);
                         rottenSearchQueue.insert(dbMovie);
                         tmdbSearchQueue.insert(dbMovie);

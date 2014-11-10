@@ -50,14 +50,15 @@ public class RottenTomatoesImpl extends GenericSearch {
         List<RTMovie> movieList = searchMoviesOnRotten(movieName);
 
         if (null != movieList) {
+            if (movieList.size() > 0) {
+                RTMovie movie = movieList.get(0);
 
-            RTMovie movie = movieList.get(0);
+                //fill IMDBQueue
+                fillIMDBQueue(movieKey, movie);
 
-            //fill IMDBQueue
-            fillIMDBQueue(movieKey, movie);
-
-            DBObject movieDetails = setMovieData(movie);
-            newMovieObject.append("rotten", movieDetails);
+                DBObject movieDetails = setMovieData(movie);
+                newMovieObject.append("rotten", movieDetails);
+            }
         }
     }
 
@@ -71,7 +72,7 @@ public class RottenTomatoesImpl extends GenericSearch {
 
             BasicDBObject imdbObject = new BasicDBObject()
                     .append(MOVIE_KEY, movieKey)
-                    .append("imdbId", movie.getAlternateIds().get("imdb"));
+                    .append("imdbId", "tt" + movie.getAlternateIds().get("imdb"));
 
             DBCollection table = db.getCollection("IMDBSearchQueue");
             table.insert(imdbObject);
@@ -126,8 +127,8 @@ public class RottenTomatoesImpl extends GenericSearch {
                 .append(ROTTEN_MOVIE_TITLE, movie.getTitle())
                 .append(ROTTEN_MOVIE_YEAR, movie.getYear())
                 .append(ROTTEN_MOVIE_CRITICS, movie.getCriticsConsensus());
-         //       .append(ROTTEN_MOVIE_CAST, castList)
-         //       .append(ROTTEN_MOVIE_GENRES, genres);
+        //       .append(ROTTEN_MOVIE_CAST, castList)
+        //       .append(ROTTEN_MOVIE_GENRES, genres);
     }
 
     public static void main(String[] args) throws Exception {

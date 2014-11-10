@@ -8,6 +8,8 @@ import java.net.UnknownHostException;
  * Created by filippm on 10.11.14..
  */
 public abstract class GenericSearch implements Runnable {
+    public static final Object SYNC_CONTROLLER = new Object();
+
     private static final int SLEEP_TIME = 100 * 60;
     private static final String DB_NAME = "moovis";
 
@@ -54,16 +56,17 @@ public abstract class GenericSearch implements Runnable {
                 //spremanje u bazu
                 DBObject searchOldMovie = new BasicDBObject().append("movieKey", movieKey);
                 System.out.println("\t\t" + searchOldMovie);
-
-                Cursor oldMovieCursor = movies.find(searchOldMovie);
-                if (oldMovieCursor.hasNext()) {
-                    BasicDBObject oldMovieObject = (BasicDBObject) oldMovieCursor.next();
-                    BasicDBObject newMovieObject = (BasicDBObject) oldMovieObject.copy();
-                    processMovie(obj, newMovieObject);
-                    movies.update(oldMovieObject, newMovieObject);
-                    postprocessActions(obj);
+                synchronized (SYNC_CONTROLLER) {
+                    Cursor oldMovieCursor = movies.find(searchOldMovie);
+                    if (oldMovieCursor.hasNext()) {
+                        BasicDBObject oldMovieObject = (BasicDBObject) oldMovieCursor.next();
+                        BasicDBObject newMovieObject = (BasicDBObject) oldMovieObject.copy();
+                        processMovie(obj, newMovieObject);
+                        movies.update(oldMovieObject, newMovieObject);
+                        postprocessActions(obj);
+                    }
+                    oldMovieCursor.close();
                 }
-                oldMovieCursor.close();
 
             }
         } finally {

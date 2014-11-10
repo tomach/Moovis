@@ -3,7 +3,7 @@ package hr.fer.tel.moovis.main;
 import com.omertron.rottentomatoesapi.RottenTomatoesException;
 import com.omertron.themoviedbapi.MovieDbException;
 import hr.fer.tel.moovis.searchers.IMDBSearcher;
-import hr.fer.tel.moovis.searchers.RottenTomatoesSearch;
+import hr.fer.tel.moovis.searchers.RottenTomatoesImpl;
 import hr.fer.tel.moovis.searchers.TMDBSearch;
 import hr.fer.tel.moovis.searchers.YouTubeSearch;
 
@@ -19,6 +19,6 @@ public class Main {
         new Thread(new IMDBSearcher()).start();
         new Thread(new TMDBSearch()).start();
         new Thread(new YouTubeSearch()).start();
-        new Thread(new RottenTomatoesSearch()).start();
+        new Thread(new RottenTomatoesImpl()).start();
     }
 }

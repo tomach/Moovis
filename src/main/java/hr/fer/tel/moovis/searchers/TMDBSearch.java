@@ -21,7 +21,7 @@ import java.util.List;
 public class TMDBSearch extends GenericSearch {
 
     private static final String API_KEY = "5086b39f4b96483187ec864955e4da88";
-    private static final String MY_QUEUE = "THDBSearchQueue";
+    private static final String MY_QUEUE = "TMDBSearchQueue";
 
     private TheMovieDbApi theMovieDbApi;
 
@@ -35,15 +35,13 @@ public class TMDBSearch extends GenericSearch {
     @Override
     protected void processMovie(DBObject obj, BasicDBObject newMovieObject) {
         String movieKey = obj.get("movieKey").toString();
-        String movieName = obj.get("name").toString();
-        String movieYear = obj.get("year").toString();
+
         System.out.println(movieKey);
-        System.out.println(movieName);
-        System.out.println(movieYear);
+
 
         //Obrada uz TMDB api
         try {
-            MovieDb movie = theMovieDbApi.searchMovie(movieName, Integer.parseInt(movieYear), null, false, 0).getResults().get(0);
+            MovieDb movie = theMovieDbApi.searchMovie(movieKey, 0, null, false, 0).getResults().get(0);
 
             System.out.println(movie);
 
