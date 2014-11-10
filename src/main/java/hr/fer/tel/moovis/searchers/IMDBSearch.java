@@ -72,7 +72,7 @@ public class IMDBSearch implements Runnable {
                         .append("author", movie.getBestPlot().getAuthor())
                         .append("text", movie.getBestPlot().getText());
                 BasicDBList cast = new BasicDBList();
-                for (ImdbCast ca : movie.getCast()){
+                for (ImdbCast ca : movie.getCast()) {
                     cast.add(ca.getPerson().getName());
                 }
 

@@ -1,28 +1,13 @@
 package hr.fer.tel.moovis.apis;
 
 import com.mongodb.*;
-import com.moviejukebox.imdbapi.ImdbApi;
-import com.moviejukebox.imdbapi.model.ImdbMovie;
-import com.moviejukebox.imdbapi.model.ImdbMovieDetails;
-import com.moviejukebox.imdbapi.model.ImdbSearchResult;
-import com.moviejukebox.imdbapi.search.SearchObject;
-import com.omertron.rottentomatoesapi.RottenTomatoesApi;
-import com.omertron.themoviedbapi.TheMovieDbApi;
 import facebook4j.*;
-import facebook4j.Movie;
 import facebook4j.auth.AccessToken;
 import facebook4j.internal.org.json.JSONException;
-import facebook4j.internal.org.json.JSONObject;
-import hr.fer.tel.moovis.model.*;
 import hr.fer.tel.moovis.model.User;
-import hr.fer.tel.moovis.searchers.IMDBSearch;
 import hr.fer.tel.moovis.searchers.IMDBSearcher;
 
-import javax.naming.directory.SearchResult;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by tomislaf on 28.10.2014..
@@ -36,8 +21,7 @@ public class FacebookAPI {
     private Facebook facebook;
 
 
-    public FacebookAPI() throws UnknownHostException
-    {
+    public FacebookAPI() throws UnknownHostException {
         facebook = new FacebookFactory().getInstance();
         facebook.setOAuthAppId(API_KEY, APP_SECRET);
         facebook.setOAuthPermissions("user_likes");
@@ -45,17 +29,16 @@ public class FacebookAPI {
 
     }
 
-    public Facebook getFacebook()
-    {
+    public Facebook getFacebook() {
         return facebook;
     }
 
 
     public static void main(String[] args) throws FacebookException, UnknownHostException, JSONException {
 
-         MongoClient mongo;
-         DB dbMoovis;
-         DBCollection imdbSearchQueue;
+        MongoClient mongo;
+        DB dbMoovis;
+        DBCollection imdbSearchQueue;
         DBCollection rottenSearchQueue;
         DBCollection tmdbSearchQueue;
         DBCollection ytbSearchQueue;
@@ -71,13 +54,13 @@ public class FacebookAPI {
         movies = dbMoovis.getCollection("movies");
 
         Facebook f = new FacebookAPI().getFacebook();
-        User u = new User(f.getName(),"");
+        User u = new User(f.getName(), "");
         ResponseList<Movie> likedMovies = f.getMovies();
 
         System.out.println("fb liked movies " + likedMovies);
 
         //List<hr.fer.tel.moovis.model.Movie> listMovies = new ArrayList<hr.fer.tel.moovis.model.Movie>();
-        for (Movie fbM : likedMovies){
+        for (Movie fbM : likedMovies) {
             DBObject dbMovie = new BasicDBObject().append("movieKey", fbM.getName());
             Cursor checkExists = movies.find(dbMovie);
             if (!checkExists.hasNext()) {
@@ -98,8 +81,8 @@ public class FacebookAPI {
             }
             checkExists.close();
         }
-       // System.out.println(listMovies);
-      // u.setLikedMovies(listMovies);
+        // System.out.println(listMovies);
+        // u.setLikedMovies(listMovies);
 
 
         //System.out.println(ImdbApi.getSearch("gone girl"));

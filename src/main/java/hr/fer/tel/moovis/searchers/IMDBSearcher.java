@@ -1,7 +1,6 @@
 package hr.fer.tel.moovis.searchers;
 
 import com.mongodb.*;
-
 import com.moviejukebox.imdbapi.ImdbApi;
 import com.moviejukebox.imdbapi.model.ImdbCast;
 import com.moviejukebox.imdbapi.model.ImdbMovieDetails;
@@ -45,12 +44,12 @@ public class IMDBSearcher extends GenericSearch {
                 .append("author", movie.getBestPlot().getAuthor())
                 .append("text", movie.getBestPlot().getText());
         BasicDBList cast = new BasicDBList();
-        for (ImdbCast ca : movie.getCast()){
+        for (ImdbCast ca : movie.getCast()) {
             cast.add(new BasicDBObject().append("id", ca.getPerson().getActorId()).append("name", ca.getPerson().getName()));
         }
 
         BasicDBList genres = new BasicDBList();
-        for (String g : movie.getGenres()){
+        for (String g : movie.getGenres()) {
             genres.add(g);
         }
         DBObject movieDetails = new BasicDBObject().append("imdbId", movie.getImdbId())
@@ -69,7 +68,7 @@ public class IMDBSearcher extends GenericSearch {
         return db.getCollection(IMDB_SEARCH_QUEUE);
     }
 
-    public static void main(String[]argv) throws UnknownHostException {
+    public static void main(String[] argv) throws UnknownHostException {
         new Thread(new IMDBSearcher()).start();
     }
 }

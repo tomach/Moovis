@@ -16,7 +16,7 @@ public class User {
     private List<Movie> likedMovies;
     private List<Movie> friendsLikedMovies;
 
-    public User(String name, String surname){
+    public User(String name, String surname) {
         this.name = name;
         this.surname = surname;
         this.likedMovies = new ArrayList<Movie>();
@@ -63,7 +63,7 @@ public class User {
         this.likedMovies = likedMovies;
     }
 
-    public void addLikedMovies(List<Movie> likedMovies){
+    public void addLikedMovies(List<Movie> likedMovies) {
         this.likedMovies.addAll(likedMovies);
     }
 
