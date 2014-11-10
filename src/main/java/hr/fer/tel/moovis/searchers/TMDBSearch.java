@@ -8,7 +8,8 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TheMovieDbApi;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.MovieDb;
-import com.omertron.themoviedbapi.model.PersonCast;
+import com.omertron.themoviedbapi.model.Person;
+import com.omertron.themoviedbapi.results.TmdbResultsList;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class TMDBSearch extends GenericSearch {
         //Obrada uz TMDB api
         try {
             MovieDb movie = theMovieDbApi.searchMovie(movieName, Integer.parseInt(movieYear), null, false, 0).getResults().get(0);
+
             System.out.println(movie);
 
             BasicDBObject movieDetails = new BasicDBObject()
@@ -53,6 +55,7 @@ public class TMDBSearch extends GenericSearch {
                     .append("revenue", movie.getRevenue()).append("releaseDate", movie.getReleaseDate())
                     .append("voteCount", movie.getVoteCount());
 
+
             if (movie.getGenres() != null) {
                 List<String> genres = new ArrayList<String>();
                 for (Genre genre : movie.getGenres()) {
@@ -60,17 +63,19 @@ public class TMDBSearch extends GenericSearch {
                 }
                 movieDetails.append("genres", genres);
             }
-            try {
-                if (movie.getCast() != null) {
 
-                    List<BasicDBObject> cast = new ArrayList<BasicDBObject>();
-                    for (PersonCast pers : movie.getCast()) {
-                        cast.add(new BasicDBObject().append("id", pers.getId()).append("castId", pers.getCastId()).append("name", pers.getName()).append("character", pers.getCharacter()));
-                    }
-                    movieDetails.append("cast", cast);
+            TmdbResultsList<Person> movieCasts = theMovieDbApi.getMovieCasts(movie.getId());
+            if (movieCasts != null) {
+
+                List<BasicDBObject> cast = new ArrayList<BasicDBObject>();
+                for (Person person : movieCasts.getResults()) {
+                    cast.add(new BasicDBObject().append("id", person.getId())
+                            .append("name", person.getName())
+                            .append("character", person.getCharacter()));
                 }
-            } catch (Exception e) {
+                movieDetails.append("cast", cast);
             }
+
 
             newMovieObject.append("tmdb", movieDetails);
         } catch (MovieDbException e) {

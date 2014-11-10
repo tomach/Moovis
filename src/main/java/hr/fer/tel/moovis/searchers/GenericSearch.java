@@ -71,6 +71,10 @@ public abstract class GenericSearch implements Runnable {
 
     }
 
+    protected DB getDb() {
+        return db;
+    }
+
     protected abstract void processMovie(DBObject obj, BasicDBObject newMovieObject);
 
 
