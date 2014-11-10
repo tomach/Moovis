@@ -1,12 +1,16 @@
 package hr.fer.tel.moovis.web.controllers;
 
 import com.mongodb.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by filippm on 10.11.14..
@@ -26,16 +30,20 @@ public class LabosController {
         movies = db.getCollection("movies");
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    @ResponseBody
-    public String dummy() {
-        StringBuilder sb = new StringBuilder();
+    @RequestMapping(value = "/list/{limit}", method = RequestMethod.GET)
+    public ResponseEntity<List<DBObject>> dummy(@PathVariable Integer limit) {
+        List<DBObject> retList = new ArrayList<DBObject>();
         DBCursor cursor = movies.find();
+        int counter = 0;
         while (cursor.hasNext()) {
+            if (counter > limit) {
+                break;
+            }
+            counter++;
             DBObject dbObj = cursor.next();
-            sb.append(dbObj.toString()).append("\n");
+            retList.add(dbObj);
         }
-        return sb.toString();
+        return new ResponseEntity<List<DBObject>>(retList, HttpStatus.OK);
     }
 
 }
