@@ -19,7 +19,7 @@ public class IMDBSearch implements Runnable {
     private DBCollection movies;
     private static int SLEEP_TIME = 100 * 60;
 
-    
+
     public IMDBSearch() throws UnknownHostException {
         mongo = new MongoClient("localhost", 27017);
         dbMoovis = mongo.getDB("moovis");
