@@ -16,14 +16,6 @@ public class IMDBSearcher extends GenericSearch {
 
     public IMDBSearcher() throws UnknownHostException {
         super();
-        DBObject obj = new BasicDBObject().append("movieKey", "goneGirlSmreki").append("imdbId", "tt2267998");
-        MongoClient mongo;
-        DB dbMoovis;
-        DBCollection imdbSearchQueue;
-        mongo = new MongoClient("localhost", 27017);
-        dbMoovis = mongo.getDB("moovis");
-        imdbSearchQueue = dbMoovis.getCollection("IMDBSearchQueue");
-        imdbSearchQueue.insert(obj);
     }
 
 
