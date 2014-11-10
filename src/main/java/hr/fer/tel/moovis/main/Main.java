@@ -11,13 +11,8 @@ import hr.fer.tel.moovis.apis.FacebookAPI;
  */
 public class Main {
 
-    public static void main(String[] args) {
-        Facebook f = new FacebookAPI().getFacebook();
-        try {
-            f.getFriends();
-        } catch (FacebookException e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args){
+
 
         //System.out.println(ImdbApi.getSearch("gone girl"));
         //System.out.println(ImdbApi.getUserReviews("tt2267998"));
