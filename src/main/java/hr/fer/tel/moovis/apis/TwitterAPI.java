@@ -98,7 +98,7 @@ public class TwitterAPI {
 
     public void getFollowedUsers() {
 
-        
+
     }
 
     //test
