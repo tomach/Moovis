@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
 /**
  * Created by filippm on 09.11.14..
  */
-public class TestMongo {
+public class InitTMDBQueue {
 
 
     public static void main(String[] args) throws UnknownHostException {
