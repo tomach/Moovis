@@ -17,7 +17,7 @@ public class FacebookAPI {
     private static final String API_KEY = "538301972979920";
     private static final String APP_SECRET = "8a17d41e0334cda6f52af4b6481f92fa";
     private static final String CLIENT_TOKEN = "CAAHplTHhoNABAEvZAeWfvNK5FdFOIvXpxdPiMy3EmHAtWeNqPHjmH3YR6ibL1UZC8jsHvGUJVAr5tP5XnA1lN7ZAopKyCta1soZC2ZCNnNDjEOAY6f2f73RAKE9djv9N7v8MwDwdZAeTKsoH8w3VTYZCYEVsrCahPavt4QvY5lsswY0ZAnRopCyE5YIEZCIipecFdArv2eN17hm10SVwHGIpy";
-    private static final String ACC_TOKEN = "CAAHplTHhoNABAMto00JvlNcjZAfyHpH45nIetnQnzXV2QYkpf5pNbvurV3XGaybfc9gq9kyjQDpOYOK9fUneSU8S5E1rLNGzGb0Ujv6y7MXjIo813ZCezURo2xAm10wdkYCikMXWqX7YhGHkY7kPCs8on7WzIilyX75M5qcH42DTBRKw2YB1JUOQs9zKk612XZBClunNLpranYHg97s\n";
+    private static final String ACC_TOKEN = "CAAHplTHhoNABACaMExgmzBoU6XFVVXZCdsA7RCY6iZBx6fKfWCPZAlTAOXdLwy0YzzT5OSGDX1tLoRYxouMFLyuchZCWrWZCoOdBKMDOWti9cxees7G9sJiIHeJaXUnn6SFVYbZBcuwlkpWI5nNxTBJygd74cNAcsbZAWyZCtEsQeTsFSZB1AmopewiDlTeytehZBVyvKwNsU7fSyfwAH3ioB7\n";
     private Facebook facebook;
 
 
@@ -59,9 +59,10 @@ public class FacebookAPI {
 
         //List<hr.fer.tel.moovis.model.Movie> listMovies = new ArrayList<hr.fer.tel.moovis.model.Movie>();
         for (Movie fbM : likedMovies) {
-            DBObject dbMovie = new BasicDBObject().append("movieKey", fbM.getName());
+            DBObject dbMovie = new BasicDBObject().append("movieKey", fbM.getName()).append("name", fbM.getName());
             Cursor checkExists = movies.find(dbMovie);
             if (!checkExists.hasNext()) {
+                movies.insert(dbMovie);
                 ytbSearchQueue.insert(dbMovie);
                 rottenSearchQueue.insert(dbMovie);
                 tmdbSearchQueue.insert(dbMovie);
