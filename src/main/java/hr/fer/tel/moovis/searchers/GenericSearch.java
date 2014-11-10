@@ -48,15 +48,12 @@ public abstract class GenericSearch implements Runnable {
                 queue.remove(obj);
                 System.out.println(obj);
                 String movieKey = obj.get("movieKey").toString();
-                String movieName = obj.get("name").toString();
-                String movieYear = obj.get("year").toString();
-                System.out.println(movieKey);
 
                 //Obrada uz TMDB api
 
                 //spremanje u bazu
                 DBObject searchOldMovie = new BasicDBObject().append("movieKey", movieKey);
-                System.out.println("\t\t"+searchOldMovie);
+                System.out.println("\t\t" + searchOldMovie);
 
                 Cursor oldMovieCursor = movies.find(searchOldMovie);
                 if (oldMovieCursor.hasNext()) {
