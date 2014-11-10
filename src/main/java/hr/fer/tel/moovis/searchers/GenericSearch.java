@@ -61,6 +61,7 @@ public abstract class GenericSearch implements Runnable {
                     BasicDBObject newMovieObject = (BasicDBObject) oldMovieObject.copy();
                     processMovie(obj, newMovieObject);
                     movies.update(oldMovieObject, newMovieObject);
+                    postprocessActions(obj);
                 }
                 oldMovieCursor.close();
 
@@ -70,6 +71,10 @@ public abstract class GenericSearch implements Runnable {
         }
 
     }
+
+    protected void postprocessActions(DBObject obj) {
+    }
+
 
     protected DB getDb() {
         return db;
