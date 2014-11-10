@@ -70,6 +70,9 @@
     <orderEntry type="library" exported="" name="Gradle: twitter4j-core-4.0.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: twitter4j-stream-4.0.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: guava-15.0" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: google-api-client-1.18.0-rc" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: google-oauth-client-1.18.0-rc" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: google-http-client-1.18.0-rc" level="project" />
   </component>
 </module>
 

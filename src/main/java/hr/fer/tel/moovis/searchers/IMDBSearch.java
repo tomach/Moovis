@@ -34,7 +34,7 @@ public class IMDBSearch implements Runnable {
         DBObject obj = new BasicDBObject().append("movieKey", "goneGirlSmreki").append("imdbId", "tt2267998");
         imdbSearchQueue.insert(obj);
     }
-    @Override
+
     public void run() {
         while(true){
             searchProcess();
