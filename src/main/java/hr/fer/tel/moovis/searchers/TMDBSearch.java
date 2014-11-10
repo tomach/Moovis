@@ -30,6 +30,7 @@ public class TMDBSearch implements Runnable {
         System.out.println(Thread.currentThread().getId());
 
         while (true) {
+
             searchProcess();
             try {
                 Thread.sleep(SLEEP_TIME);
@@ -42,7 +43,7 @@ public class TMDBSearch implements Runnable {
     private void searchProcess() {
         DB db = mongo.getDB(DB_NAME);
         DBCollection table = db.getCollection(MY_QUEUE);
-
+        //bzbz
         DBCursor cursor = table.find();
         DBObject obj;
 
