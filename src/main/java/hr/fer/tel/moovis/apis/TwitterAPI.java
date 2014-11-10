@@ -72,7 +72,7 @@ public class TwitterAPI {
         } catch (TwitterException e) {
             e.printStackTrace();
         }
-
+        System.out.println();
 
     }
 
@@ -89,8 +89,23 @@ public class TwitterAPI {
             e.printStackTrace();
         }
 
+        System.out.println("Show search result:");
         for (Status status : result.getTweets()) {
             System.out.println("@" + status.getUser().getScreenName() + ":" + status.getText());
         }
+    }
+
+
+    public void getFollowedUsers() {
+
+        
+    }
+
+    //test
+    public static void main(String[] args) throws Exception {
+
+        TwitterAPI twitterApi = new TwitterAPI();
+        twitterApi.getLatestTweets();
+        twitterApi.searchForTweets("strahovski");
     }
 }
