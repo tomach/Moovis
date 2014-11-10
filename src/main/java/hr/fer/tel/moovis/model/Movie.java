@@ -11,7 +11,7 @@ public class Movie {
     private String tmdbId;
     private String rottenId;
 
-    public Movie(String title, String description){
+    public Movie(String title, String description) {
         this.title = title;
         this.description = description;
     }
@@ -57,7 +57,7 @@ public class Movie {
         this.description = description;
     }
 
-    public String toString(){
+    public String toString() {
         return "title = " + title + ", description = " + description;
     }
 }

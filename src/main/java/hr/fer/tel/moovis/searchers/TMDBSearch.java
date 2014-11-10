@@ -1,80 +1,93 @@
 package hr.fer.tel.moovis.searchers;
 
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TheMovieDbApi;
+import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.MovieDb;
+import com.omertron.themoviedbapi.model.Person;
+import com.omertron.themoviedbapi.results.TmdbResultsList;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by filippm on 09.11.14..
+ * Created by filippm on 10.11.14..
  */
-public class TMDBSearch implements Runnable {
-    private static final String DB_NAME = "moovis";
-    private static final String MY_QUEUE = "THDBSearchQueue";
+public class TMDBSearch extends GenericSearch {
+
     private static final String API_KEY = "5086b39f4b96483187ec864955e4da88";
-    private static final int SLEEP_TIME = 100 * 60;
+    private static final String MY_QUEUE = "THDBSearchQueue";
+
     private TheMovieDbApi theMovieDbApi;
-    private MongoClient mongo;
 
     public TMDBSearch() throws MovieDbException, UnknownHostException {
+        super();
         theMovieDbApi = new TheMovieDbApi(API_KEY);
 
-        // Since 2.10.0, uses MongoClient
-        mongo = new MongoClient("localhost", 27017);
     }
 
 
-    public void run() {
-        System.out.println(Thread.currentThread().getId());
+    @Override
+    protected void processMovie(DBObject obj, BasicDBObject newMovieObject) {
+        String movieKey = obj.get("movieKey").toString();
+        String movieName = obj.get("name").toString();
+        String movieYear = obj.get("year").toString();
+        System.out.println(movieKey);
+        System.out.println(movieName);
+        System.out.println(movieYear);
 
-        while (true) {
-
-            searchProcess();
-            try {
-                Thread.sleep(SLEEP_TIME);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void searchProcess() {
-        DB db = mongo.getDB(DB_NAME);
-        DBCollection table = db.getCollection(MY_QUEUE);
-        //bzbz
-        DBCursor cursor = table.find();
-        DBObject obj;
-
+        //Obrada uz TMDB api
         try {
-            while (cursor.hasNext()) {
-                //Dohvati iz reda
-                obj = cursor.next();
-                table.remove(obj);
-                System.out.println(obj);
-                String movieKey = obj.get("movieKey").toString();
-                String movieName = obj.get("name").toString();
-                String movieYear = obj.get("year").toString();
-                System.out.println(movieKey);
-                System.out.println(movieName);
-                System.out.println(movieYear);
+            MovieDb movie = theMovieDbApi.searchMovie(movieName, Integer.parseInt(movieYear), null, false, 0).getResults().get(0);
 
-                //Obrada uz TMDB api
-                try {
-                    MovieDb movie = theMovieDbApi.searchMovie(movieName, Integer.parseInt(movieYear), null, false, 0).getResults().get(0);
-                    System.out.println(movie);
-                } catch (MovieDbException e) {
-                    continue;
+            System.out.println(movie);
+
+            BasicDBObject movieDetails = new BasicDBObject()
+                    .append("id", movie.getId())
+                    .append("title", movie.getTitle()).append("budget", movie.getBudget())
+                    .append("popularity", movie.getPopularity()).append("userRating", movie.getUserRating())
+                    .append("voteAverage", movie.getVoteAverage()).append("homepage", movie.getHomepage())
+                    .append("revenue", movie.getRevenue()).append("releaseDate", movie.getReleaseDate())
+                    .append("voteCount", movie.getVoteCount());
+
+
+            if (movie.getGenres() != null) {
+                List<String> genres = new ArrayList<String>();
+                for (Genre genre : movie.getGenres()) {
+                    genres.add(genre.getName());
                 }
+                movieDetails.append("genres", genres);
             }
-        } finally {
-            cursor.close();
+
+            TmdbResultsList<Person> movieCasts = theMovieDbApi.getMovieCasts(movie.getId());
+            if (movieCasts != null) {
+
+                List<BasicDBObject> cast = new ArrayList<BasicDBObject>();
+                for (Person person : movieCasts.getResults()) {
+                    cast.add(new BasicDBObject().append("id", person.getId())
+                            .append("name", person.getName())
+                            .append("character", person.getCharacter()));
+                }
+                movieDetails.append("cast", cast);
+            }
+
+
+            newMovieObject.append("tmdb", movieDetails);
+        } catch (MovieDbException e) {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        System.out.println(Thread.currentThread().getId());
+    @Override
+    protected DBCollection getQueue(DB db) {
+        return db.getCollection(MY_QUEUE);
+    }
+
+    public static void main(String[] args) throws MovieDbException, UnknownHostException {
         new Thread(new TMDBSearch()).start();
     }
 }

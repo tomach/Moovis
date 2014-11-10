@@ -80,13 +80,13 @@ public class RottenTomatoesSearch implements Runnable {
 
             movieKey = dbObject.get(MOVIE_KEY).toString();
             movieName = dbObject.get(MOVIE_NAME).toString();
-        //    movieYear = dbObject.get(MOVIE_YEAR).toString();
+            //    movieYear = dbObject.get(MOVIE_YEAR).toString();
 
             rottenSearchQueue.remove(dbObject);
 
-        //    System.out.println(movieKey);
-        //    System.out.println(movieName);
-        //    System.out.println(movieYear);
+            //    System.out.println(movieKey);
+            //    System.out.println(movieName);
+            //    System.out.println(movieYear);
 
             List<RTMovie> movieList = searchMoviesOnRotten(movieName);
 
@@ -95,7 +95,7 @@ public class RottenTomatoesSearch implements Runnable {
                 for (RTMovie movie : movieList) {
                     System.out.println("Movie ID: " + movie.getId());
                     System.out.println("Movie title" + movie.getTitle());
-                    System.out.println("Movie year: " +movie.getYear());
+                    System.out.println("Movie year: " + movie.getYear());
                 }
             }
         }
