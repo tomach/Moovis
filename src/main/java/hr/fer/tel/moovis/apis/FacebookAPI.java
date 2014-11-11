@@ -5,7 +5,6 @@ import facebook4j.*;
 import facebook4j.auth.AccessToken;
 import facebook4j.internal.org.json.JSONException;
 import hr.fer.tel.moovis.model.User;
-import hr.fer.tel.moovis.searchers.IMDBSearcher;
 
 import java.net.UnknownHostException;
 
@@ -18,6 +17,7 @@ public class FacebookAPI {
     private static final String APP_SECRET = "8a17d41e0334cda6f52af4b6481f92fa";
     private static final String CLIENT_TOKEN = "CAAHplTHhoNABAEvZAeWfvNK5FdFOIvXpxdPiMy3EmHAtWeNqPHjmH3YR6ibL1UZC8jsHvGUJVAr5tP5XnA1lN7ZAopKyCta1soZC2ZCNnNDjEOAY6f2f73RAKE9djv9N7v8MwDwdZAeTKsoH8w3VTYZCYEVsrCahPavt4QvY5lsswY0ZAnRopCyE5YIEZCIipecFdArv2eN17hm10SVwHGIpy";
     private static final String ACC_TOKEN = "CAAHplTHhoNABACaMExgmzBoU6XFVVXZCdsA7RCY6iZBx6fKfWCPZAlTAOXdLwy0YzzT5OSGDX1tLoRYxouMFLyuchZCWrWZCoOdBKMDOWti9cxees7G9sJiIHeJaXUnn6SFVYbZBcuwlkpWI5nNxTBJygd74cNAcsbZAWyZCtEsQeTsFSZB1AmopewiDlTeytehZBVyvKwNsU7fSyfwAH3ioB7\n";
+    private static final String CAJA_ACC_TOKEN = "CAAHplTHhoNABAKNQZCLq3uE4vJcnGQvzwXDs0EHCZACaRftMcB9K3xyoTAQ2uzpPnNij43gk9A33yAJdskjawOW3IjkTG8cxifHKC9jgUsbMY8NLspEpNxv5rGvL3N5kSkxoeq3rqhtKZBLQ1ydCiRqcNMqOAyZCJsIMLZCD4rfnoHIgOyhOIHvOQAzqMRwyarmQEMjZCUiSZANoqQmebpxJf1ZAYikLSmsZD";
     private Facebook facebook;
 
 
@@ -25,7 +25,7 @@ public class FacebookAPI {
         facebook = new FacebookFactory().getInstance();
         facebook.setOAuthAppId(API_KEY, APP_SECRET);
         facebook.setOAuthPermissions("user_likes");
-        facebook.setOAuthAccessToken(new AccessToken(ACC_TOKEN, null));
+        facebook.setOAuthAccessToken(new AccessToken(CAJA_ACC_TOKEN, null));
 
     }
 

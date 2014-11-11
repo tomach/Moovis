@@ -41,7 +41,12 @@ public class TMDBSearch extends GenericSearch {
 
         //Obrada uz TMDB api
         try {
-            MovieDb movie = theMovieDbApi.searchMovie(movieKey, 0, null, false, 0).getResults().get(0);
+
+            List<MovieDb> results = theMovieDbApi.searchMovie(movieKey, 0, null, false, 0).getResults();
+            if (results.size() == 0) {
+                return;
+            }
+            MovieDb movie = results.get(0);
 
             System.out.println(movie);
 
