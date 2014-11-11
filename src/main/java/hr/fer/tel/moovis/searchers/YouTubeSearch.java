@@ -63,6 +63,7 @@ public class YouTubeSearch extends GenericSearch {
         }
         List<SearchResult> searchResultList = searchResponse.getItems();
         if (searchResultList != null) {
+            if (searchResultList.size() == 0) return;
             SearchResult result = searchResultList.get(0);
             if (result != null) {
                 BasicDBObject movieDetails = new BasicDBObject();
