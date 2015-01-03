@@ -28,7 +28,9 @@ public class IMDBSearcher extends GenericSearch {
 
         //IMDB dohvat
         ImdbMovieDetails movie = ImdbApi.getFullDetails(imdbId);
-        System.out.println(movie);
+        System.out.println("IMDB search:" + movie);
+
+
 
         DBObject plot = new BasicDBObject()
                 .append("outline", movie.getBestPlot().getOutline())
@@ -58,6 +60,11 @@ public class IMDBSearcher extends GenericSearch {
     @Override
     protected DBCollection getQueue(DB db) {
         return db.getCollection(IMDB_SEARCH_QUEUE);
+    }
+
+    @Override
+    protected long getSleepTime() {
+        return 0;
     }
 
     public static void main(String[] argv) throws UnknownHostException {

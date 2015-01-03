@@ -43,11 +43,12 @@ public class TMDBMovieFinder implements Runnable {
     }
 
     public void run() {
-        for (int counter = 0; ; counter++) {
+        for (int counter = 1256; ; counter++) {
             try {
                 Thread.sleep(330);
             } catch (InterruptedException e) {
             }
+
             try {
 
                 MovieDb movieInfo = theMovieDbApi.getMovieInfo(counter, null);

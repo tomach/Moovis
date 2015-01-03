@@ -45,7 +45,7 @@ public class YouTubeSearch extends GenericSearch {
             return;
         }
 
-        String queryTerm = obj.get("movieKey").toString();
+        String queryTerm = obj.get("movieKey").toString() + " trailer";
 
         search.setKey(API_KEY);
         search.setQ(queryTerm);
@@ -61,6 +61,9 @@ public class YouTubeSearch extends GenericSearch {
             e.printStackTrace();
             return;
         }
+
+        System.out.println(searchResponse);
+
         List<SearchResult> searchResultList = searchResponse.getItems();
         if (searchResultList != null) {
             if (searchResultList.size() == 0) return;
@@ -81,6 +84,10 @@ public class YouTubeSearch extends GenericSearch {
         return db.getCollection(MY_QUEUE);
     }
 
+    @Override
+    protected long getSleepTime() {
+        return 0;
+    }
 
     public static void main(String[] args) throws IOException {
         System.out.println(Thread.currentThread().getId());

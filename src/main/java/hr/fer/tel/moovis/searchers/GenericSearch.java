@@ -30,7 +30,7 @@ public abstract class GenericSearch implements Runnable {
         while (true) {
             searchProcess();
             try {
-                Thread.sleep(SLEEP_TIME);
+                Thread.sleep(getSleepTime());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -87,4 +87,5 @@ public abstract class GenericSearch implements Runnable {
 
 
     protected abstract DBCollection getQueue(DB db);
+    protected abstract long getSleepTime();
 }
