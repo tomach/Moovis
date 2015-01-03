@@ -3,6 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<groupId>hr.fer.tel</groupId>
 	<artifactId>moovis</artifactId>
 	<version>0.1.0</version>
 
@@ -19,6 +20,14 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<!-- end::SPRINGBOOT[] -->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+
 
 		<dependency>
 			<groupId>org.mongodb</groupId>
@@ -81,7 +90,7 @@
 	</dependencies>
 
 	<properties>
-		<start-class>hello.Application</start-class>
+		<start-class>hr.fer.tel.moovis.StarterApp</start-class>
 	</properties>
 
 	<build>
@@ -93,5 +102,4 @@
 		</plugins>
 	</build>
 
-	<groupId>hr.fer.tel</groupId>
 </project>
