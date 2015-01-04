@@ -1,38 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>hr.fer.tel</groupId>
-	<artifactId>moovis</artifactId>
+	<artifactId>Moovis</artifactId>
 	<version>0.1.0</version>
-	<packaging>war</packaging>
-
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.1.10.RELEASE</version>
-	</parent>
+	<packaging>jar</packaging>
 
 	<dependencies>
 		<!-- tag::SPRINGBOOT[] -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<version>1.1.10.RELEASE</version>
+
 		</dependency>
 		<!-- end::SPRINGBOOT[] -->
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-
-
-		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongo-java-driver</artifactId>
+			<version>2.12.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.facebook4j</groupId>
@@ -82,12 +70,7 @@
 			<version>1.4</version>
 		</dependency>
 
-		<!-- tag::actuator[] -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-		<!-- end::actuator[] -->
+
 
 		<dependency>
 			<groupId>org.jsoup</groupId>
@@ -103,22 +86,7 @@
 
 	</dependencies>
 
-	<properties>
-		<start-class>hr.fer.tel.moovis.StarterApp</start-class>
-	</properties>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
-
-
 	<profiles>
-		<!-- Profil za pokretanje provjere id-eava -->
 		<profile>
 			<id>movie-finder</id>
 			<build>
@@ -142,8 +110,6 @@
 				</plugins>
 			</build>
 		</profile>
-
-		<!-- Profil za pokretanje movie collectora -->
 		<profile>
 			<id>data-collector</id>
 			<build>
