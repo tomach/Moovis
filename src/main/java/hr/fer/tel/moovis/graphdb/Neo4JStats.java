@@ -1,5 +1,7 @@
 package hr.fer.tel.moovis.graphdb;
 
+import java.util.Iterator;
+
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -42,12 +44,14 @@ public class Neo4JStats {
 		try (Transaction tx = graphDb.beginTx()) {
 
 			int rels = 0;
-			for (Relationship rel : GlobalGraphOperations.at(graphDb)
-					.getAllRelationships()) {
+			for (Iterator<Relationship> iterator = GlobalGraphOperations
+					.at(graphDb).getAllRelationships().iterator(); iterator
+					.hasNext();) {
 				rels++;
 			}
 			int nodes = 0;
-			for (Node node : GlobalGraphOperations.at(graphDb).getAllNodes()) {
+			for (Iterator<Node> iterator = GlobalGraphOperations.at(graphDb)
+					.getAllNodes().iterator(); iterator.hasNext();) {
 				nodes++;
 			}
 
@@ -61,7 +65,7 @@ public class Neo4JStats {
 	public static void main(String[] args) {
 		Neo4JStats obj = new Neo4JStats();
 		obj.stats();
-		//obj.delete();
+		// obj.delete();
 		obj.graphDb.shutdown();
 		// new Neo4JStats().delete();
 	}
