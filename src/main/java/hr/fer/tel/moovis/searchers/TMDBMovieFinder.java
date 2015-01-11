@@ -29,31 +29,6 @@ public class TMDBMovieFinder implements Runnable {
 	private TheMovieDbApi theMovieDbApi;
 
 	private Integer[] ids;
-	private boolean processSimilarMovies = false;
-
-	public TMDBMovieFinder(boolean processSimilarMovies)
-			throws UnknownHostException, MovieDbException {
-		theMovieDbApi = new TheMovieDbApi(API_KEY);
-
-		// Since 2.10.0, uses MongoClient
-		MongoClient mongo = new MongoClient("localhost", 27017);
-		db = mongo.getDB(DB_NAME);
-		movies = db.getCollection("movies");
-
-		rottenSearchQueue = db.getCollection("RottenSearchQueue");
-		tmdbSearchQueue = db.getCollection("TMDBSearchQueue");
-		ytbSearchQueue = db.getCollection("YTSearchQueue");
-		this.processSimilarMovies = processSimilarMovies;
-
-		List<Integer> simIds = new ArrayList<Integer>();
-		DBCollection similarMovies = db.getCollection("SimilarMovies");
-		DBCursor curSim = similarMovies.find();
-		while (curSim.hasNext()) {
-			DBObject next = curSim.next();
-			simIds.add(Integer.parseInt(next.get("id").toString()));
-		}
-		ids = simIds.toArray(new Integer[simIds.size()]);
-	}
 
 	public TMDBMovieFinder(Integer startCounter, Integer endCounter)
 			throws UnknownHostException, MovieDbException {
@@ -123,8 +98,7 @@ public class TMDBMovieFinder implements Runnable {
 
 	public static void main(String[] args) throws MovieDbException,
 			UnknownHostException {
-		//new Thread(new TMDBMovieFinder(1, 500)).start();
-		new Thread(new TMDBMovieFinder(true)).start();
+		new Thread(new TMDBMovieFinder(335399, 350000)).start();
 
 	}
 }
