@@ -4,6 +4,7 @@ import twitter4j.*;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.ConfigurationBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -95,10 +96,31 @@ public class TwitterAPI {
         }
     }
 
+    //TODO potrebno doraditi, cursor i slicno!
+    //https://dev.twitter.com/overview/api/cursoring
+    public List<String> getFollowedUsers() {
 
-    public void getFollowedUsers() {
+        long userId = 0;
+        List<String> userNames = null;
+        PagableResponseList<User> users = null;
+
+        try {
+            userId = twitter.getId();
+            users = twitter.getFriendsList(userId, -1);
+
+            if (null != users) {
+                userNames = new ArrayList<String>();
+
+                for (User user : users)
+                    userNames.add(user.getName());
+            }
 
 
+        } catch (TwitterException e) {
+            e.printStackTrace();
+        }
+
+        return userNames;
     }
 
     //test
