@@ -15,14 +15,14 @@ public class ApplicationUser {
 	private String surname;
 	private List<ApplicationUser> friendsList;
 	private List<String> movieList;
-	private Date lastUpdate; 
+	private Date lastMovieUpdate; 
 	
-	public Date getLastUpdate() {
-		return lastUpdate;
+	public Date getLastMovieUpdate() {
+		return lastMovieUpdate;
 	}
 
-	public void setLastUpdate(Date lastUpdate) {
-		this.lastUpdate = lastUpdate;
+	public void setLastMovieUpdate(Date lastMovieUpdate) {
+		this.lastMovieUpdate = lastMovieUpdate;
 	}
 
 	public ApplicationUser(String accessToken, String facebookAccessToken, String name, String surname) {
