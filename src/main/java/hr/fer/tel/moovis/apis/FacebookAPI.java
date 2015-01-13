@@ -39,7 +39,7 @@ public class FacebookAPI {
 	public User getUser() throws FacebookException, UnknownHostException,
 			JSONException {
 		Reading r = new Reading();
-		r.fields("id", "name");
+		r.fields("id", "name", "first_name", "last_name");
 		return facebook.getMe(r);
 	}
 
