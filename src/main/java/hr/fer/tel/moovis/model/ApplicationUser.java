@@ -49,31 +49,6 @@ public class ApplicationUser {
 		this.friends = friends;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ApplicationUser other = (ApplicationUser) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-
 	public void addFriend(ApplicationUser friend) {
 		if (friend == null) {
 			throw new IllegalArgumentException("frined can not be null!");
@@ -138,6 +113,40 @@ public class ApplicationUser {
 
 	public void setFacebookId(String facebookId) {
 		this.facebookId = facebookId;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ApplicationUser other = (ApplicationUser) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "ApplicationUser [id=" + id + ", accessToken=" + accessToken
+				+ ", facebookId=" + facebookId + ", facebookAccessToken="
+				+ facebookAccessToken + ", name=" + name + ", surname="
+				+ surname + ", likedMovieNames=" + likedMovieNames
+				+ ", friends=" + friends.size() + "]";
 	}
 
 }

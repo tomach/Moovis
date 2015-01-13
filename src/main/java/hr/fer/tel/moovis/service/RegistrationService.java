@@ -5,7 +5,6 @@ import hr.fer.tel.moovis.dao.ApplicationUserRepository;
 import hr.fer.tel.moovis.model.ApplicationUser;
 
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,14 +45,13 @@ public class RegistrationService {
 			Set<String> likedMovieNames = getAllMovieNames(faceApi.getMovies(0));
 			Set<ApplicationUser> friends = getAllFacebookIds(faceApi
 					.getFriends());
-			System.out.println(faceApi.getFriends());
-			System.out.println(faceApi.getMovies(0));
 
 			// TODO add call to dao save
 			ApplicationUser newUser = new ApplicationUser(accessToken,
 					facebookId, facebookAccessToken, name, surname,
 					likedMovieNames, friends);
 			appUserRepo.save(newUser);
+
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (FacebookException e) {
