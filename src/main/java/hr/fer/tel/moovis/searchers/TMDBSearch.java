@@ -1,9 +1,6 @@
 package hr.fer.tel.moovis.searchers;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TheMovieDbApi;
 import com.omertron.themoviedbapi.model.Genre;
@@ -20,72 +17,120 @@ import java.util.List;
  */
 public class TMDBSearch extends GenericSearch {
 
-    private static final String API_KEY = "5086b39f4b96483187ec864955e4da88";
-    private static final String MY_QUEUE = "TMDBSearchQueue";
+	private static final String API_KEY = "5086b39f4b96483187ec864955e4da88";
+	private static final String MY_QUEUE = "TMDBSearchQueue";
 
-    private TheMovieDbApi theMovieDbApi;
+	private TheMovieDbApi theMovieDbApi;
 
-    public TMDBSearch() throws MovieDbException, UnknownHostException {
-        super();
-        theMovieDbApi = new TheMovieDbApi(API_KEY);
+	public TMDBSearch() throws MovieDbException, UnknownHostException {
+		super();
+		theMovieDbApi = new TheMovieDbApi(API_KEY);
 
-    }
+	}
 
+	@Override
+	protected void processMovie(DBObject obj, BasicDBObject newMovieObject) {
+		String movieKey = obj.get("movieKey").toString();
 
-    @Override
-    protected void processMovie(DBObject obj, BasicDBObject newMovieObject) {
-        String movieKey = obj.get("movieKey").toString();
+		System.out.println(movieKey);
 
-        System.out.println(movieKey);
+		// Obrada uz TMDB api
+		try {
+			List<MovieDb> results = theMovieDbApi.searchMovie(movieKey, 0,
+					null, false, 0).getResults();
+			if (results.size() == 0) {
+				return;
+			}
+			MovieDb movie = theMovieDbApi.getMovieInfo(results.get(0).getId(),
+					null, "");
 
+			System.out.println("THDB search result:" + movie);
+			BasicDBObject movieDetails = new BasicDBObject()
+					.append("id", movie.getId())
+					.append("title", movie.getTitle())
+					.append("budget", movie.getBudget())
+					.append("popularity", movie.getPopularity())
+					.append("userRating", movie.getUserRating())
+					.append("voteAverage", movie.getVoteAverage())
+					.append("homepage", movie.getHomepage())
+					.append("revenue", movie.getRevenue())
+					.append("releaseDate", movie.getReleaseDate())
+					.append("voteCount", movie.getVoteCount())
+					.append("imdbID", movie.getImdbID())
+					.append("overview", movie.getOverview());
+			if (movie.getGenres() != null) {
+				List<String> genres = new ArrayList<String>();
+				for (Genre genre : movie.getGenres()) {
+					genres.add(genre.getName());
+				}
+				movieDetails.append("genres", genres);
+			}
 
-        //Obrada uz TMDB api
-        try {
-            MovieDb movie = theMovieDbApi.searchMovie(movieKey, 0, null, false, 0).getResults().get(0);
+			TmdbResultsList<Person> movieCasts = theMovieDbApi
+					.getMovieCasts(movie.getId());
+			if (movieCasts != null) {
+				List<BasicDBObject> cast = new ArrayList<BasicDBObject>();
+				int castCounter = 0;
+				for (Person person : movieCasts.getResults()) {
+					if (castCounter > 10) {
+						break;
+					}
+					castCounter++;
+					cast.add(new BasicDBObject().append("id", person.getId())
+							.append("name", person.getName())
+							.append("character", person.getCharacter()));
+				}
+				movieDetails.append("cast", cast);
+			}
 
-            System.out.println(movie);
+			try {
+				BasicDBList similarMoviesList = new BasicDBList();
+				TmdbResultsList<MovieDb> simMovies = theMovieDbApi
+						.getSimilarMovies(movie.getId(), null, 0, "");
+				System.out.println("Similar movies:" + simMovies);
+				//DBCollection similarMoviesCollection = getDb().getCollection("SimilarMovies");
+				for (MovieDb simMovie : simMovies.getResults()) {
+					BasicDBObject simMovieDetails = new BasicDBObject().append(
+							"id", simMovie.getId()).append("title",
+							simMovie.getTitle());
+					similarMoviesList.add(simMovieDetails);
+					//similarMoviesCollection.insert(new BasicDBObject("id",simMovie.getId()));
+				}
+				movieDetails.append("similarMovies", similarMoviesList);
 
-            BasicDBObject movieDetails = new BasicDBObject()
-                    .append("id", movie.getId())
-                    .append("title", movie.getTitle()).append("budget", movie.getBudget())
-                    .append("popularity", movie.getPopularity()).append("userRating", movie.getUserRating())
-                    .append("voteAverage", movie.getVoteAverage()).append("homepage", movie.getHomepage())
-                    .append("revenue", movie.getRevenue()).append("releaseDate", movie.getReleaseDate())
-                    .append("voteCount", movie.getVoteCount());
+			} catch (Exception e) {
+			}
 
+			newMovieObject.append("tmdb", movieDetails);
 
-            if (movie.getGenres() != null) {
-                List<String> genres = new ArrayList<String>();
-                for (Genre genre : movie.getGenres()) {
-                    genres.add(genre.getName());
-                }
-                movieDetails.append("genres", genres);
-            }
+			String imdbId = movie.getImdbID();
+			if (imdbId != null && !imdbId.isEmpty()) {
+				System.out.println("Get imdbId and put it to IMDB queue");
+				DB db = getDb();
 
-            TmdbResultsList<Person> movieCasts = theMovieDbApi.getMovieCasts(movie.getId());
-            if (movieCasts != null) {
+				BasicDBObject imdbObject = new BasicDBObject().append(
+						"movieKey", movieKey).append("imdbId", imdbId);
+				DBCollection table = db.getCollection("IMDBSearchQueue");
+				table.insert(imdbObject);
+			}
 
-                List<BasicDBObject> cast = new ArrayList<BasicDBObject>();
-                for (Person person : movieCasts.getResults()) {
-                    cast.add(new BasicDBObject().append("id", person.getId())
-                            .append("name", person.getName())
-                            .append("character", person.getCharacter()));
-                }
-                movieDetails.append("cast", cast);
-            }
+		} catch (MovieDbException e) {
+		}
+	}
 
+	@Override
+	protected DBCollection getQueue(DB db) {
+		return db.getCollection(MY_QUEUE);
+	}
 
-            newMovieObject.append("tmdb", movieDetails);
-        } catch (MovieDbException e) {
-        }
-    }
+	@Override
+	protected long getSleepTime() {
+		return 330;
+	}
 
-    @Override
-    protected DBCollection getQueue(DB db) {
-        return db.getCollection(MY_QUEUE);
-    }
-
-    public static void main(String[] args) throws MovieDbException, UnknownHostException {
-        new Thread(new TMDBSearch()).start();
-    }
+	public static void main(String[] args) throws MovieDbException,
+			UnknownHostException {
+		new Thread(new TMDBSearch()).start();
+		
+	}
 }

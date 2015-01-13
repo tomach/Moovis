@@ -17,7 +17,7 @@ public class FacebookAPI {
     private static final String API_KEY = "538301972979920";
     private static final String APP_SECRET = "8a17d41e0334cda6f52af4b6481f92fa";
     private static final String CLIENT_TOKEN = "CAAHplTHhoNABAEvZAeWfvNK5FdFOIvXpxdPiMy3EmHAtWeNqPHjmH3YR6ibL1UZC8jsHvGUJVAr5tP5XnA1lN7ZAopKyCta1soZC2ZCNnNDjEOAY6f2f73RAKE9djv9N7v8MwDwdZAeTKsoH8w3VTYZCYEVsrCahPavt4QvY5lsswY0ZAnRopCyE5YIEZCIipecFdArv2eN17hm10SVwHGIpy";
-    private static final String ACC_TOKEN = "CAAHplTHhoNABACaMExgmzBoU6XFVVXZCdsA7RCY6iZBx6fKfWCPZAlTAOXdLwy0YzzT5OSGDX1tLoRYxouMFLyuchZCWrWZCoOdBKMDOWti9cxees7G9sJiIHeJaXUnn6SFVYbZBcuwlkpWI5nNxTBJygd74cNAcsbZAWyZCtEsQeTsFSZB1AmopewiDlTeytehZBVyvKwNsU7fSyfwAH3ioB7\n";
+    private static final String ACC_TOKEN = "CAAHplTHhoNABAK7oFmC9B1A79d21X1t96fHUM4Qp1yqM2WG4bdr1tkZAibq6LPoG5CEy9vRi4gCWzx8tbZArpsWFop6ZBbTk1ucauYfd2DvZCRLIMz3irLXHjBZB8cW9sK5lexBz2Y9v9YDUHlu2pNJtprA1L3ZAA2BJqSlnxmRwZC06gfRcZBsLtrgAUAHJnFdumCM9LIMog7Qr3dYrTewH";
     private Facebook facebook;
 
 
