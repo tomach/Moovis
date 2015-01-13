@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: api-imdb-1.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.moviejukebox/api-imdb/1.2/f148b0ef59c03408bc0846cecca1f522a8b65792/api-imdb-1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.moviejukebox/api-imdb/1.2/f8569e0497db5d41ecf0bba462bbd5dba3458cf6/api-imdb-1.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

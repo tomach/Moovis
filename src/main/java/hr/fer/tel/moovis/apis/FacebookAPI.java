@@ -1,84 +1,161 @@
 package hr.fer.tel.moovis.apis;
 
 import com.mongodb.*;
+
 import facebook4j.*;
 import facebook4j.auth.AccessToken;
 import facebook4j.internal.org.json.JSONException;
-import hr.fer.tel.moovis.model.User;
 import hr.fer.tel.moovis.searchers.IMDBSearcher;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by tomislaf on 28.10.2014..
  */
 public class FacebookAPI {
 
-    private static final String API_KEY = "538301972979920";
-    private static final String APP_SECRET = "8a17d41e0334cda6f52af4b6481f92fa";
-    private static final String CLIENT_TOKEN = "CAAHplTHhoNABAEvZAeWfvNK5FdFOIvXpxdPiMy3EmHAtWeNqPHjmH3YR6ibL1UZC8jsHvGUJVAr5tP5XnA1lN7ZAopKyCta1soZC2ZCNnNDjEOAY6f2f73RAKE9djv9N7v8MwDwdZAeTKsoH8w3VTYZCYEVsrCahPavt4QvY5lsswY0ZAnRopCyE5YIEZCIipecFdArv2eN17hm10SVwHGIpy";
-    private static final String ACC_TOKEN = "CAAHplTHhoNABAK7oFmC9B1A79d21X1t96fHUM4Qp1yqM2WG4bdr1tkZAibq6LPoG5CEy9vRi4gCWzx8tbZArpsWFop6ZBbTk1ucauYfd2DvZCRLIMz3irLXHjBZB8cW9sK5lexBz2Y9v9YDUHlu2pNJtprA1L3ZAA2BJqSlnxmRwZC06gfRcZBsLtrgAUAHJnFdumCM9LIMog7Qr3dYrTewH";
-    private Facebook facebook;
+	private static final String API_KEY = "538301972979920";
+	private static final String APP_SECRET = "8a17d41e0334cda6f52af4b6481f92fa";
+	private static final String CLIENT_TOKEN = "CAAHplTHhoNABAEvZAeWfvNK5FdFOIvXpxdPiMy3EmHAtWeNqPHjmH3YR6ibL1UZC8jsHvGUJVAr5tP5XnA1lN7ZAopKyCta1soZC2ZCNnNDjEOAY6f2f73RAKE9djv9N7v8MwDwdZAeTKsoH8w3VTYZCYEVsrCahPavt4QvY5lsswY0ZAnRopCyE5YIEZCIipecFdArv2eN17hm10SVwHGIpy";
+	private static final String ACC_TOKEN = "CAAHplTHhoNABABA1FpWPoQN1yjYBZAezVZCfmCMlZALthsatjZCR9qwdE0UlnedknXYeQSfE393MdvgZB6bfqh8KhoIbcvLdBIefOZBut0JEvrjNsZB8ofH5HeeDDkgpeAjA9GQ5qN9qtipqRLi4fCLMG2VT0Nl1lz4mHY7NUgYFB9hzleAyQQ42gHgi3b0lqW0GtULDeCR6JuZApWuA719A";
+	private Facebook facebook;
 
+	public FacebookAPI(String accessToken) throws UnknownHostException {
+		facebook = new FacebookFactory().getInstance();
+		facebook.setOAuthAppId(API_KEY, APP_SECRET);
+		facebook.setOAuthPermissions("user_likes");
+		facebook.setOAuthAccessToken(new AccessToken(accessToken, null));
+	}
 
-    public FacebookAPI() throws UnknownHostException {
-        facebook = new FacebookFactory().getInstance();
-        facebook.setOAuthAppId(API_KEY, APP_SECRET);
-        facebook.setOAuthPermissions("user_likes");
-        facebook.setOAuthAccessToken(new AccessToken(ACC_TOKEN, null));
+	public Facebook getFacebook() {
+		return facebook;
+	}
 
-    }
+	public User loginUser() throws FacebookException, UnknownHostException,
+			JSONException {
+		Reading r = new Reading();
+		r.fields("id", "name");
+		return facebook.getMe(r);
+	}
 
-    public Facebook getFacebook() {
-        return facebook;
-    }
+	public static void main(String argv[]) throws UnknownHostException {
+		FacebookAPI fa = new FacebookAPI(ACC_TOKEN);
+		try {
+			System.out.println(fa.getMovies(0).size());
+		} catch (FacebookException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
+	public List<Movie> getMovies(long sinceTimestamp) throws FacebookException {
+		Date since = new Date(sinceTimestamp);
 
-    public static void main(String[] args) throws FacebookException, UnknownHostException, JSONException {
+		ResponseList<Movie> likedMovies = facebook.getMovies();
+		List<Movie> result = new ArrayList<>();
 
-        MongoClient mongo;
-        DB dbMoovis;
-        DBCollection rottenSearchQueue;
-        DBCollection tmdbSearchQueue;
-        DBCollection ytbSearchQueue;
+		int totalNum = likedMovies.size();
+		for (Movie fbM : likedMovies) {
+			if (fbM.getCreatedTime().before(since))
+				break;
+			result.add(fbM);
+		}
 
-        DBCollection movies;
+		Paging<Movie> moviePaging = likedMovies.getPaging();
+		while ((likedMovies = facebook.fetchNext(moviePaging)) != null) {
+			totalNum += likedMovies.size();
+			boolean stop = false;
+			for (Movie fbM : likedMovies) {
+				if (fbM.getCreatedTime().before(since)) {
+					stop = true;
+					break;
+				}
+				result.add(fbM);
+			}
+			if (stop)
+				break;
+			moviePaging = likedMovies.getPaging();
+		}
 
-        mongo = new MongoClient("localhost", 27017);
-        dbMoovis = mongo.getDB("moovis");
-        rottenSearchQueue = dbMoovis.getCollection("RottenSearchQueue");
-        tmdbSearchQueue = dbMoovis.getCollection("TMDBSearchQueue");
-        ytbSearchQueue = dbMoovis.getCollection("YTSearchQueue");
-        movies = dbMoovis.getCollection("movies");
+		return result;
+	}
 
-        Facebook f = new FacebookAPI().getFacebook();
-        User u = new User(f.getName(), "");
-        ResponseList<Movie> likedMovies = f.getMovies();
+	public List<Friend> getFriends() throws FacebookException {
+		ResponseList<Friend> friends = facebook.getFriends();
+		List<Friend> result = new ArrayList<>();
 
-        System.out.println("fb liked movies " + likedMovies);
+		int totalNum = friends.size();
+		for (Friend fbM : friends) {
+			result.add(fbM);
+		}
 
-        //List<hr.fer.tel.moovis.model.Movie> listMovies = new ArrayList<hr.fer.tel.moovis.model.Movie>();
-        for (Movie fbM : likedMovies) {
-            DBObject dbMovie = new BasicDBObject().append("movieKey", fbM.getName()).append("name", fbM.getName());
-            Cursor checkExists = movies.find(dbMovie);
-            if (!checkExists.hasNext()) {
-                movies.insert(dbMovie);
-                ytbSearchQueue.insert(dbMovie);
-                rottenSearchQueue.insert(dbMovie);
-                tmdbSearchQueue.insert(dbMovie);
-                /*
-                hr.fer.tel.moovis.model.Movie movie = new hr.fer.tel.moovis.model.Movie(fbM.getName(), "");
+		Paging<Friend> friendPaging = friends.getPaging();
+		while ((friends = facebook.fetchNext(friendPaging)) != null) {
+			totalNum += friends.size();
+			for (Friend fbM : friends) {
+				result.add(fbM);
+			}
+			friendPaging = friends.getPaging();
+		}
+		return result;
+	}
 
-                Group g = f.getGroup(fbM.getId());
-                Page p = f.getPage(fbM.getId());
-                JSONObject obj = f.rawAPI().callGetAPI(fbM.getId()).asJSONObject();
-                String dat = obj.getString("release_date");
-                System.out.println("releaseDate " + dat);
-                movie.setDescription(g.getDescription());
-                listMovies.add(movie);
-                */
-            }
-            checkExists.close();
-        }
-    }
+	// za damsa
+	public void spremanjeFilmova() throws UnknownHostException,
+			FacebookException {
+		MongoClient mongo;
+		DB dbMoovis;
+		DBCollection rottenSearchQueue;
+		DBCollection tmdbSearchQueue;
+		DBCollection ytbSearchQueue;
+
+		DBCollection movies;
+
+		mongo = new MongoClient("localhost", 27017);
+		dbMoovis = mongo.getDB("moovis");
+		rottenSearchQueue = dbMoovis.getCollection("RottenSearchQueue");
+		tmdbSearchQueue = dbMoovis.getCollection("TMDBSearchQueue");
+		ytbSearchQueue = dbMoovis.getCollection("YTSearchQueue");
+		movies = dbMoovis.getCollection("movies");
+
+		ResponseList<Movie> likedMovies = facebook.getMovies();
+
+		int totalNum = likedMovies.size();
+		for (Movie fbM : likedMovies) {
+			DBObject dbMovie = new BasicDBObject().append("movieKey",
+					fbM.getName()).append("name", fbM.getName());
+			Cursor checkExists = movies.find(dbMovie);
+			if (!checkExists.hasNext()) {
+				ytbSearchQueue.insert(dbMovie);
+				rottenSearchQueue.insert(dbMovie);
+				tmdbSearchQueue.insert(dbMovie);
+			}
+			checkExists.close();
+		}
+
+		Paging<Movie> moviePaging = likedMovies.getPaging();
+		while ((likedMovies = facebook.fetchNext(moviePaging)) != null) {
+			totalNum += likedMovies.size();
+			System.out.println("fb liked movies " + likedMovies);
+			for (Movie fbM : likedMovies) {
+				DBObject dbMovie = new BasicDBObject().append("movieKey",
+						fbM.getName()).append("name", fbM.getName());
+				Cursor checkExists = movies.find(dbMovie);
+				if (!checkExists.hasNext()) {
+					ytbSearchQueue.insert(dbMovie);
+					rottenSearchQueue.insert(dbMovie);
+					tmdbSearchQueue.insert(dbMovie);
+				}
+				checkExists.close();
+			}
+			moviePaging = likedMovies.getPaging();
+		}
+		System.out.println("broj dohvacenih filmova " + totalNum);
+	}
+
 }
