@@ -13,8 +13,7 @@ public class FacebookLoginController {
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ApplicationUser facebookLogin(@RequestParam(value = "access_token") String accessToken) {
 		
-		//ApplicationUser appUser = new ApplicationUser();
-		//appUser.setAccessToken(accessToken);
+		
 	
 		return null;
 	}
