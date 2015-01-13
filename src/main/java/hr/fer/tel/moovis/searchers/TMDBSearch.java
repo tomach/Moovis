@@ -25,7 +25,6 @@ public class TMDBSearch extends GenericSearch {
 	public TMDBSearch() throws MovieDbException, UnknownHostException {
 		super();
 		theMovieDbApi = new TheMovieDbApi(API_KEY);
-
 	}
 
 	@Override
@@ -88,13 +87,15 @@ public class TMDBSearch extends GenericSearch {
 				TmdbResultsList<MovieDb> simMovies = theMovieDbApi
 						.getSimilarMovies(movie.getId(), null, 0, "");
 				System.out.println("Similar movies:" + simMovies);
-				//DBCollection similarMoviesCollection = getDb().getCollection("SimilarMovies");
+				// DBCollection similarMoviesCollection =
+				// getDb().getCollection("SimilarMovies");
 				for (MovieDb simMovie : simMovies.getResults()) {
 					BasicDBObject simMovieDetails = new BasicDBObject().append(
 							"id", simMovie.getId()).append("title",
 							simMovie.getTitle());
 					similarMoviesList.add(simMovieDetails);
-					//similarMoviesCollection.insert(new BasicDBObject("id",simMovie.getId()));
+					// similarMoviesCollection.insert(new
+					// BasicDBObject("id",simMovie.getId()));
 				}
 				movieDetails.append("similarMovies", similarMoviesList);
 
@@ -131,6 +132,6 @@ public class TMDBSearch extends GenericSearch {
 	public static void main(String[] args) throws MovieDbException,
 			UnknownHostException {
 		new Thread(new TMDBSearch()).start();
-		
+
 	}
 }
