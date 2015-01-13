@@ -1,11 +1,5 @@
 package hr.fer.tel.moovis.model;
 
-<<<<<<< HEAD
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-=======
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
->>>>>>> 8ab08fc5a1e38585bee2ab0831ac6ed96e432532
 
 @Entity
 @Table(name = "application_users")
@@ -32,34 +25,6 @@ public class ApplicationUser {
 	private String facebookAccessToken;
 	private String name;
 	private String surname;
-<<<<<<< HEAD
-	private String email;
-	private String password;
-	private List<ApplicationUser> friendsList;
-	private List<String> movieList;
-	private Date lastMovieUpdate; 
-	
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	public Date getLastMovieUpdate() {
-		return lastMovieUpdate;
-	}
-=======
->>>>>>> 8ab08fc5a1e38585bee2ab0831ac6ed96e432532
 
 	@ElementCollection
 	@CollectionTable(name = "movie_names")
@@ -105,12 +70,6 @@ public class ApplicationUser {
 			return false;
 		return true;
 	}
-<<<<<<< HEAD
-	
-	
-	public List<ApplicationUser> getFriendsList() {
-		return friendsList;
-=======
 
 	public void addFriend(ApplicationUser friend) {
 		if (friend == null) {
@@ -128,7 +87,6 @@ public class ApplicationUser {
 
 	public Set<String> getLikedMovieNames() {
 		return Collections.unmodifiableSet(likedMovieNames);
->>>>>>> 8ab08fc5a1e38585bee2ab0831ac6ed96e432532
 	}
 
 	public Set<ApplicationUser> getFriends() {
