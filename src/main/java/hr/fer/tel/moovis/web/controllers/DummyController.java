@@ -2,6 +2,7 @@ package hr.fer.tel.moovis.web.controllers;
 
 import hr.fer.tel.moovis.dao.ApplicationUserRepository;
 import hr.fer.tel.moovis.model.ApplicationUser;
+import hr.fer.tel.moovis.service.RegistrationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,21 +15,14 @@ public class DummyController {
 	@Autowired
 	private ApplicationUserRepository repo;
 
+	@Autowired
+	private RegistrationService regService;
+
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public void facebookLogin() {
 
-		ApplicationUser user1 = repo.findOne(1L);
-		ApplicationUser user2 = repo.findOne(2L);
-		ApplicationUser user3 = repo.findOne(3L);
-
-		user1.getFriends().add(user2);
-		user2.getFriends().add(user1);
-
-		user3.getFriends().add(user1);
-
-		repo.save(user1);
-		repo.save(user2);
-		repo.save(user3);
+		regService
+				.registerApplicationUser("CAAHplTHhoNABAG3CpyZAg9lic8uFfNtxbWzw7ww8OQrHGslCuF0UpiQ7wjrcHuV8U8ymI4JbhiBihdV5AmBWd9JKGZARAehnwLDVdFaTM7nHSRxOrUPihATLeDFWqSq09f5s78IZBSzAbFhAUgDmmA0VMvIZAZCiAXL3UZCfZAtizZCVm1ZCw34thFNW8y4ZAN89OfQ1lcYfNUlAtav5oxZAJPm");
 
 	}
 }

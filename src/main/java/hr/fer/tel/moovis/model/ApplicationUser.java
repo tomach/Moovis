@@ -33,6 +33,9 @@ public class ApplicationUser {
 	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<ApplicationUser> friends = new HashSet<>();
 
+	public ApplicationUser() {
+	}
+
 	public ApplicationUser(String accessToken, String facebookId,
 			String facebookAccessToken, String name, String surname,
 			Set<String> likedMovieNames, Set<ApplicationUser> friends) {
