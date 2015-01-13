@@ -41,7 +41,7 @@ public class RegistrationService {
 			String surname = user.getLastName();
 			String accessToken = UUID.nameUUIDFromBytes(facebookId.getBytes())
 					.toString();
-
+			System.out.println(name + " " + surname);
 			Set<String> likedMovieNames = getAllMovieNames(faceApi.getMovies(0));
 			Set<ApplicationUser> friends = getAllFacebookIds(faceApi
 					.getFriends());
@@ -71,12 +71,15 @@ public class RegistrationService {
 
 	private Set<ApplicationUser> getAllFacebookIds(List<Friend> friends) {
 		Set<ApplicationUser> facebookIds = new HashSet<>();
+		System.out.println("!!!");
+		System.out.println(friends);
 		for (Friend friend : friends) {
 			ApplicationUser fr = appUserRepo.findByFacebookId(friend.getId());
 			if (fr != null) {
 				facebookIds.add(fr);
 			}
 		}
+		System.out.println(facebookIds);
 		return facebookIds;
 	}
 }
