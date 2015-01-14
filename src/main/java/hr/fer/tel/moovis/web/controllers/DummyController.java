@@ -1,7 +1,9 @@
 package hr.fer.tel.moovis.web.controllers;
 
 import hr.fer.tel.moovis.dao.ApplicationUserRepository;
+import hr.fer.tel.moovis.dao.MovieDao;
 import hr.fer.tel.moovis.model.ApplicationUser;
+import hr.fer.tel.moovis.recommendation.MovieRecommendation;
 import hr.fer.tel.moovis.service.RegistrationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class DummyController {
+
+	@Autowired
+	private MovieDao movieDao;
+	@Autowired
+	private MovieRecommendation movieRec;
 	@Autowired
 	private ApplicationUserRepository repo;
 
@@ -36,7 +43,20 @@ public class DummyController {
 
 	}
 
-	@RequestMapping(value = "/env", method = RequestMethod.GET)
+	@RequestMapping(value = "/movie", method = RequestMethod.GET)
 	public void env() {
+
+		System.out.println(movieDao.findMovieByName("Interstellar"));
+		System.out.println(movieDao.findMovieByName("Interstellar")
+				.getSimilarMovies());
+
 	}
+
+	@RequestMapping(value = "/rec", method = RequestMethod.GET)
+	public void env1() {
+		movieRec.calculateRecommendation(repo
+				.findByFacebookId("1375227446117765"));
+
+	}
+
 }
