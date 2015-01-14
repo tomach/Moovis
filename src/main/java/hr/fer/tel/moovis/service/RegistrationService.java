@@ -6,7 +6,6 @@ import hr.fer.tel.moovis.model.ApplicationUser;
 import hr.fer.tel.moovis.names.MovieNamesContainer;
 
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,8 +25,10 @@ public class RegistrationService {
 	@Autowired
 	private ApplicationUserRepository appUserRepo;
 
-	public void registerApplicationUser(String facebookAccessToken) {
+	public ApplicationUser registerApplicationUser(String facebookAccessToken) {
 
+		ApplicationUser savedUser = null;
+		
 		try {
 
 			FacebookAPI faceApi = new FacebookAPI(facebookAccessToken);
@@ -61,7 +62,8 @@ public class RegistrationService {
 			ApplicationUser newUser = new ApplicationUser(accessToken,
 					facebookId, facebookAccessToken, name, surname,
 					checkedMovieNames, friends);
-			appUserRepo.save(newUser);
+			savedUser = appUserRepo.save(newUser);			
+			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (FacebookException e) {
@@ -69,6 +71,8 @@ public class RegistrationService {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		
+		return savedUser;
 	}
 
 	private Set<String> getAllMovieNames(List<Movie> movies) {
