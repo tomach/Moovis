@@ -4,9 +4,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import hr.fer.tel.moovis.dao.MovieDao;
 import hr.fer.tel.moovis.model.Person;
@@ -24,7 +23,6 @@ public class MovieProxy extends Movie {
 
 	public MovieProxy() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public MovieProxy(String title, YouTubeInfo ytInfo, IMDBMovieInfo imdbInfo,
@@ -42,7 +40,10 @@ public class MovieProxy extends Movie {
 			if (simNames != null) {
 				List<Movie> similars = new ArrayList<Movie>();
 				for (String name : simNames) {
-					similars.add(movieDao.findMovieByName(name));
+					Movie simMovieObj = movieDao.findMovieByName(name);
+					if (simMovieObj != null) {
+						similars.add(simMovieObj);
+					}
 				}
 				super.setSimilarMovies(similars);
 			}

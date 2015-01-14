@@ -83,25 +83,29 @@ public class MovieDao {
 
 	private YouTubeInfo loadYTInfo(DBObject movieRecord) {
 		YouTubeInfo ytInfo = new YouTubeInfo();
-		if (movieRecord.containsField("youTube")) {
+		if (movieRecord.containsField("youTube")
+				&& movieRecord.get("youTube") != null) {
 			movieRecord = (DBObject) movieRecord.get("youTube");
 		} else {
 			return null;
 		}
 
-		if (movieRecord.containsField("id")) {
+		if (movieRecord.containsField("id") && movieRecord.get("id") != null) {
 			ytInfo.setId(movieRecord.get("id").toString());
 		}
 
-		if (movieRecord.containsField("description")) {
+		if (movieRecord.containsField("description")
+				&& movieRecord.get("description") != null) {
 			ytInfo.setDescription(movieRecord.get("description").toString());
 		}
 
-		if (movieRecord.containsField("thumbnailURL")) {
+		if (movieRecord.containsField("thumbnailURL")
+				&& movieRecord.get("thumbnailURL") != null) {
 			ytInfo.setThumbnailURL(movieRecord.get("thumbnailURL").toString());
 		}
 
-		if (movieRecord.containsField("title")) {
+		if (movieRecord.containsField("title")
+				&& movieRecord.get("title") != null) {
 			ytInfo.setTitle(movieRecord.get("title").toString());
 		}
 
@@ -109,17 +113,20 @@ public class MovieDao {
 	}
 
 	private IMDBMovieInfo loadIMDBInfo(DBObject movieRecord) {
-		if (movieRecord.containsField("imdb")) {
+		if (movieRecord.containsField("imdb")
+				&& movieRecord.get("imdb") != null) {
 			movieRecord = (DBObject) movieRecord.get("imdb");
 		} else {
 			return null;
 		}
 		IMDBMovieInfo imdbInfo = new IMDBMovieInfo();
-		if (movieRecord.containsField("imdbId")) {
+		if (movieRecord.containsField("imdbId")
+				&& movieRecord.get("imdbId") != null) {
 			imdbInfo.setImdbId(movieRecord.get("imdbId").toString());
 		}
 
-		if (movieRecord.containsField("rating")) {
+		if (movieRecord.containsField("rating")
+				&& movieRecord.get("rating") != null) {
 			imdbInfo.setRating(Double.parseDouble(movieRecord.get("rating")
 					.toString()));
 		}
@@ -127,35 +134,43 @@ public class MovieDao {
 	}
 
 	private TMDBMovieInfo loadTMDBMovieInfo(DBObject movieRecord) {
-		if (movieRecord.containsField("tmdb")) {
+		if (movieRecord.containsField("tmdb")
+				&& movieRecord.get("tmdb") != null) {
 			movieRecord = (DBObject) movieRecord.get("tmdb");
 		} else {
 			return null;
 		}
+
 		TMDBMovieInfo tmdbInfo = new TMDBMovieInfo();
-		if (movieRecord.containsField("id")) {
+		if (movieRecord.containsField("id") && movieRecord.get("id") != null) {
 			tmdbInfo.setTmdbId(movieRecord.get("id").toString());
 		}
-		if (movieRecord.containsField("budget")) {
+		if (movieRecord.containsField("budget")
+				&& movieRecord.get("budget") != null) {
 			tmdbInfo.setBudget(Long.parseLong(movieRecord.get("budget")
 					.toString()));
 		}
-		if (movieRecord.containsField("revenue")) {
+		if (movieRecord.containsField("revenue")
+				&& movieRecord.get("revenue") != null) {
 			tmdbInfo.setRevenue(Long.parseLong(movieRecord.get("revenue")
 					.toString()));
 		}
-		if (movieRecord.containsField("releaseDate")) {
+		if (movieRecord.containsField("releaseDate")
+				&& movieRecord.get("releaseDate") != null) {
 			tmdbInfo.setReleaseDate(movieRecord.get("releaseDate").toString());
 		}
-		if (movieRecord.containsField("overview")) {
+		if (movieRecord.containsField("overview")
+				&& movieRecord.get("overview") != null) {
 			tmdbInfo.setOverview(movieRecord.get("overview").toString());
 		}
 
-		if (movieRecord.containsField("voteAverage")) {
+		if (movieRecord.containsField("voteAverage")
+				&& movieRecord.get("voteAverage") != null) {
 			tmdbInfo.setVoteAverage(Double.parseDouble(movieRecord.get(
 					"voteAverage").toString()));
 		}
-		if (movieRecord.containsField("voteCount")) {
+		if (movieRecord.containsField("voteCount")
+				&& movieRecord.get("voteCount") != null) {
 			tmdbInfo.setVoteCount(Long.parseLong(movieRecord.get("voteCount")
 					.toString()));
 		}
