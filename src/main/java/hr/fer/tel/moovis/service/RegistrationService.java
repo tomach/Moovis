@@ -3,8 +3,10 @@ package hr.fer.tel.moovis.service;
 import hr.fer.tel.moovis.apis.FacebookAPI;
 import hr.fer.tel.moovis.dao.ApplicationUserRepository;
 import hr.fer.tel.moovis.model.ApplicationUser;
+import hr.fer.tel.moovis.names.MovieNamesContainer;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,17 +43,25 @@ public class RegistrationService {
 			String surname = user.getLastName();
 			String accessToken = UUID.nameUUIDFromBytes(facebookId.getBytes())
 					.toString();
-			System.out.println(name + " " + surname);
+
 			Set<String> likedMovieNames = getAllMovieNames(faceApi.getMovies(0));
 			Set<ApplicationUser> friends = getAllFacebookIds(faceApi
 					.getFriends());
-
-			// TODO add call to dao save
+			
+			MovieNamesContainer movieNamesChecker = MovieNamesContainer.getInstance();
+			Set<String> checkedMovieNames = new HashSet<String>();
+			for (String movie : likedMovieNames) {
+				checkedMovieNames.add(movieNamesChecker.getMovieName(movie));
+			}
+			
+			System.out.println(faceApi.getFriends());
+			System.out.println(faceApi.getMovies(0));
+			
+			
 			ApplicationUser newUser = new ApplicationUser(accessToken,
 					facebookId, facebookAccessToken, name, surname,
-					likedMovieNames, friends);
+					checkedMovieNames, friends);
 			appUserRepo.save(newUser);
-
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (FacebookException e) {
@@ -71,15 +81,12 @@ public class RegistrationService {
 
 	private Set<ApplicationUser> getAllFacebookIds(List<Friend> friends) {
 		Set<ApplicationUser> facebookIds = new HashSet<>();
-		System.out.println("!!!");
-		System.out.println(friends);
 		for (Friend friend : friends) {
 			ApplicationUser fr = appUserRepo.findByFacebookId(friend.getId());
 			if (fr != null) {
 				facebookIds.add(fr);
 			}
 		}
-		System.out.println(facebookIds);
 		return facebookIds;
 	}
 }
