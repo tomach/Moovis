@@ -210,8 +210,26 @@
 		</profile>
 	</profiles>
 
+
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>hr.fer.tel.moovis.StarterApp</mainClass>
+
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -226,11 +244,11 @@
 				<artifactId>maven-install-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>similarity-jar</id>
-						<phase>initialize</phase>
 						<goals>
 							<goal>install-file</goal>
 						</goals>
+						<id>similarity-jar</id>
+						<phase>initialize</phase>
 						<configuration>
 							<groupId>com</groupId>
 							<artifactId>similarity-jar</artifactId>
@@ -242,5 +260,7 @@
 				</executions>
 			</plugin>
 		</plugins>
+
 	</build>
+
 </project>
