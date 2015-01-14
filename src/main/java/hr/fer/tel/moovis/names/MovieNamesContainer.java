@@ -4,6 +4,8 @@ import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.stereotype.Service;
+
 import uk.ac.shef.wit.simmetrics.similaritymetrics.JaroWinkler;
 
 import com.mongodb.Cursor;

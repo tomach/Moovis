@@ -1,0 +1,6 @@
+Provuci imena filmova kroz similarity
+Proces za osvježavanje prijatelja kod registracije
+Proces za updateanje lajkanih filmova
+
+
+Preporuka

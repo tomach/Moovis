@@ -55,6 +55,8 @@ public class FacebookAPI {
 
 	public List<Movie> getMovies(long sinceTimestamp) throws FacebookException {
 		Date since = new Date(sinceTimestamp);
+		Reading r = new Reading();
+		r.fields("id", "name", "created_time");
 
 		ResponseList<Movie> likedMovies = facebook.getMovies();
 		List<Movie> result = new ArrayList<>();
@@ -71,10 +73,13 @@ public class FacebookAPI {
 			totalNum += likedMovies.size();
 			boolean stop = false;
 			for (Movie fbM : likedMovies) {
-				if (fbM.getCreatedTime().before(since)) {
-					stop = true;
-					break;
+				if (fbM.getCreatedTime() != null) {
+					if (fbM.getCreatedTime().before(since)) {
+						stop = true;
+						break;
+					}
 				}
+
 				result.add(fbM);
 			}
 			if (stop)

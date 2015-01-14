@@ -5,59 +5,85 @@ package hr.fer.tel.moovis.model;
  */
 public class Movie {
 
-    private String title;
-    private String description;
-    private String imdbId;
-    private String tmdbId;
-    private String rottenId;
+	private String title;
+	private String imdbId;
+	private String tmdbId;
+	private double imdbScore;
+	private double tmdbScore;
 
-    public Movie(String title, String description) {
-        this.title = title;
-        this.description = description;
-    }
+	public Movie(String title, String imdbId, String tmdbId, double imdbScore,
+			double tmdbScore) {
+		super();
+		this.title = title;
+		this.imdbId = imdbId;
+		this.tmdbId = tmdbId;
+		this.imdbScore = imdbScore;
+		this.tmdbScore = tmdbScore;
+	}
 
+	public String getTitle() {
+		return title;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public String getImdbId() {
+		return imdbId;
+	}
 
-    public String getImdbId() {
-        return imdbId;
-    }
+	public void setImdbId(String imdbId) {
+		this.imdbId = imdbId;
+	}
 
-    public void setImdbId(String imdbId) {
-        this.imdbId = imdbId;
-    }
+	public String getTmdbId() {
+		return tmdbId;
+	}
 
-    public String getTmdbId() {
-        return tmdbId;
-    }
+	public void setTmdbId(String tmdbId) {
+		this.tmdbId = tmdbId;
+	}
 
-    public void setTmdbId(String tmdbId) {
-        this.tmdbId = tmdbId;
-    }
+	public double getImdbScore() {
+		return imdbScore;
+	}
 
-    public String getRottenId() {
-        return rottenId;
-    }
+	public void setImdbScore(double imdbScore) {
+		this.imdbScore = imdbScore;
+	}
 
-    public void setRottenId(String rottenId) {
-        this.rottenId = rottenId;
-    }
+	public double getTmdbScore() {
+		return tmdbScore;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setTmdbScore(double tmdbScore) {
+		this.tmdbScore = tmdbScore;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((tmdbId == null) ? 0 : tmdbId.hashCode());
+		return result;
+	}
 
-    public String toString() {
-        return "title = " + title + ", description = " + description;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Movie other = (Movie) obj;
+		if (tmdbId == null) {
+			if (other.tmdbId != null)
+				return false;
+		} else if (!tmdbId.equals(other.tmdbId))
+			return false;
+		return true;
+	}
+
 }
