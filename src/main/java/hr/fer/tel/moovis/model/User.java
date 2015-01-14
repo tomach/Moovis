@@ -1,5 +1,7 @@
 package hr.fer.tel.moovis.model;
 
+import hr.fer.tel.moovis.model.movie.Movie;
+
 import java.util.ArrayList;
 import java.util.List;
 

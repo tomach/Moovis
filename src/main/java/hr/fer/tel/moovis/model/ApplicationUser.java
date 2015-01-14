@@ -46,6 +46,9 @@ public class ApplicationUser {
 		this.friends = friends;
 	}
 
+	public ApplicationUser() {
+	}
+
 	public void addFriend(ApplicationUser friend) {
 		if (friend == null) {
 			throw new IllegalArgumentException("frined can not be null!");

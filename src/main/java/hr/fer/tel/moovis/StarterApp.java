@@ -18,8 +18,6 @@ import org.springframework.core.env.Environment;
 @ComponentScan
 @Configuration
 public class StarterApp extends SpringBootServletInitializer {
-	@Autowired
-	ApplicationUserRepository rep;
 
 	@Override
 	protected SpringApplicationBuilder configure(
@@ -30,7 +28,7 @@ public class StarterApp extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		System.out.println("Starting...");
 		SpringApplication.run(StarterApp.class, args);
-		
+
 		System.out.println(System.getenv());
 		System.out.println(System.getProperties().keySet());
 		System.out.println("Started");
