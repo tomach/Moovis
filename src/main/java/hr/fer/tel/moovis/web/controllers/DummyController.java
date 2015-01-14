@@ -56,10 +56,10 @@ public class DummyController {
 
 	@RequestMapping(value = "/rec", method = RequestMethod.GET)
 	public ResponseEntity<List<Movie>> env1(
-			@RequestParam(value = "facebook_id") String facebookId) {
+			@RequestParam(value = "access_token") String accessToken) {
 		return new ResponseEntity<List<Movie>>(
 				movieRec.calculateRecommendation(repo
-						.findByFacebookId(facebookId)), HttpStatus.OK);
+						.findByAccessToken(accessToken)), HttpStatus.OK);
 
 	}
 

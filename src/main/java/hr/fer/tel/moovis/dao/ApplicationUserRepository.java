@@ -14,4 +14,7 @@ import org.springframework.stereotype.Repository;
 public interface ApplicationUserRepository extends
 		JpaRepository<ApplicationUser, Long> {
 	public ApplicationUser findByFacebookId(String facebookId);
+
+	public ApplicationUser findByAccessToken(String accessToken);
+
 }
