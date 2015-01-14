@@ -47,17 +47,17 @@ public class RegistrationService {
 			Set<String> likedMovieNames = getAllMovieNames(faceApi.getMovies(0));
 			Set<ApplicationUser> friends = getAllFacebookIds(faceApi
 					.getFriends());
-			
-			MovieNamesContainer movieNamesChecker = MovieNamesContainer.getInstance();
+
+			MovieNamesContainer movieNamesChecker = MovieNamesContainer
+					.getInstance();
 			Set<String> checkedMovieNames = new HashSet<String>();
 			for (String movie : likedMovieNames) {
 				checkedMovieNames.add(movieNamesChecker.getMovieName(movie));
 			}
-			
+
 			System.out.println(faceApi.getFriends());
 			System.out.println(faceApi.getMovies(0));
-			
-			
+
 			ApplicationUser newUser = new ApplicationUser(accessToken,
 					facebookId, facebookAccessToken, name, surname,
 					checkedMovieNames, friends);
