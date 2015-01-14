@@ -2,6 +2,7 @@ package hr.fer.tel.moovis.service;
 
 import hr.fer.tel.moovis.apis.FacebookAPI;
 import hr.fer.tel.moovis.dao.ApplicationUserRepository;
+import hr.fer.tel.moovis.exceptions.FacebookLoginException;
 import hr.fer.tel.moovis.model.ApplicationUser;
 import hr.fer.tel.moovis.names.MovieNamesContainer;
 
@@ -18,14 +19,14 @@ import facebook4j.FacebookException;
 import facebook4j.Friend;
 import facebook4j.Movie;
 import facebook4j.User;
-import facebook4j.internal.org.json.JSONException;
 
 @Service
 public class RegistrationService {
 	@Autowired
 	private ApplicationUserRepository appUserRepo;
 
-	public ApplicationUser registerApplicationUser(String facebookAccessToken) {
+	public ApplicationUser registerApplicationUser(String facebookAccessToken)
+			throws FacebookLoginException {
 
 		ApplicationUser savedUser = null;
 
@@ -34,12 +35,23 @@ public class RegistrationService {
 			FacebookAPI faceApi = new FacebookAPI(facebookAccessToken);
 			System.out.println(faceApi);
 			System.out.println(facebookAccessToken);
-			User user = faceApi.getUser();
+			User user;
+			try {
+				user = faceApi.getUser();
+			} catch (Exception e) {
+				throw new FacebookLoginException(
+						"Error while getting facebook user."
+								+ e.getLocalizedMessage());
+			}
 			String facebookId = user.getId();
 			System.out.println(facebookId);
 			System.out.println(appUserRepo);
 			if (appUserRepo.findByFacebookId(facebookId) != null) {
-				throw new IllegalStateException();
+				ApplicationUser appUser = appUserRepo
+						.findByFacebookId(facebookId);
+				appUser.setFacebookAccessToken(facebookAccessToken);
+				appUserRepo.save(appUser);
+				return appUser;
 			}
 
 			String name = user.getFirstName();
@@ -69,8 +81,6 @@ public class RegistrationService {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (FacebookException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 

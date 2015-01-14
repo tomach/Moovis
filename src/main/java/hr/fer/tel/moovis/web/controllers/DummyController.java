@@ -4,6 +4,7 @@ import java.util.List;
 
 import hr.fer.tel.moovis.dao.ApplicationUserRepository;
 import hr.fer.tel.moovis.dao.MovieDao;
+import hr.fer.tel.moovis.exceptions.FacebookLoginException;
 import hr.fer.tel.moovis.model.ApplicationUser;
 import hr.fer.tel.moovis.model.movie.Movie;
 import hr.fer.tel.moovis.recommendation.MovieRecommendation;
@@ -35,8 +36,12 @@ public class DummyController {
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public void facebookLogin() {
 
-		regService
-				.registerApplicationUser("CAAHplTHhoNABAFzZBQ8BXJMZCEJCtvPdpf6KY0SeiSlVoN8GITAtLwPRy1OUpOIVGcSZBINZBCpyfM2VurfZBw4SgjeG0NIEJ422wxvYfG14syYrjER6o2RVo4D4vGJqgigbEhSfAhbnstXOyV771jgpdyHGzfcqG9ebXmaUP4EnpDx35SaT32GpmBkiFu7Xte25FtAifeaJxAQg1y2WA");
+		try {
+			regService
+					.registerApplicationUser("CAAHplTHhoNABAFzZBQ8BXJMZCEJCtvPdpf6KY0SeiSlVoN8GITAtLwPRy1OUpOIVGcSZBINZBCpyfM2VurfZBw4SgjeG0NIEJ422wxvYfG14syYrjER6o2RVo4D4vGJqgigbEhSfAhbnstXOyV771jgpdyHGzfcqG9ebXmaUP4EnpDx35SaT32GpmBkiFu7Xte25FtAifeaJxAQg1y2WA");
+		} catch (FacebookLoginException e) {
+			e.printStackTrace();
+		}
 
 	}
 
