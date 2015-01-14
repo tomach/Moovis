@@ -3,6 +3,7 @@ package hr.fer.tel.moovis.web.controllers;
 import hr.fer.tel.moovis.model.ApplicationUser;
 import hr.fer.tel.moovis.service.RegistrationService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,11 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class FacebookLoginController {
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ResponseEntity<String> facebookLogin(@RequestParam(value = "access_token") String accessToken) {
-		
-		RegistrationService regService = new RegistrationService();
+	@Autowired
+	private RegistrationService regService;
+
+	@RequestMapping(value = "/login", method = RequestMethod.PUT)
+	public ResponseEntity<ApplicationUser> facebookLogin(
+			@RequestParam(value = "access_token") String accessToken) {
+
 		ApplicationUser user = regService.registerApplicationUser(accessToken);
-		return new ResponseEntity<String>(user.getAccessToken(), HttpStatus.OK);		
+		return new ResponseEntity<ApplicationUser>(user, HttpStatus.OK);
 	}
 }

@@ -28,14 +28,16 @@ public class RegistrationService {
 	public ApplicationUser registerApplicationUser(String facebookAccessToken) {
 
 		ApplicationUser savedUser = null;
-		
+
 		try {
 
 			FacebookAPI faceApi = new FacebookAPI(facebookAccessToken);
-
+			System.out.println(faceApi);
+			System.out.println(facebookAccessToken);
 			User user = faceApi.getUser();
 			String facebookId = user.getId();
-
+			System.out.println(facebookId);
+			System.out.println(appUserRepo);
 			if (appUserRepo.findByFacebookId(facebookId) != null) {
 				throw new IllegalStateException();
 			}
@@ -62,8 +64,8 @@ public class RegistrationService {
 			ApplicationUser newUser = new ApplicationUser(accessToken,
 					facebookId, facebookAccessToken, name, surname,
 					checkedMovieNames, friends);
-			savedUser = appUserRepo.save(newUser);			
-			
+			savedUser = appUserRepo.save(newUser);
+
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (FacebookException e) {
@@ -71,7 +73,7 @@ public class RegistrationService {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
+
 		return savedUser;
 	}
 
