@@ -28,7 +28,7 @@ public class DummyController {
 	@Autowired
 	private MovieRecommendation movieRec;
 	@Autowired
-	private ApplicationUserRepository repo;
+	private ApplicationUserRepository appUserRepo;
 
 	@Autowired
 	private RegistrationService regService;
@@ -57,9 +57,12 @@ public class DummyController {
 	@RequestMapping(value = "/rec", method = RequestMethod.GET)
 	public ResponseEntity<List<Movie>> env1(
 			@RequestParam(value = "access_token") String accessToken) {
+
+		System.out.println(accessToken);
+		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
+		System.out.println(user);
 		return new ResponseEntity<List<Movie>>(
-				movieRec.calculateRecommendation(repo
-						.findByAccessToken(accessToken)), HttpStatus.OK);
+				movieRec.calculateRecommendation(user), HttpStatus.OK);
 
 	}
 

@@ -141,7 +141,8 @@ public class Movie {
 		return "Movie [title=" + title + ", ytInfo=" + ytInfo + ", imdbInfo="
 				+ imdbInfo + ", tmdbInfo=" + tmdbInfo + ", genres=" + genres
 				+ ", cast=" + cast + ", directors=" + directors
-				+ ", similarMovies=" + getSimilarMovies().size() + "]";
+				+ ", similarMovies="
+				+ (getSimilarMovies() == null ? 0 : getSimilarMovies().size())
+				+ "]";
 	}
-
 }

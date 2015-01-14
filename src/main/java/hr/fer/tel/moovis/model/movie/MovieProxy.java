@@ -46,6 +46,8 @@ public class MovieProxy extends Movie {
 					}
 				}
 				super.setSimilarMovies(similars);
+			} else {
+				super.setSimilarMovies(new ArrayList<Movie>());
 			}
 		}
 		return super.getSimilarMovies();
@@ -53,6 +55,6 @@ public class MovieProxy extends Movie {
 
 	@Override
 	public String toString() {
-		return super.toString();
+		return "MovieProxy" + super.toString();
 	}
 }

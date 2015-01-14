@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.parboiled.matchervisitors.GetStarterCharVisitor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,9 @@ public class MovieRecommendationImpl implements MovieRecommendation {
 		// dohvati slične filmove
 		for (String likedMovieName : user.getLikedMovieNames()) {
 			Movie likedMovie = movieDao.findMovieByName(likedMovieName);
+
 			Set<RecommendationRecord> similarAsRecords = new HashSet<>();
+
 			for (Movie sim : likedMovie.getSimilarMovies()) {
 				similarAsRecords.add(new RecommendationRecord(sim, sim
 						.getTmdbInfo().getVoteAverage()));
