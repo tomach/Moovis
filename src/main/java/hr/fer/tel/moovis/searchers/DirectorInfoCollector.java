@@ -12,6 +12,7 @@ import java.util.concurrent.TimeoutException;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
+import com.mongodb.Bytes;
 import com.mongodb.Cursor;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -44,7 +45,11 @@ public class DirectorInfoCollector {
 	public void process() {
 		int i = 0;
 		DBCursor cur = movies.find();
+		cur.addOption(Bytes.QUERYOPTION_NOTIMEOUT);
+		long startTime;
+		long endTime;
 		while (cur.hasNext()) {
+			startTime = System.currentTimeMillis();
 			i++;
 			if (i % 1000 == 0) {
 				System.out.println(i);
@@ -138,7 +143,9 @@ public class DirectorInfoCollector {
 
 				directorInfoCollelction.insert(directorInfo);
 			}
+			endTime = System.currentTimeMillis();
 
+			//System.out.println("Execution time:" + (endTime - startTime));
 		}
 	}
 

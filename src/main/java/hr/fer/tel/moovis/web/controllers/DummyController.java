@@ -5,6 +5,7 @@ import hr.fer.tel.moovis.model.ApplicationUser;
 import hr.fer.tel.moovis.service.RegistrationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,5 +31,12 @@ public class DummyController {
 		regService
 				.registerApplicationUser("CAAHplTHhoNABAKGIZCu4KQ5XlGAQY7UhlnjD9Mtjw9CusQ1UKXR0qalaZCKUZBPPYGZAegVdeUulGbgvHhroZBY3c6fZAJmSz8PDgXPEN3UCb4VCrnUKvw0fhWCOyduTMpuiTytqGuLHi3HSq0PNjZB6lwhI7e0KV6ZB2z7gJU3j3UBWQM53TazMJYdQ1BJLBOhEcEnaZBlQJL7nY8KtskYXR");
 
+		regService
+				.registerApplicationUser("CAAHplTHhoNABAC07y6jG3pg4qsdMjCF7spfc7ZBONKdFe888ypGO2vH3uhp0BOHywhal8hztNTZChL9Qzz7JrsRdSat95JsU4oMubJ7Rj1kF3O0InqySeJv0rijvuI5iwjRHDIduJXbKZAl0zOz9nZA8xuAOvyoWb5ixDhskMa4XzcsVFJCHRjZC6oxEg2SO4qkZARZA0oISYNMA3r9ZCXf1");
+
+	}
+
+	@RequestMapping(value = "/env", method = RequestMethod.GET)
+	public void env() {
 	}
 }

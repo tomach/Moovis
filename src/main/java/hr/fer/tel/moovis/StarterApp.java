@@ -9,6 +9,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 /**
  * Created by filippm on 10.11.14..
@@ -29,6 +30,9 @@ public class StarterApp extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		System.out.println("Starting...");
 		SpringApplication.run(StarterApp.class, args);
+		
+		System.out.println(System.getenv());
+		System.out.println(System.getProperties().keySet());
 		System.out.println("Started");
 	}
 }
