@@ -1,6 +1,7 @@
 package hr.fer.tel.moovis;
 
 import hr.fer.tel.moovis.dao.ApplicationUserRepository;
+import hr.fer.tel.moovis.names.MovieNamesContainer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -46,6 +47,7 @@ public class StarterApp extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		System.out.println("Starting...");
+		MovieNamesContainer.getInstance();
 		SpringApplication.run(StarterApp.class, args);
 
 		System.out.println(System.getenv());

@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ import facebook4j.Movie;
 import facebook4j.User;
 
 @Service
+@Transactional
 public class RegistrationService {
 	@Autowired
 	private ApplicationUserRepository appUserRepo;
