@@ -162,58 +162,56 @@
 
 
 	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-install-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>similarity-jar</id>
-							<phase>initialize</phase>
-							<goals>
-								<goal>install-file</goal>
-							</goals>
-							<configuration>
-								<groupId>com</groupId>
-								<artifactId>similarity-jar</artifactId>
-								<version>1.0</version>
-								<packaging>jar</packaging>
-								<file>${basedir}/src/main/resources/lib/simmetrics_jar_v1_6_2_d07_02_07.jar</file>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>exec-maven-plugin</artifactId>
-					<executions>
-						<execution>
-							<phase>test</phase>
-							<goals>
-								<goal>java</goal>
-							</goals>
-							<configuration>
-								<mainClass>hr.fer.tel.moovis.StarterApp</mainClass>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>similarity-jar</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<groupId>com</groupId>
+							<artifactId>similarity-jar</artifactId>
+							<version>1.0</version>
+							<packaging>jar</packaging>
+							<file>${basedir}/src/main/resources/lib/simmetrics_jar_v1_6_2_d07_02_07.jar</file>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>hr.fer.tel.moovis.StarterApp</mainClass>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<configuration>
-						<source>1.7</source>
-						<target>1.7</target>
-					</configuration>
-				</plugin>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
 
 
 
-			</plugins>
-		</pluginManagement>
+
+		</plugins>
 	</build>
 
 
