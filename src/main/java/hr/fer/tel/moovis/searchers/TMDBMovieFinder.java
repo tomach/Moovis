@@ -33,7 +33,7 @@ public class TMDBMovieFinder implements Runnable {
 	public TMDBMovieFinder(Integer startCounter, Integer endCounter)
 			throws UnknownHostException, MovieDbException {
 		theMovieDbApi = new TheMovieDbApi(API_KEY);
-
+		
 		// Since 2.10.0, uses MongoClient
 		MongoClient mongo = new MongoClient("localhost", 27017);
 		db = mongo.getDB(DB_NAME);
