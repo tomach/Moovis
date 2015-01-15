@@ -131,7 +131,7 @@ public class MovieDao {
 			photo = directorRec.get("photo").toString();
 		}
 
-		return new Person("" + id, name, biography, photo);
+		return new Person("" + id, name, biography, photo, null);
 	}
 
 	private List<Person> loadActors(DBObject movieRecord) {
@@ -167,6 +167,7 @@ public class MovieDao {
 		String name = null;
 		String biography = null;
 		String photo = null;
+		String birthdate = null;
 		if (actorRec.containsField("name")) {
 			name = actorRec.get("name").toString();
 		}
@@ -176,8 +177,10 @@ public class MovieDao {
 		if (actorRec.containsField("picture")) {
 			photo = actorRec.get("picture").toString();
 		}
-
-		return new Person("" + id, name, biography, photo);
+		if (actorRec.containsField("birthday")) {
+			birthdate = actorRec.get("birthday").toString();
+		}
+		return new Person("" + id, name, biography, photo, birthdate);
 	}
 
 	private List<String> loadGenres(DBObject movieRecord) {

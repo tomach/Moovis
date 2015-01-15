@@ -5,13 +5,24 @@ public class Person {
 	private String name;
 	private String biography;
 	private String photo;
+	private String birthDate;
 
-	public Person(String id, String name, String biography, String photo) {
+	public Person(String id, String name, String biography, String photo,
+			String birthDate) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.biography = biography;
 		this.photo = photo;
+		this.birthDate = birthDate;
+	}
+
+	public String getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(String birthDate) {
+		this.birthDate = birthDate;
 	}
 
 	public String getId() {
