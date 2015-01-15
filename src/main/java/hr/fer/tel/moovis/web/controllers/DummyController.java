@@ -61,9 +61,12 @@ public class DummyController {
 		System.out.println(accessToken);
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
 		System.out.println(user);
-		return new ResponseEntity<List<Movie>>(
-				movieRec.calculateRecommendation(user), HttpStatus.OK);
+		List<Movie> rec = movieRec.calculateRecommendation(user);
+		if (rec.size() > 50) {
+			rec = rec.subList(0, 50);
+		}
+
+		return new ResponseEntity<List<Movie>>(rec, HttpStatus.OK);
 
 	}
-
 }
