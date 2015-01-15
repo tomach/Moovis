@@ -4,7 +4,6 @@
 
 	<groupId>hr.fer.tel</groupId>
 	<artifactId>Moovis</artifactId>
-	<version>0.1.0</version>
 	<packaging>war</packaging>
 
 	<parent>
