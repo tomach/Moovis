@@ -22,6 +22,7 @@ import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 @ComponentScan
 @Configuration
 public class StarterApp extends SpringBootServletInitializer {
+
 	@Bean
 	public MappingJackson2HttpMessageConverter jacksonMessageConverter() {
 		MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
@@ -39,8 +40,10 @@ public class StarterApp extends SpringBootServletInitializer {
 	@Override
 	protected SpringApplicationBuilder configure(
 			SpringApplicationBuilder application) {
-		return application.sources(StarterApp.class);
+		return application.sources(applicationClass);
 	}
+
+	private static Class<StarterApp> applicationClass = StarterApp.class;
 
 	public static void main(String[] args) {
 		System.out.println("Starting...");

@@ -4,6 +4,7 @@
 
 	<groupId>hr.fer.tel</groupId>
 	<artifactId>Moovis</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<parent>
@@ -84,8 +85,6 @@
 			<version>1.4</version>
 		</dependency>
 
-
-
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
@@ -98,43 +97,22 @@
 			<version>2.1.6</version>
 		</dependency>
 
+
+
+		<!-- HIBERNATE -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.hibernate</groupId>
-					<artifactId>hibernate-entitymanager</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
-
-		<!-- HIBERNATE -->
-
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>4.3.0.Final</version>
 		</dependency>
-
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<optional>true</optional>
 		</dependency>
-
-		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.0-api</artifactId>
-			<optional>true</optional>
-		</dependency>
-
 		<!-- Spring ORM, works with Hibernate -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -169,6 +147,10 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-install-plugin</artifactId>
 				<executions>
@@ -201,22 +183,14 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
-
-
-
-
 		</plugins>
-
-
-
 	</build>
 
 
 	<properties>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<!-- <maven.compiler.source>1.7</maven.compiler.source> <maven.compiler.target>1.7</maven.compiler.target> -->
 		<start-class>hr.fer.tel.moovis.StarterApp</start-class>
 	</properties>
 
