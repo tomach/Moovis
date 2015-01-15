@@ -86,9 +86,52 @@ public class MovieDao {
 		YouTubeInfo ytInfo = loadYTInfo(movieRecord);
 		List<String> genres = loadGenres(movieRecord);
 		List<Person> actors = loadActors(movieRecord);
-
+		List<Person> directors = loadDirectors(movieRecord);
 		return new MovieProxy(titme, ytInfo, imdbInfo, tmbInfo, genres, actors,
-				null, null);
+				directors, null);
+	}
+
+	private List<Person> loadDirectors(DBObject movieRecord) {
+		Set<Person> retList = new HashSet<>();
+		if (movieRecord.containsField("imdb")) {
+			DBObject imdb = (DBObject) movieRecord.get("imdb");
+			if (imdb.containsField("directors")) {
+				BasicDBList cast = (BasicDBList) imdb.get("directors");
+				for (Object object : cast) {
+					DBObject director = (DBObject) object;
+					Person actorPerson = loadDirector(director.get("imdbId"));
+					if (actorPerson != null) {
+						retList.add(actorPerson);
+					}
+				}
+			}
+		}
+
+		return new LinkedList<Person>(retList);
+	}
+
+	private Person loadDirector(Object object) {
+		String id = object.toString();
+
+		DBObject directorRec = directors
+				.findOne(new BasicDBObject("imdbId", id));
+		if (directorRec == null) {
+			return null;
+		}
+		String name = null;
+		String biography = null;
+		String photo = null;
+		if (directorRec.containsField("name")) {
+			name = directorRec.get("name").toString();
+		}
+		if (directorRec.containsField("biography")) {
+			biography = directorRec.get("biography").toString();
+		}
+		if (directorRec.containsField("photo")) {
+			photo = directorRec.get("photo").toString();
+		}
+
+		return new Person("" + id, name, biography, photo);
 	}
 
 	private List<Person> loadActors(DBObject movieRecord) {
