@@ -195,7 +195,6 @@
 							</goals>
 							<configuration>
 								<mainClass>hr.fer.tel.moovis.StarterApp</mainClass>
-
 							</configuration>
 						</execution>
 					</executions>
