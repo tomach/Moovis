@@ -99,9 +99,12 @@ public class MovieDao {
 				BasicDBList cast = (BasicDBList) imdb.get("directors");
 				for (Object object : cast) {
 					DBObject director = (DBObject) object;
-					Person actorPerson = loadDirector(director.get("imdbId"));
-					if (actorPerson != null) {
-						retList.add(actorPerson);
+					if (director.containsField("imdbId")) {
+						Person directorPerson = loadDirector(director
+								.get("imdbId"));
+						if (directorPerson != null) {
+							retList.add(directorPerson);
+						}
 					}
 				}
 			}
