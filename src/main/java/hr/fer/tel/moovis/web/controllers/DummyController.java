@@ -2,6 +2,8 @@ package hr.fer.tel.moovis.web.controllers;
 
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import hr.fer.tel.moovis.dao.ApplicationUserRepository;
@@ -30,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class DummyController {
-	
+
 	@Autowired
 	private MovieRecommendationOnlyFriendScoreImpl movieRecFriend;
 	@Autowired
@@ -55,21 +57,21 @@ public class DummyController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@RequestMapping(value = "/test_rec", method = RequestMethod.GET)
 	public void testRec() {
 
-		ApplicationUser user = appUserRepo.
-				findByAccessToken("02eb2504-17f8-33c3-8d25-9325b0235201");
+		ApplicationUser user = appUserRepo
+				.findByAccessToken("02eb2504-17f8-33c3-8d25-9325b0235201");
 		movieRecFriend.calculateRecommendation(user);
 
 	}
-	
+
 	@RequestMapping(value = "/test2_rec_all", method = RequestMethod.GET)
 	public void testRecAll() {
 
-		ApplicationUser user = appUserRepo.
-				findByAccessToken("02eb2504-17f8-33c3-8d25-9325b0235201");
+		ApplicationUser user = appUserRepo
+				.findByAccessToken("02eb2504-17f8-33c3-8d25-9325b0235201");
 		movieRecWithFriend.calculateRecommendation(user);
 
 	}
@@ -165,8 +167,51 @@ public class DummyController {
 		JSONObject response = new JSONObject();
 		response.put("sucsess", "true");
 		response.put("status", "Movie added!");
-		
+
 		return new ResponseEntity<String>(response.toString(), HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/watchlist", method = RequestMethod.GET)
+	public ResponseEntity<List<Movie>> getWatchList(
+			@RequestParam(value = "access_token") String accessToken) {
+		System.out.println("Get wathclist request!");
+		System.out.println("access token:" + accessToken);
+		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
+		System.out.println(user);
+		if (user == null) {
+			return new ResponseEntity<List<Movie>>(HttpStatus.BAD_REQUEST);
+		}
+
+		List<Movie> retList = new LinkedList<Movie>();
+		for (String watchlistMovieName : user.getWatchList()) {
+			Movie mov = movieDao.findMovieByName(watchlistMovieName);
+			if (mov != null) {
+				retList.add(mov);
+			}
+
+		}
+		return new ResponseEntity<List<Movie>>(retList, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/watchedlist", method = RequestMethod.GET)
+	public ResponseEntity<List<Movie>> getWatchedList(
+			@RequestParam(value = "access_token") String accessToken) {
+		System.out.println("Get watchedlist request!");
+		System.out.println("access token:" + accessToken);
+		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
+		System.out.println(user);
+		if (user == null) {
+			return new ResponseEntity<List<Movie>>(HttpStatus.BAD_REQUEST);
+		}
+
+		List<Movie> retList = new LinkedList<Movie>();
+		for (String watchlistMovieName : user.getWatchedMovieNames()) {
+			Movie mov = movieDao.findMovieByName(watchlistMovieName);
+			if (mov != null) {
+				retList.add(mov);
+			}
+
+		}
+		return new ResponseEntity<List<Movie>>(retList, HttpStatus.OK);
+	}
 }
