@@ -5,3 +5,9 @@ Preporuka
 Sci-Fi i Science Fiction
 
 provjeriti The dark knight i The dark knightfall, čajin film
+
+api poziv za micanje filma iz liste watched_movies
+
+kod preporuke sad osim lajkanih filmova izbaciti i watched movies
+
+modificirati dodavanje watched movie-a - ako postoji u watchlisti, makni ga

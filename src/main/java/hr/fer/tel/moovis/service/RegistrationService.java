@@ -56,7 +56,17 @@ public class RegistrationService {
 				ApplicationUser appUser = appUserRepo
 						.findByFacebookId(facebookId);
 				appUser.setFacebookAccessToken(facebookAccessToken);
-				savedUser=appUserRepo.save(appUser);
+
+				Set<String> likedMovieNames = getAllMovieNames(faceApi
+						.getMovies(0));
+
+				MovieNamesContainer movieNamesChecker = MovieNamesContainer
+						.getInstance();
+				for (String movie : likedMovieNames) {
+					appUser.addLikedMovie(movieNamesChecker.getMovieName(movie));
+				}
+
+				savedUser = appUserRepo.save(appUser);
 				addFriendToAppUser(friends, savedUser);
 				return appUser;
 			}
