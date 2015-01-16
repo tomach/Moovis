@@ -49,11 +49,15 @@ public class RegistrationService {
 			String facebookId = user.getId();
 			System.out.println(facebookId);
 			System.out.println(appUserRepo);
+
+			Set<ApplicationUser> friends = getAllFacebookIds(faceApi
+					.getFriends());
 			if (appUserRepo.findByFacebookId(facebookId) != null) {
 				ApplicationUser appUser = appUserRepo
 						.findByFacebookId(facebookId);
 				appUser.setFacebookAccessToken(facebookAccessToken);
-				appUserRepo.save(appUser);
+				savedUser=appUserRepo.save(appUser);
+				addFriendToAppUser(friends, savedUser);
 				return appUser;
 			}
 
@@ -63,9 +67,6 @@ public class RegistrationService {
 					.toString();
 
 			Set<String> likedMovieNames = getAllMovieNames(faceApi.getMovies(0));
-			Set<ApplicationUser> friends = getAllFacebookIds(faceApi
-					.getFriends());
-			
 
 			MovieNamesContainer movieNamesChecker = MovieNamesContainer
 					.getInstance();
@@ -82,7 +83,7 @@ public class RegistrationService {
 					checkedMovieNames, new HashSet<String>(),
 					new HashSet<String>(), friends);
 			savedUser = appUserRepo.save(newUser);
-			
+
 			addFriendToAppUser(friends, savedUser);
 
 		} catch (UnknownHostException e) {
@@ -112,8 +113,9 @@ public class RegistrationService {
 		}
 		return facebookIds;
 	}
-	
-	private void addFriendToAppUser(Set<ApplicationUser> usersToAddTo, ApplicationUser userToBeAdded) {
+
+	private void addFriendToAppUser(Set<ApplicationUser> usersToAddTo,
+			ApplicationUser userToBeAdded) {
 		for (ApplicationUser userToAddTo : usersToAddTo) {
 			userToAddTo.addFriend(userToBeAdded);
 			appUserRepo.save(userToAddTo);
