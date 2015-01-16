@@ -304,6 +304,10 @@ public class MovieDao {
 			tmdbInfo.setVoteCount(Long.parseLong(movieRecord.get("voteCount")
 					.toString()));
 		}
+		if (movieRecord.containsField("photo")
+				&& movieRecord.get("photo") != null) {
+			tmdbInfo.setPhoto(movieRecord.get("photo").toString());
+		}
 		return tmdbInfo;
 	}
 }

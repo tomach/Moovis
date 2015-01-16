@@ -1,25 +1,38 @@
 package hr.fer.tel.moovis;
 
 import java.net.UnknownHostException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.TheMovieDbApi;
 
 public class Test {
-	private static final String API_KEY = "5086b39f4b96483187ec864955e4da88";
 
 	public static void main(String[] args) throws UnknownHostException,
 			MovieDbException {
-		// TODO Auto-generated method stub
-		TheMovieDbApi theMovieDbApi = new TheMovieDbApi(API_KEY);
+		try {
+			// The newInstance() call is a work around for some
+			// broken Java implementations
 
-		System.out.println(theMovieDbApi.getMovieImages(2348, null, "")
-				.getResults().get(0).getFilePath());
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		} catch (Exception ex) {
+			// handle the error
+		}
+
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection("jdbc:mysql://social2.tel.fer.hr:3306/moovis?"
+					+ "user=social&password=crocodileagent");
+
+			// Do something with the Connection
+
+		} catch (SQLException ex) {
+			// handle any errors
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		}
 
 	}
 }

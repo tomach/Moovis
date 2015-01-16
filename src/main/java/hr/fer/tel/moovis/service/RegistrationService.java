@@ -78,7 +78,7 @@ public class RegistrationService {
 
 			ApplicationUser newUser = new ApplicationUser(accessToken,
 					facebookId, facebookAccessToken, name, surname,
-					checkedMovieNames, friends);
+					checkedMovieNames, new HashSet<String>(), friends);
 			savedUser = appUserRepo.save(newUser);
 
 		} catch (UnknownHostException e) {

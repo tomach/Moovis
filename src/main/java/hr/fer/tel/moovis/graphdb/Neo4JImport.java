@@ -17,7 +17,7 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
 public class Neo4JImport {
-	private static final String DB_PATH = "/home/filippm/neo4j-community-2.1.6/data/graph.db";
+	private static final String DB_PATH = "/home/filippm/neo4j-community-2.1.6/data/";
 
 	private static final String DB_NAME = "moovis";
 
@@ -38,8 +38,8 @@ public class Neo4JImport {
 		DBCursor moviesCursor = movies.find();
 		int i = 0;
 		while (moviesCursor.hasNext()) {
-			if (i > 100) {
-				break;
+			if (i % 1000 == 0) {
+				System.out.println(i);
 			}
 			i++;
 			DBObject movie = moviesCursor.next();
@@ -97,8 +97,10 @@ public class Neo4JImport {
 		movieNode = graphDb.createNode(NodeLabels.MOVIE);
 		System.out.println("Kreirao čvor za film");
 		movieNode.setProperty("title", movieTitle.trim());
-		movieNode.setProperty("tmdbId",
-				((DBObject) (movie.get("tmdb"))).get("id").toString());
+		if (movie.containsField("tmdb")) {
+			movieNode.setProperty("tmdbId", ((DBObject) (movie.get("tmdb")))
+					.get("id").toString());
+		}
 
 		return movieNode;
 	}
