@@ -56,7 +56,7 @@ public class RegistrationService {
 				ApplicationUser appUser = appUserRepo
 						.findByFacebookId(facebookId);
 				appUser.setFacebookAccessToken(facebookAccessToken);
-				appUserRepo.save(appUser);
+				savedUser=appUserRepo.save(appUser);
 				addFriendToAppUser(friends, savedUser);
 				return appUser;
 			}
