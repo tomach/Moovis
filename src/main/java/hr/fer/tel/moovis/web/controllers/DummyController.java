@@ -46,8 +46,13 @@ public class DummyController {
 	@RequestMapping(value = "/test_rec", method = RequestMethod.GET)
 	public void testRec() {
 
+		//Damjan
+//		ApplicationUser user = appUserRepo
+//				.findByAccessToken("02eb2504-17f8-33c3-8d25-9325b0235201");
+		//Tomislav
 		ApplicationUser user = appUserRepo
-				.findByAccessToken("02eb2504-17f8-33c3-8d25-9325b0235201");
+				.findByAccessToken("5785e725-390c-3f84-8637-d6d12b6598a5");
+		
 		movieRecOnlyFriend.calculateRecommendation(user);
 
 	}

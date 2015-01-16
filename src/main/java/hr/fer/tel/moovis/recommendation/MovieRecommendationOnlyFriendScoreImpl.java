@@ -113,11 +113,13 @@ public class MovieRecommendationOnlyFriendScoreImpl implements
 		List<RecommendationRecord> finalRec = new LinkedList<>(friendsMovieRec);
 		Collections.sort(finalRec);
 
-//		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
-//		for (RecommendationRecord recommendationRecord : finalRec) {
-//			System.out.println(recommendationRecord.getMovie().getTitle()
-//					+ "\t" + recommendationRecord.getRecScore());
-//		}
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
+		for (RecommendationRecord recommendationRecord : finalRec) {
+			RecommendationRecordWithFriendLikes recRecord = (RecommendationRecordWithFriendLikes) recommendationRecord;
+			System.out.println(recRecord.getMovie().getTitle()
+					+ "\t" + recRecord.getRecScore() + "\t" +
+					recRecord.getFriendNames());
+		}
 
 		return finalRec;
 	}
