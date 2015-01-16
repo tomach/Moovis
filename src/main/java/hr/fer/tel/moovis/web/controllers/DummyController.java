@@ -1,8 +1,5 @@
 package hr.fer.tel.moovis.web.controllers;
 
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +9,6 @@ import hr.fer.tel.moovis.exceptions.FacebookLoginException;
 import hr.fer.tel.moovis.model.ApplicationUser;
 import hr.fer.tel.moovis.model.movie.Movie;
 import hr.fer.tel.moovis.names.MovieNamesContainer;
-import hr.fer.tel.moovis.recommendation.MovieRecommendation;
 import hr.fer.tel.moovis.recommendation.MovieRecommendationImpl;
 import hr.fer.tel.moovis.recommendation.MovieRecommendationOnlyFriendScoreImpl;
 import hr.fer.tel.moovis.recommendation.MovieRecommendationWithFriendScoreImpl;
@@ -21,7 +17,6 @@ import hr.fer.tel.moovis.service.RegistrationService;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,15 +29,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class DummyController {
 
 	@Autowired
-	private MovieRecommendationOnlyFriendScoreImpl movieRecFriend;
+	private MovieRecommendationOnlyFriendScoreImpl movieRecOnlyFriend;
 	@Autowired
 	private MovieDao movieDao;
 	@Autowired
-	private MovieRecommendationImpl movieRec;
+	private MovieRecommendationImpl movieRecSimilar;
 	@Autowired
 	private ApplicationUserRepository appUserRepo;
 	@Autowired
-	private MovieRecommendationWithFriendScoreImpl movieRecWithFriend;
+	private MovieRecommendationWithFriendScoreImpl movieRecWithFriends;
 
 	@Autowired
 	private RegistrationService regService;
@@ -63,7 +58,7 @@ public class DummyController {
 
 		ApplicationUser user = appUserRepo
 				.findByAccessToken("02eb2504-17f8-33c3-8d25-9325b0235201");
-		movieRecFriend.calculateRecommendation(user);
+		movieRecOnlyFriend.calculateRecommendation(user);
 
 	}
 
@@ -72,7 +67,7 @@ public class DummyController {
 
 		ApplicationUser user = appUserRepo
 				.findByAccessToken("02eb2504-17f8-33c3-8d25-9325b0235201");
-		movieRecWithFriend.calculateRecommendation(user);
+		movieRecWithFriends.calculateRecommendation(user);
 
 	}
 
@@ -87,19 +82,30 @@ public class DummyController {
 	}
 
 	@RequestMapping(value = "/rec", method = RequestMethod.GET)
-	public ResponseEntity<List<Movie>> env1(
-			@RequestParam(value = "access_token") String accessToken) {
+	public ResponseEntity<List<RecommendationRecord>> env1(
+			@RequestParam(value = "access_token") String accessToken,
+			@RequestParam(value = "type") String type) {
 
+		//all, friends, similar
 		System.out.println(accessToken);
+		System.out.println(type);
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
 		System.out.println(user);
-		List<Movie> rec = movieRec.calculateRecommendation(user);
+		
+		List<RecommendationRecord> rec;
+		if (type.equals("all")) {
+			rec = movieRecWithFriends.calculateRecommendation(user);
+		} else if (type.equals("similar")) {
+			rec = movieRecSimilar.calculateRecommendation(user);
+		} else {
+			rec = movieRecOnlyFriend.calculateRecommendation(user);
+		}
+		
 		if (rec.size() > 50) {
 			rec = rec.subList(0, 50);
 		}
 
-		return new ResponseEntity<List<Movie>>(rec, HttpStatus.OK);
-
+		return new ResponseEntity<List<RecommendationRecord>>(rec, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/user_info", method = RequestMethod.GET)
