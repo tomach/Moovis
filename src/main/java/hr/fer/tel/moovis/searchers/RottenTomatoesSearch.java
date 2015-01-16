@@ -33,6 +33,7 @@ public class RottenTomatoesSearch extends GenericSearch {
 			RottenTomatoesException {
 		super();
 		rottenApi = new RottenTomatoesApi(API_KEY);
+
 	}
 
 	@Override
