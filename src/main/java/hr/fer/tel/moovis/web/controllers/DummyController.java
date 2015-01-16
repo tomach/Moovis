@@ -1,5 +1,7 @@
 package hr.fer.tel.moovis.web.controllers;
 
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.List;
 
 import hr.fer.tel.moovis.dao.ApplicationUserRepository;
@@ -12,6 +14,7 @@ import hr.fer.tel.moovis.recommendation.MovieRecommendation;
 import hr.fer.tel.moovis.recommendation.RecommendationRecord;
 import hr.fer.tel.moovis.service.RegistrationService;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -44,7 +47,6 @@ public class DummyController {
 		} catch (FacebookLoginException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@RequestMapping(value = "/movie/{name}", method = RequestMethod.GET)
@@ -94,7 +96,11 @@ public class DummyController {
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
 		System.out.println(user);
 		if (user == null) {
-			return new ResponseEntity<String>("UserNotFound",
+			JSONObject response = new JSONObject();
+			response.put("sucsess", "false");
+			response.put("error", "User not found");
+
+			return new ResponseEntity<String>(response.toString(),
 					HttpStatus.BAD_REQUEST);
 		}
 
@@ -102,7 +108,10 @@ public class DummyController {
 				movieName);
 		user.addWatchedMovie(normalizedName);
 		appUserRepo.save(user);
-		return new ResponseEntity<String>("Movie added!", HttpStatus.OK);
+		JSONObject response = new JSONObject();
+		response.put("sucsess", "true");
+		response.put("status", "Movie added!");
+		return new ResponseEntity<String>(response.toString(), HttpStatus.OK);
 
 	}
 
