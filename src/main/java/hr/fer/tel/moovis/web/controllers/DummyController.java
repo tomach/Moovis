@@ -8,6 +8,9 @@ import hr.fer.tel.moovis.exceptions.FacebookLoginException;
 import hr.fer.tel.moovis.model.ApplicationUser;
 import hr.fer.tel.moovis.model.movie.Movie;
 import hr.fer.tel.moovis.recommendation.MovieRecommendation;
+import hr.fer.tel.moovis.recommendation.MovieRecommendationImpl;
+import hr.fer.tel.moovis.recommendation.MovieRecommendationOnlyFriendScoreImpl;
+import hr.fer.tel.moovis.recommendation.MovieRecommendationWithFriendScoreImpl;
 import hr.fer.tel.moovis.recommendation.RecommendationRecord;
 import hr.fer.tel.moovis.service.RegistrationService;
 
@@ -22,13 +25,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class DummyController {
-
+	
+	@Autowired
+	private MovieRecommendationOnlyFriendScoreImpl movieRecFriend;
 	@Autowired
 	private MovieDao movieDao;
 	@Autowired
-	private MovieRecommendation movieRec;
+	private MovieRecommendationImpl movieRec;
 	@Autowired
 	private ApplicationUserRepository appUserRepo;
+	@Autowired
+	private MovieRecommendationWithFriendScoreImpl movieRecWithFriend;
 
 	@Autowired
 	private RegistrationService regService;
@@ -42,6 +49,24 @@ public class DummyController {
 		} catch (FacebookLoginException e) {
 			e.printStackTrace();
 		}
+
+	}
+	
+	@RequestMapping(value = "/test_rec", method = RequestMethod.GET)
+	public void testRec() {
+
+		ApplicationUser user = appUserRepo.
+				findByAccessToken("02eb2504-17f8-33c3-8d25-9325b0235201");
+		movieRecFriend.calculateRecommendation(user);
+
+	}
+	
+	@RequestMapping(value = "/test2_rec_all", method = RequestMethod.GET)
+	public void testRecAll() {
+
+		ApplicationUser user = appUserRepo.
+				findByAccessToken("02eb2504-17f8-33c3-8d25-9325b0235201");
+		movieRecWithFriend.calculateRecommendation(user);
 
 	}
 

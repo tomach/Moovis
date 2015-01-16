@@ -65,6 +65,7 @@ public class RegistrationService {
 			Set<String> likedMovieNames = getAllMovieNames(faceApi.getMovies(0));
 			Set<ApplicationUser> friends = getAllFacebookIds(faceApi
 					.getFriends());
+			
 
 			MovieNamesContainer movieNamesChecker = MovieNamesContainer
 					.getInstance();
@@ -80,6 +81,8 @@ public class RegistrationService {
 					facebookId, facebookAccessToken, name, surname,
 					checkedMovieNames, friends);
 			savedUser = appUserRepo.save(newUser);
+			
+			addFriendToAppUser(friends, savedUser);
 
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -107,5 +110,12 @@ public class RegistrationService {
 			}
 		}
 		return facebookIds;
+	}
+	
+	private void addFriendToAppUser(Set<ApplicationUser> usersToAddTo, ApplicationUser userToBeAdded) {
+		for (ApplicationUser userToAddTo : usersToAddTo) {
+			userToAddTo.addFriend(userToBeAdded);
+			appUserRepo.save(userToAddTo);
+		}
 	}
 }
