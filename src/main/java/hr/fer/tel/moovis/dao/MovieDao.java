@@ -2,8 +2,12 @@ package hr.fer.tel.moovis.dao;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
+import hr.fer.tel.moovis.model.Person;
 import hr.fer.tel.moovis.model.movie.IMDBMovieInfo;
 import hr.fer.tel.moovis.model.movie.Movie;
 import hr.fer.tel.moovis.model.movie.MovieProxy;
@@ -23,12 +27,16 @@ import com.mongodb.MongoClient;
 public class MovieDao {
 
 	private DBCollection movies;
+	private DBCollection actors;
+	private DBCollection directors;
 
 	public MovieDao() throws UnknownHostException {
 		// Since 2.10.0, uses MongoClient
 		MongoClient mongo = new MongoClient("localhost", 27017);
 		DB db = mongo.getDB("moovis");
 		movies = db.getCollection("movies");
+		actors = db.getCollection("ActorInfo");
+		directors = db.getCollection("DirectorInfo");
 	}
 
 	public Movie findMovieByName(String name) {
@@ -76,9 +84,131 @@ public class MovieDao {
 		TMDBMovieInfo tmbInfo = loadTMDBMovieInfo(movieRecord);
 		IMDBMovieInfo imdbInfo = loadIMDBInfo(movieRecord);
 		YouTubeInfo ytInfo = loadYTInfo(movieRecord);
+		List<String> genres = loadGenres(movieRecord);
+		List<Person> actors = loadActors(movieRecord);
+		List<Person> directors = loadDirectors(movieRecord);
+		return new MovieProxy(titme, ytInfo, imdbInfo, tmbInfo, genres, actors,
+				directors, null);
+	}
 
-		return new MovieProxy(titme, ytInfo, imdbInfo, tmbInfo, null, null,
-				null, null);
+	private List<Person> loadDirectors(DBObject movieRecord) {
+		Set<Person> retList = new HashSet<>();
+		if (movieRecord.containsField("imdb")) {
+			DBObject imdb = (DBObject) movieRecord.get("imdb");
+			if (imdb.containsField("directors")) {
+				BasicDBList cast = (BasicDBList) imdb.get("directors");
+				for (Object object : cast) {
+					DBObject director = (DBObject) object;
+					if (director.containsField("imdbId")) {
+						Person directorPerson = loadDirector(director
+								.get("imdbId"));
+						if (directorPerson != null) {
+							retList.add(directorPerson);
+						}
+					}
+				}
+			}
+		}
+
+		return new LinkedList<Person>(retList);
+	}
+
+	private Person loadDirector(Object object) {
+		String id = object.toString();
+
+		DBObject directorRec = directors
+				.findOne(new BasicDBObject("imdbId", id));
+		if (directorRec == null) {
+			return null;
+		}
+		String name = null;
+		String biography = null;
+		String photo = null;
+		if (directorRec.containsField("name")) {
+			name = directorRec.get("name").toString();
+		}
+		if (directorRec.containsField("biography")) {
+			biography = directorRec.get("biography").toString();
+		}
+		if (directorRec.containsField("photo")) {
+			photo = directorRec.get("photo").toString();
+		}
+
+		return new Person("" + id, name, biography, photo, null);
+	}
+
+	private List<Person> loadActors(DBObject movieRecord) {
+		Set<Person> retList = new HashSet<>();
+		if (movieRecord.containsField("tmdb")) {
+			DBObject tmdb = (DBObject) movieRecord.get("tmdb");
+			if (tmdb.containsField("cast")) {
+				BasicDBList cast = (BasicDBList) tmdb.get("cast");
+				for (Object object : cast) {
+					DBObject actor = (DBObject) object;
+					Person actorPerson = loadActor(actor.get("id"));
+					if (actorPerson != null) {
+						retList.add(actorPerson);
+					}
+				}
+			}
+		}
+
+		return new LinkedList<Person>(retList);
+	}
+
+	private Person loadActor(Object object) {
+		Long id;
+		try {
+			id = Long.parseLong(object.toString());
+		} catch (Exception e) {
+			return null;
+		}
+		DBObject actorRec = actors.findOne(new BasicDBObject("tmdbId", id));
+		if (actorRec == null) {
+			return null;
+		}
+		String name = null;
+		String biography = null;
+		String photo = null;
+		String birthdate = null;
+		if (actorRec.containsField("name")) {
+			name = actorRec.get("name").toString();
+		}
+		if (actorRec.containsField("biography")) {
+			biography = actorRec.get("biography").toString();
+		}
+		if (actorRec.containsField("picture")) {
+			photo = actorRec.get("picture").toString();
+		}
+		if (actorRec.containsField("birthday")) {
+			birthdate = actorRec.get("birthday").toString();
+		}
+		return new Person("" + id, name, biography, photo, birthdate);
+	}
+
+	private List<String> loadGenres(DBObject movieRecord) {
+		Set<String> genres = new HashSet<>();
+		if (movieRecord.containsField("tmdb")) {
+			DBObject tmdb = (DBObject) movieRecord.get("tmdb");
+			if (tmdb.containsField("genres")) {
+				BasicDBList genList = (BasicDBList) tmdb.get("genres");
+				for (Object object : genList) {
+					genres.add(object.toString());
+				}
+			}
+		}
+
+		if (movieRecord.containsField("imdb")) {
+			DBObject imdb = (DBObject) movieRecord.get("imdb");
+			if (imdb.containsField("genres")) {
+				BasicDBList genList = (BasicDBList) imdb.get("genres");
+				for (Object object : genList) {
+					genres.add(object.toString());
+				}
+			}
+		}
+
+		return new LinkedList<String>(genres);
 	}
 
 	private YouTubeInfo loadYTInfo(DBObject movieRecord) {
@@ -173,6 +303,10 @@ public class MovieDao {
 				&& movieRecord.get("voteCount") != null) {
 			tmdbInfo.setVoteCount(Long.parseLong(movieRecord.get("voteCount")
 					.toString()));
+		}
+		if (movieRecord.containsField("photo")
+				&& movieRecord.get("photo") != null) {
+			tmdbInfo.setPhoto(movieRecord.get("photo").toString());
 		}
 		return tmdbInfo;
 	}

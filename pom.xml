@@ -5,16 +5,22 @@
 	<groupId>hr.fer.tel</groupId>
 	<artifactId>Moovis</artifactId>
 	<version>0.1.0</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.1.3.RELEASE</version>
+		<version>1.1.10.RELEASE</version>
 	</parent>
 
 
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- tag::SPRINGBOOT[] -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -79,8 +85,6 @@
 			<version>1.4</version>
 		</dependency>
 
-
-
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
@@ -93,43 +97,22 @@
 			<version>2.1.6</version>
 		</dependency>
 
+
+
+		<!-- HIBERNATE -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.hibernate</groupId>
-					<artifactId>hibernate-entitymanager</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
-
-		<!-- HIBERNATE -->
-
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>4.3.0.Final</version>
 		</dependency>
-
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<optional>true</optional>
 		</dependency>
-
-		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.0-api</artifactId>
-			<optional>true</optional>
-		</dependency>
-
 		<!-- Spring ORM, works with Hibernate -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -162,95 +145,53 @@
 
 
 	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-install-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>similarity-jar</id>
-							<phase>initialize</phase>
-							<goals>
-								<goal>install-file</goal>
-							</goals>
-							<configuration>
-								<groupId>com</groupId>
-								<artifactId>similarity-jar</artifactId>
-								<version>1.0</version>
-								<packaging>jar</packaging>
-								<file>${basedir}/src/main/resources/lib/simmetrics_jar_v1_6_2_d07_02_07.jar</file>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>exec-maven-plugin</artifactId>
-					<executions>
-						<execution>
-							<phase>test</phase>
-							<goals>
-								<goal>java</goal>
-							</goals>
-							<configuration>
-								<mainClass>hr.fer.tel.moovis.StarterApp</mainClass>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>similarity-jar</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<groupId>com</groupId>
+							<artifactId>similarity-jar</artifactId>
+							<version>1.0</version>
+							<packaging>jar</packaging>
+							<file>${basedir}/src/main/resources/lib/simmetrics_jar_v1_6_2_d07_02_07.jar</file>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>exec-maven-plugin</artifactId> 
+				<executions> <execution> <phase>test</phase> <goals> <goal>java</goal> </goals> 
+				<configuration> <mainClass>hr.fer.tel.moovis.StarterApp</mainClass> </configuration> 
+				</execution> </executions> </plugin> -->
 
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<configuration>
-						<source>1.7</source>
-						<target>1.7</target>
-					</configuration>
-				</plugin>
-
-
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.apache.maven.plugins
-										</groupId>
-										<artifactId>
-											maven-install-plugin
-										</artifactId>
-										<versionRange>
-											[2.5.1,)
-										</versionRange>
-										<goals>
-											<goal>install-file</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<execute />
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 
 	<properties>
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<!-- <maven.compiler.source>1.7</maven.compiler.source> <maven.compiler.target>1.7</maven.compiler.target> -->
+		<start-class>hr.fer.tel.moovis.StarterApp</start-class>
 	</properties>
 
 

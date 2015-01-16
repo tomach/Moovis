@@ -1,24 +1,18 @@
 package hr.fer.tel.moovis;
 
-import java.net.UnknownHostException;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
+import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.TheMovieDbApi;
 
 public class Test {
 
-	public static void main(String[] args) throws UnknownHostException {
-		// TODO Auto-generated method stub
-		MongoClient mongo = new MongoClient("localhost", 27017);
-		DB db = mongo.getDB("moovis");
-		DBCollection movies = db.getCollection("movies");
+	public static void main(String[] args) throws MovieDbException {
 
-		DBObject movie = movies.findOne(new BasicDBObject("movieKey",
-				"Interstellar"));
-		System.out.println(movie.containsField("tmdb.id"));
+		TheMovieDbApi theMovieDbApi = new TheMovieDbApi(
+				"5086b39f4b96483187ec864955e4da88");
+		int id = theMovieDbApi.searchPeople("Evan Goldberg", true, 0)
+				.getResults().get(0).getId();
+
+		System.out.println(theMovieDbApi.getPersonInfo(id, ""));
+
 	}
-
 }

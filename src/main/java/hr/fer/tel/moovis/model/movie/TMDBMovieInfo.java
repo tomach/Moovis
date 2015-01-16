@@ -12,6 +12,8 @@ public class TMDBMovieInfo {
 
 	private String overview;
 
+	private String photo;
+
 	public TMDBMovieInfo() {
 	}
 
@@ -69,6 +71,14 @@ public class TMDBMovieInfo {
 
 	public void setOverview(String overview) {
 		this.overview = overview;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 
 	@Override

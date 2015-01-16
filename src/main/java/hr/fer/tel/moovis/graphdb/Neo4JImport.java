@@ -10,6 +10,7 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.tooling.GlobalGraphOperations;
 
 import com.mongodb.BasicDBList;
+import com.mongodb.Bytes;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -17,7 +18,7 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
 public class Neo4JImport {
-	private static final String DB_PATH = "/home/filippm/neo4j-community-2.1.6/data/graph.db";
+	private static final String DB_PATH = "/home/filippm/neo4j-community-2.1.6/data/";
 
 	private static final String DB_NAME = "moovis";
 
@@ -36,20 +37,22 @@ public class Neo4JImport {
 
 	public void importDataToNeo() {
 		DBCursor moviesCursor = movies.find();
+		moviesCursor.addOption(Bytes.QUERYOPTION_NOTIMEOUT);
+
 		int i = 0;
 		while (moviesCursor.hasNext()) {
-			if (i > 100) {
-				break;
+			if (i % 1000 == 0) {
+				System.out.println(i);
 			}
 			i++;
 			DBObject movie = moviesCursor.next();
-			System.out.println(movie);
+			// System.out.println(movie);
 			try (Transaction tx = graphDb.beginTx()) {
 				Node movieNode = importBasicMovieData(movie);
 				importMovieGenre(movie, movieNode);
 				importMovieDirectors(movie, movieNode);
 				importMovieCasts(movie, movieNode);
-				importSimilarMovies(movie, movieNode);
+				// importSimilarMovies(movie, movieNode);
 				tx.success();
 			}
 
@@ -95,10 +98,12 @@ public class Neo4JImport {
 		}
 
 		movieNode = graphDb.createNode(NodeLabels.MOVIE);
-		System.out.println("Kreirao čvor za film");
+		// System.out.println("Kreirao čvor za film");
 		movieNode.setProperty("title", movieTitle.trim());
-		movieNode.setProperty("tmdbId",
-				((DBObject) (movie.get("tmdb"))).get("id").toString());
+		if (movie.containsField("tmdb")) {
+			movieNode.setProperty("tmdbId", ((DBObject) (movie.get("tmdb")))
+					.get("id").toString());
+		}
 
 		return movieNode;
 	}
