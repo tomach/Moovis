@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.parboiled.matchervisitors.GetStarterCharVisitor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +21,7 @@ public class MovieRecommendationImpl implements MovieRecommendation {
 	private MovieDao movieDao;
 
 	@Override
-	public List<Movie> calculateRecommendation(ApplicationUser user) {
+	public List<RecommendationRecord> calculateRecommendation(ApplicationUser user) {
 		Map<Movie, Set<RecommendationRecord>> similarsForLikedMovies = new HashMap<>();
 		// dohvati slične filmove
 		for (String likedMovieName : user.getLikedMovieNames()) {
@@ -69,10 +68,6 @@ public class MovieRecommendationImpl implements MovieRecommendation {
 					+ "\t" + recommendationRecord.getRecScore());
 		}
 
-		List<Movie> retList = new LinkedList<Movie>();
-		for (RecommendationRecord recommendationRecord : finalRec) {
-			retList.add(recommendationRecord.getMovie());
-		}
-		return retList;
+		return finalRec;
 	}
 }

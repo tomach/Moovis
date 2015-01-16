@@ -27,7 +27,7 @@ public class MovieRecommendationOnlyFriendScoreImpl implements
 //	private ApplicationUserRepository userRepo;
 	
 	@Override
-	public List<Movie> calculateRecommendation(ApplicationUser user) {
+	public List<RecommendationRecord> calculateRecommendation(ApplicationUser user) {
 		
 		if (user == null) {
 			return null;
@@ -82,10 +82,10 @@ public class MovieRecommendationOnlyFriendScoreImpl implements
 		
 		//create initial records
 		Set<String> movieNames = new HashSet<String>(allFriendMovies);
-		Set<RecommendationRecord> friendsMovieRec = new HashSet<RecommendationRecord>();
+		Set<RecommendationRecord> friendsMovieRec = new HashSet<>();
 		for (String friendsMovie : movieNames) {
 			Movie likedMovie = movieDao.findMovieByName(friendsMovie);
-			friendsMovieRec.add(new RecommendationRecord(likedMovie, START_VALUE));
+			friendsMovieRec.add(new RecommendationRecordWithFriendLikes(likedMovie, START_VALUE));
 		}
 		
 		//add STEP
@@ -96,21 +96,27 @@ public class MovieRecommendationOnlyFriendScoreImpl implements
 				}
 			}
 		}
+		
+		//add friends
+		for (RecommendationRecord recommendation : friendsMovieRec) {
+			String movieName = recommendation.getMovie().getTitle();
+			RecommendationRecordWithFriendLikes casted = (RecommendationRecordWithFriendLikes) recommendation;
+			for (ApplicationUser friend : friends) {
+				if (friend.getLikedMovieNames().contains(movieName)) {
+					casted.addFriendName(friend.getName());
+				}
+			}
+		}
 
 		List<RecommendationRecord> finalRec = new LinkedList<>(friendsMovieRec);
 		Collections.sort(finalRec);
 
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
-		for (RecommendationRecord recommendationRecord : finalRec) {
-			System.out.println(recommendationRecord.getMovie().getTitle()
-					+ "\t" + recommendationRecord.getRecScore());
-		}
+//		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
+//		for (RecommendationRecord recommendationRecord : finalRec) {
+//			System.out.println(recommendationRecord.getMovie().getTitle()
+//					+ "\t" + recommendationRecord.getRecScore());
+//		}
 
-		List<Movie> retList = new LinkedList<Movie>();
-		for (RecommendationRecord recommendationRecord : finalRec) {
-			retList.add(recommendationRecord.getMovie());
-		}
-		
-		return retList;
+		return finalRec;
 	}
 }

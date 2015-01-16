@@ -27,7 +27,7 @@ public class MovieRecommendationWithFriendScoreImpl implements
 	private MovieDao movieDao;
 
 	@Override
-	public List<Movie> calculateRecommendation(ApplicationUser user) {
+	public List<RecommendationRecord> calculateRecommendation(ApplicationUser user) {
 
 		Map<Movie, Set<RecommendationRecord>> similarMoviesOfLikedMovie = new HashMap<>();
 
@@ -91,11 +91,7 @@ public class MovieRecommendationWithFriendScoreImpl implements
 					+ "\t" + recommendationRecord.getRecScore());
 		}
 
-		List<Movie> retList = new LinkedList<Movie>();
-		for (RecommendationRecord recommendationRecord : finalRec) {
-			retList.add(recommendationRecord.getMovie());
-		}
 		
-		return retList;
+		return finalRec;
 	}
 }
