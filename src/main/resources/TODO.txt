@@ -11,3 +11,9 @@ api poziv za micanje filma iz liste watched_movies
 kod preporuke sad osim lajkanih filmova izbaciti i watched movies
 
 modificirati dodavanje watched movie-a - ako postoji u watchlisti, makni ga
+
+dodati rotten u preporuke
+
+dodati rotten u front
+
+poraditi na sličnosti riječi!

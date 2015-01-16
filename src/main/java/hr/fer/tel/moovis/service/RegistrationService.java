@@ -17,6 +17,11 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
+
 import facebook4j.FacebookException;
 import facebook4j.Friend;
 import facebook4j.Movie;
@@ -27,6 +32,14 @@ import facebook4j.User;
 public class RegistrationService {
 	@Autowired
 	private ApplicationUserRepository appUserRepo;
+
+	private DBCollection rottenQueue;
+
+	public RegistrationService() throws UnknownHostException {
+		MongoClient mongo = new MongoClient("localhost", 27017);
+		DB db = mongo.getDB("moovis");
+		rottenQueue = db.getCollection("RottenSearchQueue");
+	}
 
 	public ApplicationUser registerApplicationUser(String facebookAccessToken)
 			throws FacebookLoginException {
@@ -63,7 +76,10 @@ public class RegistrationService {
 				MovieNamesContainer movieNamesChecker = MovieNamesContainer
 						.getInstance();
 				for (String movie : likedMovieNames) {
-					appUser.addLikedMovie(movieNamesChecker.getMovieName(movie));
+					String checkedName = movieNamesChecker.getMovieName(movie);
+					appUser.addLikedMovie(checkedName);
+					rottenQueue.insert(new BasicDBObject("movieKey",
+							checkedName));
 				}
 
 				savedUser = appUserRepo.save(appUser);
@@ -82,7 +98,9 @@ public class RegistrationService {
 					.getInstance();
 			Set<String> checkedMovieNames = new HashSet<String>();
 			for (String movie : likedMovieNames) {
-				checkedMovieNames.add(movieNamesChecker.getMovieName(movie));
+				String checkedName = movieNamesChecker.getMovieName(movie);
+				rottenQueue.insert(new BasicDBObject("movieKey", checkedName));
+				checkedMovieNames.add(checkedName);
 			}
 
 			System.out.println(faceApi.getFriends());

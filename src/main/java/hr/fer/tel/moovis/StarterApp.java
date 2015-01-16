@@ -40,6 +40,8 @@ public class StarterApp extends SpringBootServletInitializer {
 	@Override
 	protected SpringApplicationBuilder configure(
 			SpringApplicationBuilder application) {
+		System.out.println("Starting...");
+		MovieNamesContainer.getInstance();
 		return application.sources(applicationClass);
 	}
 

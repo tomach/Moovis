@@ -1,7 +1,9 @@
 package hr.fer.tel.moovis.names;
 
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
@@ -22,12 +24,17 @@ public class MovieNamesContainer {
 		} catch (UnknownHostException e) {
 		}
 	}
+	// namelowerCase:nameNormal
+	private Map<String, String> names;
 
 	private Set<String> movieNames;
+	private Set<String> movieNamesLowerCased;
 
 	private MovieNamesContainer() throws UnknownHostException {
 		System.out.println("Loading movie names...");
 		movieNames = new HashSet<>();
+		movieNamesLowerCased = new HashSet<>();
+		names = new HashMap<>();
 		// Since 2.10.0, uses MongoClient
 		MongoClient mongo = new MongoClient("localhost", 27017);
 		DB db = mongo.getDB("moovis");
@@ -36,30 +43,42 @@ public class MovieNamesContainer {
 
 		Cursor cur = movies.find();
 		while (cur.hasNext()) {
-			movieNames.add(cur.next().get("name").toString());
+			String tempName = cur.next().get("name").toString();
+			// movieNames.add(tempName);
+			// movieNamesLowerCased.add(tempName.toLowerCase());
+			if (!names.containsKey(tempName.toLowerCase())) {
+				names.put(tempName.toLowerCase(), tempName);
+			}
 		}
 		System.out.println("Loading over!");
 	}
 
 	public String getMovieName(String nameCandidate) {
-		if (movieNames.contains(nameCandidate)) {
-			return nameCandidate;
+		String res;
+		if (names.containsKey(nameCandidate.toLowerCase())) {
+			res = nameCandidate;
 		} else {
-			return getMovieNameWithSimilarity(nameCandidate);
+			res = getMovieNameWithSimilarity(nameCandidate);
+
 		}
+		System.out.println(nameCandidate + "\n" + res);
+		return res;
 	}
 
 	private String getMovieNameWithSimilarity(String nameCandidate) {
 		double similarity = 0.0;
 		JaroWinkler algorithm = new JaroWinkler();
 		String retVal = null;
-		for (String name : movieNames) {
-			double tempSim = algorithm.getSimilarity(nameCandidate, name);
-			if (tempSim > similarity) {
-				retVal = name;
+		String nameCandidateToLower = nameCandidate.toLowerCase();
+		for (String name : names.keySet()) {
+			double tempSim = algorithm
+					.getSimilarity(nameCandidateToLower, name);
+			if (tempSim > similarity && name.length() < nameCandidate.length()) {
+				retVal = names.get(name);
 				similarity = tempSim;
 			}
 		}
+
 		return retVal;
 	}
 
