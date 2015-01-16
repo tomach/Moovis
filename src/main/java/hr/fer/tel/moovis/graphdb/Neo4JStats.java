@@ -2,6 +2,8 @@ package hr.fer.tel.moovis.graphdb;
 
 import java.util.Iterator;
 
+import javax.management.RuntimeErrorException;
+
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -10,7 +12,7 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.tooling.GlobalGraphOperations;
 
 public class Neo4JStats {
-	private static final String DB_PATH = "/home/filippm/neo4j-community-2.1.6/data/graph.db";
+	private static final String DB_PATH = "/home/filippm/neo4j-community-2.1.6/data/";
 
 	private GraphDatabaseService graphDb;
 
@@ -19,12 +21,16 @@ public class Neo4JStats {
 	}
 
 	public void delete() {
+
 		try (Transaction tx = graphDb.beginTx()) {
 
 			int rels = 0;
 			for (Relationship rel : GlobalGraphOperations.at(graphDb)
 					.getAllRelationships()) {
 				rel.delete();
+				if (rels % 1000 == 0) {
+					System.out.println(rels);
+				}
 				rels++;
 			}
 			int nodes = 0;
@@ -43,16 +49,25 @@ public class Neo4JStats {
 	public void stats() {
 		try (Transaction tx = graphDb.beginTx()) {
 
-			int rels = 0;
+			long nodes = 0;
+			for (Iterator<Node> iterator = GlobalGraphOperations.at(graphDb)
+					.getAllNodes().iterator(); iterator.hasNext();) {
+				if (nodes % 1000 == 0) {
+					System.out.println(nodes);
+				}
+				nodes++;
+			}
+			if (nodes > 1) {
+				throw new RuntimeException();
+			}
+			long rels = 0;
 			for (Iterator<Relationship> iterator = GlobalGraphOperations
 					.at(graphDb).getAllRelationships().iterator(); iterator
 					.hasNext();) {
+				if (rels % 1000 == 0) {
+					System.out.println(rels);
+				}
 				rels++;
-			}
-			int nodes = 0;
-			for (Iterator<Node> iterator = GlobalGraphOperations.at(graphDb)
-					.getAllNodes().iterator(); iterator.hasNext();) {
-				nodes++;
 			}
 
 			System.out.println(" nodes:" + nodes);

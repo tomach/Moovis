@@ -10,6 +10,7 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.tooling.GlobalGraphOperations;
 
 import com.mongodb.BasicDBList;
+import com.mongodb.Bytes;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -36,6 +37,8 @@ public class Neo4JImport {
 
 	public void importDataToNeo() {
 		DBCursor moviesCursor = movies.find();
+		moviesCursor.addOption(Bytes.QUERYOPTION_NOTIMEOUT);
+
 		int i = 0;
 		while (moviesCursor.hasNext()) {
 			if (i % 1000 == 0) {
@@ -43,13 +46,13 @@ public class Neo4JImport {
 			}
 			i++;
 			DBObject movie = moviesCursor.next();
-			System.out.println(movie);
+			// System.out.println(movie);
 			try (Transaction tx = graphDb.beginTx()) {
 				Node movieNode = importBasicMovieData(movie);
 				importMovieGenre(movie, movieNode);
 				importMovieDirectors(movie, movieNode);
 				importMovieCasts(movie, movieNode);
-				importSimilarMovies(movie, movieNode);
+				// importSimilarMovies(movie, movieNode);
 				tx.success();
 			}
 
@@ -95,7 +98,7 @@ public class Neo4JImport {
 		}
 
 		movieNode = graphDb.createNode(NodeLabels.MOVIE);
-		System.out.println("Kreirao čvor za film");
+		// System.out.println("Kreirao čvor za film");
 		movieNode.setProperty("title", movieTitle.trim());
 		if (movie.containsField("tmdb")) {
 			movieNode.setProperty("tmdbId", ((DBObject) (movie.get("tmdb")))

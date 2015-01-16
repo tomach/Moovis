@@ -35,13 +35,17 @@ public class ApplicationUser {
 	@CollectionTable(name = "movie_names")
 	private Set<String> watchedMovieNames = new HashSet<>();
 
+	@ElementCollection
+	@CollectionTable(name = "movie_names")
+	private Set<String> watchList = new HashSet<>();
+
 	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<ApplicationUser> friends = new HashSet<>();
 
 	public ApplicationUser(String accessToken, String facebookId,
 			String facebookAccessToken, String name, String surname,
 			Set<String> likedMovieNames, Set<String> watchedMovieNames,
-			Set<ApplicationUser> friends) {
+			Set<String> watchList, Set<ApplicationUser> friends) {
 		super();
 		this.accessToken = accessToken;
 		this.facebookId = facebookId;
@@ -51,6 +55,7 @@ public class ApplicationUser {
 		this.likedMovieNames = likedMovieNames;
 		this.watchedMovieNames = watchedMovieNames;
 		this.friends = friends;
+		this.watchList = watchList;
 	}
 
 	public ApplicationUser() {
@@ -75,6 +80,17 @@ public class ApplicationUser {
 			throw new IllegalArgumentException("Movie name cannot be null!");
 		}
 		watchedMovieNames.add(movieName);
+	}
+
+	public void addMovieToWatchList(String movieName) {
+		if (movieName == null) {
+			throw new IllegalArgumentException("Movie name cannot be null!");
+		}
+		watchList.add(movieName);
+	}
+
+	public Set<String> getWatchList() {
+		return Collections.unmodifiableSet(watchList);
 	}
 
 	public Set<String> getWatchedMovieNames() {

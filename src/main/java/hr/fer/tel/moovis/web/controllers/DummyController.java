@@ -115,4 +115,33 @@ public class DummyController {
 
 	}
 
+	@RequestMapping(value = "/watchlist/{name}", method = RequestMethod.POST)
+	public ResponseEntity<String> addMovieToWatchList(
+			@RequestParam(value = "access_token") String accessToken,
+			@PathVariable(value = "name") String movieName) {
+		System.out.println("Add movie to watchlst request!");
+		System.out.println("access token:" + accessToken);
+		System.out.println("Movie name:" + movieName);
+		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
+		System.out.println(user);
+		if (user == null) {
+			JSONObject response = new JSONObject();
+			response.put("sucsess", "false");
+			response.put("error", "User not found");
+
+			return new ResponseEntity<String>(response.toString(),
+					HttpStatus.BAD_REQUEST);
+		}
+
+		String normalizedName = MovieNamesContainer.getInstance().getMovieName(
+				movieName);
+		user.addMovieToWatchList(normalizedName);
+		appUserRepo.save(user);
+		JSONObject response = new JSONObject();
+		response.put("sucsess", "true");
+		response.put("status", "Movie added!");
+		
+		return new ResponseEntity<String>(response.toString(), HttpStatus.OK);
+	}
+
 }
