@@ -87,6 +87,8 @@ public class MovieRecommendationOnlyFriendScoreImpl implements
 			if (likedMovie != null) {
 				friendsMovieRec.add(new RecommendationRecordWithFriendLikes(
 						likedMovie, START_VALUE));
+			} else {
+				System.out.println("Nema filma za naslov:" + friendsMovie);
 			}
 		}
 
