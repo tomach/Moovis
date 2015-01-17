@@ -104,14 +104,17 @@ public class MovieRecommendationOnlyFriendScoreImpl implements
 
 		// add friends
 		for (RecommendationRecord recommendation : friendsMovieRec) {
-			String movieName = recommendation.getMovie().getTitle();
-			RecommendationRecordWithFriendLikes casted = (RecommendationRecordWithFriendLikes) recommendation;
-			for (ApplicationUser friend : friends) {
-				if (friend.getLikedMovieNames().contains(movieName)) {
-					StringBuilder builder = new StringBuilder();
-					builder.append(friend.getName()).append(" ")
-							.append(friend.getSurname());
-					casted.addFriendName(builder.toString());
+			if (recommendation != null && recommendation.getMovie() != null
+					&& recommendation.getMovie().getTitle() != null) {
+				String movieName = recommendation.getMovie().getTitle();
+				RecommendationRecordWithFriendLikes casted = (RecommendationRecordWithFriendLikes) recommendation;
+				for (ApplicationUser friend : friends) {
+					if (friend.getLikedMovieNames().contains(movieName)) {
+						StringBuilder builder = new StringBuilder();
+						builder.append(friend.getName()).append(" ")
+								.append(friend.getSurname());
+						casted.addFriendName(builder.toString());
+					}
 				}
 			}
 		}
