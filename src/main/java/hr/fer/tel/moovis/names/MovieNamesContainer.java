@@ -73,7 +73,7 @@ public class MovieNamesContainer {
 		for (String name : names.keySet()) {
 			double tempSim = algorithm
 					.getSimilarity(nameCandidateToLower, name);
-			if (tempSim > similarity && name.length() < nameCandidate.length()) {
+			if (tempSim > similarity /* && name.length() < nameCandidate.length() */) {
 				retVal = names.get(name);
 				similarity = tempSim;
 			}
