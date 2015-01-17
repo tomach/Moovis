@@ -43,7 +43,7 @@ public class MovieNamesContainer {
 
 		Cursor cur = movies.find();
 		while (cur.hasNext()) {
-			String tempName = cur.next().get("name").toString();
+			String tempName = cur.next().get("movieKey").toString();
 			// movieNames.add(tempName);
 			// movieNamesLowerCased.add(tempName.toLowerCase());
 			if (!names.containsKey(tempName.toLowerCase())) {

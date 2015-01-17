@@ -21,12 +21,16 @@ public class MovieRecommendationImpl implements MovieRecommendation {
 	private MovieDao movieDao;
 
 	@Override
-	public List<RecommendationRecord> calculateRecommendation(ApplicationUser user) {
+	public List<RecommendationRecord> calculateRecommendation(
+			ApplicationUser user) {
 		Map<Movie, Set<RecommendationRecord>> similarsForLikedMovies = new HashMap<>();
 		// dohvati slične filmove
 		for (String likedMovieName : user.getLikedMovieNames()) {
 			Movie likedMovie = movieDao.findMovieByName(likedMovieName);
-
+			if (likedMovie == null) {
+				System.out.println("Nema filma za naslov:" + likedMovieName);
+				continue;
+			}
 			Set<RecommendationRecord> similarAsRecords = new HashSet<>();
 
 			for (Movie sim : likedMovie.getSimilarMovies()) {
