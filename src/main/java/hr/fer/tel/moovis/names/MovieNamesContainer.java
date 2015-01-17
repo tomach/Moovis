@@ -56,7 +56,7 @@ public class MovieNamesContainer {
 	public String getMovieName(String nameCandidate) {
 		String res;
 		if (names.containsKey(nameCandidate.toLowerCase())) {
-			res = nameCandidate;
+			res = names.get(nameCandidate.toLowerCase());
 		} else {
 			res = getMovieNameWithSimilarity(nameCandidate);
 
