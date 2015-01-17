@@ -84,8 +84,10 @@ public class MovieRecommendationOnlyFriendScoreImpl implements
 		Set<RecommendationRecord> friendsMovieRec = new HashSet<>();
 		for (String friendsMovie : movieNames) {
 			Movie likedMovie = movieDao.findMovieByName(friendsMovie);
-			friendsMovieRec.add(new RecommendationRecordWithFriendLikes(
-					likedMovie, START_VALUE));
+			if (likedMovie != null) {
+				friendsMovieRec.add(new RecommendationRecordWithFriendLikes(
+						likedMovie, START_VALUE));
+			}
 		}
 
 		// add STEP
@@ -124,10 +126,14 @@ public class MovieRecommendationOnlyFriendScoreImpl implements
 
 		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
 		for (RecommendationRecord recommendationRecord : finalRec) {
-			RecommendationRecordWithFriendLikes recRecord = (RecommendationRecordWithFriendLikes) recommendationRecord;
-			System.out.println(recRecord.getMovie().getTitle() + "\t"
-					+ recRecord.getRecScore() + "\t"
-					+ recRecord.getFriendNames());
+			if (recommendationRecord != null
+					&& recommendationRecord.getMovie() != null
+					&& recommendationRecord.getMovie().getTitle() != null) {
+				RecommendationRecordWithFriendLikes recRecord = (RecommendationRecordWithFriendLikes) recommendationRecord;
+				System.out.println(recRecord.getMovie().getTitle() + "\t"
+						+ recRecord.getRecScore() + "\t"
+						+ recRecord.getFriendNames());
+			}
 		}
 
 		return finalRec;
