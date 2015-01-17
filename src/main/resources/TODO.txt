@@ -1,6 +1,4 @@
-Proces za updateanje lajkanih filmova
 Youtube thumbnail high quality
-Preporuka
 
 Sci-Fi i Science Fiction
 
@@ -17,3 +15,8 @@ dodati rotten u preporuke
 dodati rotten u front
 
 poraditi na sličnosti riječi!
+
+
+
+POSTPONED:
+Proces za updateanje lajkanih filmova

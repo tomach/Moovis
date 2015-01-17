@@ -23,17 +23,19 @@ public class MovieRecommendationOnlyFriendScoreImpl implements
 
 	@Autowired
 	private MovieDao movieDao;
-//	@Autowired
-//	private ApplicationUserRepository userRepo;
-	
+
+	// @Autowired
+	// private ApplicationUserRepository userRepo;
+
 	@Override
-	public List<RecommendationRecord> calculateRecommendation(ApplicationUser user) {
-		
+	public List<RecommendationRecord> calculateRecommendation(
+			ApplicationUser user) {
+
 		if (user == null) {
 			return null;
 		}
-		
-		//get user movies 
+
+		// get user movies
 		Set<String> userMovies = user.getLikedMovieNames();
 
 		// get all friends and their liked movies
@@ -43,68 +45,72 @@ public class MovieRecommendationOnlyFriendScoreImpl implements
 			Set<String> friendsLikedMovies = friend.getLikedMovieNames();
 			allFriendMovies.addAll(friendsLikedMovies);
 		}
-		
-//		allFriendMovies = new ArrayList<String>();
-//		allFriendMovies.add("Film1");
-//		allFriendMovies.add("Film1");
-//		allFriendMovies.add("Film2");
-//		allFriendMovies.add("Film3");
-//		allFriendMovies.add("Film4");
-//		allFriendMovies.add("Film4");
-//		
-//		userMovies = new HashSet<String>();
-//		userMovies.add("Film2");
-//		userMovies.add("Film1");
-//		userMovies.add("Film5");
-		
-		//exclude watched movies
-		allFriendMovies.removeAll(userMovies);
-		
-		
-//		List<String> union = new ArrayList<String>(allFriendMovies);
-//		union.addAll(userMovies);
-//		
-//		List<String> intersection = new ArrayList<String>(allFriendMovies);
-//		intersection.retainAll(userMovies);
-//		
-//		for (String name : userMovies) {
-//			System.out.println("Moje: " + name);
-//		}
-//		
-//		for (String name : allFriendMovies) {
-//			System.out.println("Njihovo: " + name);
-//		}
-//	
-//		
-//		union.removeAll(intersection);
 
-		
-		
-		//create initial records
+		// allFriendMovies = new ArrayList<String>();
+		// allFriendMovies.add("Film1");
+		// allFriendMovies.add("Film1");
+		// allFriendMovies.add("Film2");
+		// allFriendMovies.add("Film3");
+		// allFriendMovies.add("Film4");
+		// allFriendMovies.add("Film4");
+		//
+		// userMovies = new HashSet<String>();
+		// userMovies.add("Film2");
+		// userMovies.add("Film1");
+		// userMovies.add("Film5");
+
+		// exclude watched movies
+		allFriendMovies.removeAll(userMovies);
+
+		// List<String> union = new ArrayList<String>(allFriendMovies);
+		// union.addAll(userMovies);
+		//
+		// List<String> intersection = new ArrayList<String>(allFriendMovies);
+		// intersection.retainAll(userMovies);
+		//
+		// for (String name : userMovies) {
+		// System.out.println("Moje: " + name);
+		// }
+		//
+		// for (String name : allFriendMovies) {
+		// System.out.println("Njihovo: " + name);
+		// }
+		//
+		//
+		// union.removeAll(intersection);
+
+		// create initial records
 		Set<String> movieNames = new HashSet<String>(allFriendMovies);
 		Set<RecommendationRecord> friendsMovieRec = new HashSet<>();
 		for (String friendsMovie : movieNames) {
 			Movie likedMovie = movieDao.findMovieByName(friendsMovie);
-			friendsMovieRec.add(new RecommendationRecordWithFriendLikes(likedMovie, START_VALUE));
+			friendsMovieRec.add(new RecommendationRecordWithFriendLikes(
+					likedMovie, START_VALUE));
 		}
-		
-		//add STEP
+
+		// add STEP
 		for (RecommendationRecord recommendation : friendsMovieRec) {
 			for (String friendsMovieName : allFriendMovies) {
-				if (recommendation.getMovie().getTitle().equals(friendsMovieName)) {
-					recommendation.setRecScore(recommendation.getRecScore() + STEP);
+				if (recommendation != null && recommendation.getMovie() != null
+						&& recommendation.getMovie().getTitle() != null) {
+					if (recommendation.getMovie().getTitle()
+							.equals(friendsMovieName)) {
+						recommendation.setRecScore(recommendation.getRecScore()
+								+ STEP);
+					}
 				}
 			}
 		}
-		
-		//add friends
+
+		// add friends
 		for (RecommendationRecord recommendation : friendsMovieRec) {
 			String movieName = recommendation.getMovie().getTitle();
 			RecommendationRecordWithFriendLikes casted = (RecommendationRecordWithFriendLikes) recommendation;
 			for (ApplicationUser friend : friends) {
 				if (friend.getLikedMovieNames().contains(movieName)) {
 					StringBuilder builder = new StringBuilder();
-					builder.append(friend.getName()).append(" ").append(friend.getSurname());
+					builder.append(friend.getName()).append(" ")
+							.append(friend.getSurname());
 					casted.addFriendName(builder.toString());
 				}
 			}
@@ -116,9 +122,9 @@ public class MovieRecommendationOnlyFriendScoreImpl implements
 		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
 		for (RecommendationRecord recommendationRecord : finalRec) {
 			RecommendationRecordWithFriendLikes recRecord = (RecommendationRecordWithFriendLikes) recommendationRecord;
-			System.out.println(recRecord.getMovie().getTitle()
-					+ "\t" + recRecord.getRecScore() + "\t" +
-					recRecord.getFriendNames());
+			System.out.println(recRecord.getMovie().getTitle() + "\t"
+					+ recRecord.getRecScore() + "\t"
+					+ recRecord.getFriendNames());
 		}
 
 		return finalRec;
