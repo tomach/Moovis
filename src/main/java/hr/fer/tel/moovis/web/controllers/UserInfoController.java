@@ -34,7 +34,8 @@ public class UserInfoController {
 		System.out.println("Get user request!");
 		System.out.println("acess_token:" + accessToken);
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
-
+		System.out.println(user.getName());
+		System.out.println(user.getSurname());
 		return new ResponseEntity<ApplicationUser>(user, HttpStatus.OK);
 
 	}
@@ -60,9 +61,9 @@ public class UserInfoController {
 		String normalizedName = MovieNamesContainer.getInstance().getMovieName(
 				movieName);
 		user.addWatchedMovie(normalizedName);
-		//makni ga i iz watchliste
+		// makni ga i iz watchliste
 		user.removeMovieToWatchList(normalizedName);
-		
+
 		appUserRepo.save(user);
 		JSONObject response = new JSONObject();
 		response.put("sucsess", "true");

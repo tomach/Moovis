@@ -1,5 +1,8 @@
 package hr.fer.tel.moovis;
 
+import java.nio.charset.Charset;
+import java.util.Arrays;
+
 import hr.fer.tel.moovis.names.MovieNamesContainer;
 
 import org.springframework.boot.SpringApplication;
@@ -9,6 +12,9 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -22,6 +28,14 @@ import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 @ComponentScan
 @Configuration
 public class StarterApp extends SpringBootServletInitializer {
+
+	@Bean
+	public HttpMessageConverter<String> responseBodyConverter() {
+		StringHttpMessageConverter converter = new StringHttpMessageConverter(
+				Charset.forName("UTF-8"));
+		converter.setWriteAcceptCharset(false);
+		return converter;
+	}
 
 	@Bean
 	public MappingJackson2HttpMessageConverter jacksonMessageConverter() {

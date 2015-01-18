@@ -84,7 +84,8 @@ public class IMDBSearcher extends GenericSearch {
 		BasicDBList directors = new BasicDBList();
 		for (ImdbCast director : movie.getDirectors()) {
 			directors.add(new BasicDBObject("name", director.getPerson()
-					.getName()));
+					.getName()).append("imdbId", director.getPerson()
+					.getActorId()));
 		}
 
 		DBObject movieDetails = new BasicDBObject()
@@ -113,8 +114,6 @@ public class IMDBSearcher extends GenericSearch {
 		IMDBSearcher ser = new IMDBSearcher();
 		Thread newSearc = new Thread(ser);
 		newSearc.start();
-
-		
 
 		/*
 		 * while (true) { IMDBSearcher ser = new IMDBSearcher(); Thread newSearc

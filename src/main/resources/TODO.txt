@@ -6,21 +6,18 @@ DONE:
 api poziv za micanje filma iz liste watched_movies
 modificirati dodavanje watched movie-a - ako postoji u watchlisti, makni ga
 proces za rotten on demand
+poraditi na sličnosti riječi!
+provjeriti The dark knight i The dark knightfall, čajin film-ovo nejde bolje nikako!!
 
 
 UNDONE:
 
-provjeriti The dark knight i The dark knightfall, čajin film
 
 
 kod preporuke sad osim lajkanih filmova izbaciti i watched movies
-
-
 dodati rotten u preporuke
-
 dodati rotten u front
 
-poraditi na sličnosti riječi!
 
 
 

@@ -53,7 +53,7 @@ public class YouTubeSearch extends GenericSearch {
 		search.setQ(queryTerm);
 		search.setType("video");
 
-		search.setFields("items(id/kind,id/videoId,snippet/title,snippet/description,snippet/thumbnails/default/url)");
+		search.setFields("items(id/kind,id/videoId,snippet/title,snippet/description,snippet/thumbnails/high/url)");
 		search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
 
 		SearchListResponse searchResponse = null;
@@ -78,9 +78,10 @@ public class YouTubeSearch extends GenericSearch {
 						.append("description",
 								result.getSnippet().getDescription())
 						.append("thumbnailURL",
-								result.getSnippet().getThumbnails()
-										.getDefault().getUrl())
-						.append("title", result.getSnippet().getTitle());
+								result.getSnippet().getThumbnails().getHigh()
+										.getUrl())
+						.append("title", result.getSnippet().getTitle())
+						.append("highThumb", true);
 				newMovieObject.append("youTube", movieDetails);
 			}
 

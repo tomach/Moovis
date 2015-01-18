@@ -30,18 +30,13 @@ public class TMDBSearch extends GenericSearch {
 	@Override
 	protected void processMovie(DBObject obj, BasicDBObject newMovieObject) {
 		String movieKey = obj.get("movieKey").toString();
-
+		int movieId = (int) obj.get("tmdbId");
 		System.out.println(movieKey);
-
+		System.out.println(movieId);
 		// Obrada uz TMDB api
 		try {
-			List<MovieDb> results = theMovieDbApi.searchMovie(movieKey, 0,
-					null, false, 0).getResults();
-			if (results.size() == 0) {
-				return;
-			}
-			MovieDb movie = theMovieDbApi.getMovieInfo(results.get(0).getId(),
-					null, "");
+
+			MovieDb movie = theMovieDbApi.getMovieInfo(movieId, null, "");
 
 			System.out.println("THDB search result:" + movie);
 			BasicDBObject movieDetails = new BasicDBObject()
@@ -56,7 +51,10 @@ public class TMDBSearch extends GenericSearch {
 					.append("releaseDate", movie.getReleaseDate())
 					.append("voteCount", movie.getVoteCount())
 					.append("imdbID", movie.getImdbID())
-					.append("overview", movie.getOverview());
+					.append("overview", movie.getOverview())
+					.append("photo", movie.getPosterPath())
+					.append("backdropPath", movie.getBackdropPath())
+					.append("updatedPhotos", true);
 			if (movie.getGenres() != null) {
 				List<String> genres = new ArrayList<String>();
 				for (Genre genre : movie.getGenres()) {

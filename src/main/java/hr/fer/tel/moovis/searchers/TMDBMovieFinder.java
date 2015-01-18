@@ -75,6 +75,7 @@ public class TMDBMovieFinder implements Runnable {
 
 				MovieDb movieInfo = theMovieDbApi.getMovieInfo(counter, null);
 				if (movieInfo != null) {
+					
 					DBObject dbMovie = new BasicDBObject().append("movieKey",
 							movieInfo.getOriginalTitle()).append("name",
 							movieInfo.getOriginalTitle());

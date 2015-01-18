@@ -62,7 +62,8 @@ public class RegistrationService {
 			String facebookId = user.getId();
 			System.out.println(facebookId);
 			System.out.println(appUserRepo);
-
+			System.out.println(user.getName());
+			System.out.println(user.getLastName());
 			Set<ApplicationUser> friends = getAllFacebookIds(faceApi
 					.getFriends());
 			if (appUserRepo.findByFacebookId(facebookId) != null) {
@@ -83,7 +84,11 @@ public class RegistrationService {
 					rottenQueue.insert(new BasicDBObject("movieKey",
 							checkedName));
 				}
-
+				//OVO JE SAMO PRIVREMENO
+				appUser.setName(user.getName());
+				appUser.setSurname(user.getLastName());
+				//
+				
 				savedUser = appUserRepo.save(appUser);
 				addFriendToAppUser(friends, savedUser);
 				return appUser;
