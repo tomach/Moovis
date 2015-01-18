@@ -72,7 +72,9 @@ public class RegistrationService {
 
 				Set<String> likedMovieNames = getAllMovieNames(faceApi
 						.getMovies(0));
-
+				if (likedMovieNames != null) {
+					appUser.resetLikedMovies();
+				}
 				MovieNamesContainer movieNamesChecker = MovieNamesContainer
 						.getInstance();
 				for (String movie : likedMovieNames) {

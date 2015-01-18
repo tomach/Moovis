@@ -79,13 +79,17 @@ public class ApplicationUser {
 		likedMovieNames.add(movieName);
 	}
 
+	public void resetLikedMovies() {
+		likedMovieNames = new HashSet<String>();
+	}
+
 	public void addWatchedMovie(String movieName) {
 		if (movieName == null) {
 			throw new IllegalArgumentException("Movie name cannot be null!");
 		}
 		watchedMovieNames.add(movieName);
 	}
-	
+
 	public void removeWatchedMovie(String movieName) {
 		if (movieName == null) {
 			throw new IllegalArgumentException("Movie name cannot be null!");
@@ -99,6 +103,7 @@ public class ApplicationUser {
 		}
 		watchList.add(movieName);
 	}
+
 	public void removeMovieToWatchList(String movieName) {
 		if (movieName == null) {
 			throw new IllegalArgumentException("Movie name cannot be null!");

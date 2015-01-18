@@ -55,7 +55,7 @@ public class MovieNamesContainer {
 
 	public String getMovieName(String nameCandidate) {
 		String res;
-		nameCandidate=nameCandidate.trim();
+		nameCandidate = nameCandidate.trim();
 		if (names.containsKey(nameCandidate.toLowerCase())) {
 			res = names.get(nameCandidate.toLowerCase());
 		} else {
@@ -70,12 +70,44 @@ public class MovieNamesContainer {
 		JaroWinkler algorithm = new JaroWinkler();
 		String retVal = null;
 		String nameCandidateToLower = nameCandidate.toLowerCase();
-		for (String key : names.keySet()) {
-			double tempSim = algorithm
-					.getSimilarity(nameCandidateToLower, key);
-			if (tempSim > similarity /* && name.length() < nameCandidate.length() */) {
-				retVal = names.get(key);
-				similarity = tempSim;
+
+		if (nameCandidateToLower.startsWith("the")) {
+			String nameCanWithoutThe = nameCandidateToLower.substring(4);
+			double simWithoutThe = 0.0;
+			double simWithThe = 0.0;
+			String retValWitoutThe = null;
+			String retValWithThe = null;
+			for (String key : names.keySet()) {
+				double tempSimWithThe = algorithm.getSimilarity(
+						nameCandidateToLower, key);
+				double tempSimWitoutThe = algorithm.getSimilarity(
+						nameCanWithoutThe, key);
+
+				if (tempSimWithThe > simWithThe) {
+					retValWithThe = names.get(key);
+					simWithThe = tempSimWithThe;
+				}
+				if (tempSimWitoutThe > simWithoutThe) {
+					retValWitoutThe = names.get(key);
+					simWithoutThe = tempSimWitoutThe;
+				}
+
+			}
+
+			if (simWithoutThe > simWithThe) {
+				return retValWitoutThe;
+			} else {
+				return retValWithThe;
+			}
+		} else {
+			for (String key : names.keySet()) {
+				double tempSim = algorithm.getSimilarity(nameCandidateToLower,
+						key);
+				if (tempSim > similarity
+						&& key.length() <= nameCandidate.length()) {
+					retVal = names.get(key);
+					similarity = tempSim;
+				}
 			}
 		}
 
