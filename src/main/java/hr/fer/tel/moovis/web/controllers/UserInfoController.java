@@ -21,13 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UserInfoController {
-	
+
 	@Autowired
 	private ApplicationUserRepository appUserRepo;
-	
+
 	@Autowired
 	private MovieDao movieDao;
-	
+
 	@RequestMapping(value = "/user_info", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationUser> getUser(
 			@RequestParam(value = "access_token") String accessToken) {
@@ -60,10 +60,42 @@ public class UserInfoController {
 		String normalizedName = MovieNamesContainer.getInstance().getMovieName(
 				movieName);
 		user.addWatchedMovie(normalizedName);
+		//makni ga i iz watchliste
+		user.removeMovieToWatchList(normalizedName);
+		
 		appUserRepo.save(user);
 		JSONObject response = new JSONObject();
 		response.put("sucsess", "true");
 		response.put("status", "Movie added!");
+		return new ResponseEntity<String>(response.toString(), HttpStatus.OK);
+
+	}
+
+	@RequestMapping(value = "/watched_movies/{name}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> removeWatchedMovie(
+			@RequestParam(value = "access_token") String accessToken,
+			@PathVariable(value = "name") String movieName) {
+		System.out.println("Remove wathc movie request!");
+		System.out.println("access token:" + accessToken);
+		System.out.println("Movie name:" + movieName);
+		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
+		System.out.println(user);
+		if (user == null) {
+			JSONObject response = new JSONObject();
+			response.put("sucsess", "false");
+			response.put("error", "User not found");
+
+			return new ResponseEntity<String>(response.toString(),
+					HttpStatus.BAD_REQUEST);
+		}
+
+		String normalizedName = MovieNamesContainer.getInstance().getMovieName(
+				movieName);
+		user.removeWatchedMovie(normalizedName);
+		appUserRepo.save(user);
+		JSONObject response = new JSONObject();
+		response.put("sucsess", "true");
+		response.put("status", "Movie removed!");
 		return new ResponseEntity<String>(response.toString(), HttpStatus.OK);
 
 	}
@@ -89,6 +121,35 @@ public class UserInfoController {
 		String normalizedName = MovieNamesContainer.getInstance().getMovieName(
 				movieName);
 		user.addMovieToWatchList(normalizedName);
+		appUserRepo.save(user);
+		JSONObject response = new JSONObject();
+		response.put("sucsess", "true");
+		response.put("status", "Movie added!");
+
+		return new ResponseEntity<String>(response.toString(), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/watchlist/{name}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> removeMovieFromWatchList(
+			@RequestParam(value = "access_token") String accessToken,
+			@PathVariable(value = "name") String movieName) {
+		System.out.println("Remove movie from watchlst request!");
+		System.out.println("access token:" + accessToken);
+		System.out.println("Movie name:" + movieName);
+		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
+		System.out.println(user);
+		if (user == null) {
+			JSONObject response = new JSONObject();
+			response.put("sucsess", "false");
+			response.put("error", "User not found");
+
+			return new ResponseEntity<String>(response.toString(),
+					HttpStatus.BAD_REQUEST);
+		}
+
+		String normalizedName = MovieNamesContainer.getInstance().getMovieName(
+				movieName);
+		user.removeMovieToWatchList(normalizedName);
 		appUserRepo.save(user);
 		JSONObject response = new JSONObject();
 		response.put("sucsess", "true");
@@ -136,7 +197,7 @@ public class UserInfoController {
 			if (mov != null) {
 				retList.add(mov);
 			}
-			
+
 		}
 		return new ResponseEntity<List<Movie>>(retList, HttpStatus.OK);
 	}

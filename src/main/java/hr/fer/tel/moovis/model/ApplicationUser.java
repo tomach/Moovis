@@ -14,6 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "application_users")
 public class ApplicationUser {
@@ -28,18 +31,19 @@ public class ApplicationUser {
 	private String surname;
 
 	@ElementCollection
-	@CollectionTable(name = "movie_names")
+	@CollectionTable(name = "liked_movie_names")
 	private Set<String> likedMovieNames = new HashSet<>();
 
 	@ElementCollection
-	@CollectionTable(name = "movie_names")
+	@CollectionTable(name = "watched_movie_names")
 	private Set<String> watchedMovieNames = new HashSet<>();
 
 	@ElementCollection
-	@CollectionTable(name = "movie_names")
+	@CollectionTable(name = "watchlist_movie_names")
 	private Set<String> watchList = new HashSet<>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
+	@JsonIgnore
 	private Set<ApplicationUser> friends = new HashSet<>();
 
 	public ApplicationUser(String accessToken, String facebookId,
@@ -81,12 +85,25 @@ public class ApplicationUser {
 		}
 		watchedMovieNames.add(movieName);
 	}
+	
+	public void removeWatchedMovie(String movieName) {
+		if (movieName == null) {
+			throw new IllegalArgumentException("Movie name cannot be null!");
+		}
+		watchedMovieNames.remove(movieName);
+	}
 
 	public void addMovieToWatchList(String movieName) {
 		if (movieName == null) {
 			throw new IllegalArgumentException("Movie name cannot be null!");
 		}
 		watchList.add(movieName);
+	}
+	public void removeMovieToWatchList(String movieName) {
+		if (movieName == null) {
+			throw new IllegalArgumentException("Movie name cannot be null!");
+		}
+		watchList.remove(movieName);
 	}
 
 	public Set<String> getWatchList() {

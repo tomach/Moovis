@@ -25,6 +25,7 @@ public class MovieRecommendationImpl implements MovieRecommendation {
 			ApplicationUser user) {
 		Map<Movie, Set<RecommendationRecord>> similarsForLikedMovies = new HashMap<>();
 		// dohvati slične filmove
+
 		for (String likedMovieName : user.getLikedMovieNames()) {
 			Movie likedMovie = movieDao.findMovieByName(likedMovieName);
 			if (likedMovie == null) {

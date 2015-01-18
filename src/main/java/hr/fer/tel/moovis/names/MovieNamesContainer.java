@@ -43,7 +43,7 @@ public class MovieNamesContainer {
 
 		Cursor cur = movies.find();
 		while (cur.hasNext()) {
-			String tempName = cur.next().get("movieKey").toString();
+			String tempName = cur.next().get("movieKey").toString().trim();
 			// movieNames.add(tempName);
 			// movieNamesLowerCased.add(tempName.toLowerCase());
 			if (!names.containsKey(tempName.toLowerCase())) {
@@ -55,11 +55,11 @@ public class MovieNamesContainer {
 
 	public String getMovieName(String nameCandidate) {
 		String res;
+		nameCandidate=nameCandidate.trim();
 		if (names.containsKey(nameCandidate.toLowerCase())) {
 			res = names.get(nameCandidate.toLowerCase());
 		} else {
 			res = getMovieNameWithSimilarity(nameCandidate);
-
 		}
 		System.out.println(nameCandidate + "\n" + res);
 		return res;
@@ -70,11 +70,11 @@ public class MovieNamesContainer {
 		JaroWinkler algorithm = new JaroWinkler();
 		String retVal = null;
 		String nameCandidateToLower = nameCandidate.toLowerCase();
-		for (String name : names.keySet()) {
+		for (String key : names.keySet()) {
 			double tempSim = algorithm
-					.getSimilarity(nameCandidateToLower, name);
+					.getSimilarity(nameCandidateToLower, key);
 			if (tempSim > similarity /* && name.length() < nameCandidate.length() */) {
-				retVal = names.get(name);
+				retVal = names.get(key);
 				similarity = tempSim;
 			}
 		}

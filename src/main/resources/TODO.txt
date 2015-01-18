@@ -1,14 +1,20 @@
+U procesu:
 Youtube thumbnail high quality
 
-Sci-Fi i Science Fiction
+
+DONE:
+api poziv za micanje filma iz liste watched_movies
+modificirati dodavanje watched movie-a - ako postoji u watchlisti, makni ga
+proces za rotten on demand
+
+
+UNDONE:
 
 provjeriti The dark knight i The dark knightfall, čajin film
 
-api poziv za micanje filma iz liste watched_movies
 
 kod preporuke sad osim lajkanih filmova izbaciti i watched movies
 
-modificirati dodavanje watched movie-a - ako postoji u watchlisti, makni ga
 
 dodati rotten u preporuke
 
@@ -20,3 +26,4 @@ poraditi na sličnosti riječi!
 
 POSTPONED:
 Proces za updateanje lajkanih filmova
+Sci-Fi i Science Fiction
