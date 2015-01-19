@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import hr.fer.tel.moovis.MongoConnections;
 import hr.fer.tel.moovis.model.Person;
 import hr.fer.tel.moovis.model.movie.IMDBMovieInfo;
 import hr.fer.tel.moovis.model.movie.Movie;
@@ -31,9 +32,7 @@ public class MovieDao {
 	private DBCollection directors;
 
 	public MovieDao() throws UnknownHostException {
-		// Since 2.10.0, uses MongoClient
-		MongoClient mongo = new MongoClient("localhost", 27017);
-		DB db = mongo.getDB("moovis");
+		DB db = MongoConnections.getInstance().getDb();
 		movies = db.getCollection("movies");
 		actors = db.getCollection("ActorInfo");
 		directors = db.getCollection("DirectorInfo");

@@ -1,8 +1,5 @@
 package hr.fer.tel.moovis.web.controllers;
 
-import javax.transaction.Transactional;
-
-import hr.fer.tel.moovis.exceptions.FacebookLoginException;
 import hr.fer.tel.moovis.model.ApplicationUser;
 import hr.fer.tel.moovis.service.RegistrationService;
 

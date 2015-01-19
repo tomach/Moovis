@@ -1,5 +1,7 @@
 package hr.fer.tel.moovis.names;
 
+import hr.fer.tel.moovis.MongoConnections;
+
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,9 +37,7 @@ public class MovieNamesContainer {
 		movieNames = new HashSet<>();
 		movieNamesLowerCased = new HashSet<>();
 		names = new HashMap<>();
-		// Since 2.10.0, uses MongoClient
-		MongoClient mongo = new MongoClient("localhost", 27017);
-		DB db = mongo.getDB("moovis");
+		DB db = MongoConnections.getInstance().getDb();
 
 		DBCollection movies = db.getCollection("movies");
 
@@ -50,6 +50,7 @@ public class MovieNamesContainer {
 				names.put(tempName.toLowerCase(), tempName);
 			}
 		}
+		cur.close();
 		System.out.println("Loading over!");
 	}
 
