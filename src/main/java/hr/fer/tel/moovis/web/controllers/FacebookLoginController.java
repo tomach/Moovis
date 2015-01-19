@@ -29,7 +29,7 @@ public class FacebookLoginController {
 		ApplicationUser user;
 		try {
 			user = regService.registerApplicationUser(facebookAccessToken);
-		} catch (FacebookLoginException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			JSONObject json = new JSONObject();
 			json.put("error", e.getLocalizedMessage());

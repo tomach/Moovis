@@ -17,6 +17,7 @@ public class ActorQueueFill {
 	private DB db;
 	private DBCollection movies;
 	private DBCollection actorInfoQueue;
+	private DBCollection actorInfo;
 
 	public ActorQueueFill() throws UnknownHostException {
 		// Since 2.10.0, uses MongoClient
@@ -25,16 +26,20 @@ public class ActorQueueFill {
 
 		movies = db.getCollection("movies");
 		actorInfoQueue = db.getCollection("ActorInfoQueue");
+		actorInfo = db.getCollection("ActorInfo");
+
 	}
 
 	public void process() {
 		Cursor cur = movies.find();
 		int i = 0;
 		int isti = 0;
+		int novi = 0;
 		while (cur.hasNext()) {
 			i++;
 			if (i % 1000 == 0) {
 				System.out.println(i);
+				System.out.println("novi:" + novi);
 			}
 			DBObject movie = cur.next();
 
@@ -53,8 +58,10 @@ public class ActorQueueFill {
 				DBObject actor = (DBObject) obj;
 				DBObject checkActorQueue = new BasicDBObject("tmdbId",
 						actor.get("id"));
-				if (actorInfoQueue.findOne(checkActorQueue) == null) {
+				if (actorInfoQueue.findOne(checkActorQueue) == null
+						&& actorInfo.findOne(checkActorQueue) == null) {
 					actorInfoQueue.insert(checkActorQueue);
+					novi++;
 				} else {
 					isti++;
 					continue;

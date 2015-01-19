@@ -3,9 +3,11 @@ package hr.fer.tel.moovis.searchers;
 import java.net.UnknownHostException;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.Bytes;
 import com.mongodb.Cursor;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.omertron.themoviedbapi.MovieDbException;
@@ -33,7 +35,9 @@ public class ActorInfoCollector {
 	}
 
 	public void process() {
-		Cursor cur = actorInfoQueue.find();
+		DBCursor cur = actorInfoQueue.find();
+		cur.addOption(Bytes.QUERYOPTION_NOTIMEOUT);
+
 		int i = 0;
 		long startTime;
 		long endTime;
@@ -41,7 +45,7 @@ public class ActorInfoCollector {
 		while (cur.hasNext()) {
 			startTime = System.currentTimeMillis();
 			if (i % 1000 == 0) {
-				System.out.println(i);
+				System.out.println(i+"/"+cur.count());
 			}
 			DBObject actorRequest = cur.next();
 			actorInfoQueue.remove(actorRequest);
