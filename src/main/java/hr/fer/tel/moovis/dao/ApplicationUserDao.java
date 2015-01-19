@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Table(name = "application_users")
 @Transactional
-public interface ApplicationUserRepository extends
+public interface ApplicationUserDao extends
 		JpaRepository<ApplicationUser, Long> {
 	public ApplicationUser findByFacebookId(String facebookId);
 

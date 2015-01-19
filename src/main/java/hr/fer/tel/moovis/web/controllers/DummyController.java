@@ -2,7 +2,7 @@ package hr.fer.tel.moovis.web.controllers;
 
 import java.util.List;
 
-import hr.fer.tel.moovis.dao.ApplicationUserRepository;
+import hr.fer.tel.moovis.dao.ApplicationUserDao;
 import hr.fer.tel.moovis.dao.MovieDao;
 import hr.fer.tel.moovis.exceptions.FacebookLoginException;
 import hr.fer.tel.moovis.model.ApplicationUser;
@@ -27,7 +27,7 @@ public class DummyController {
 	@Autowired
 	private MovieRecommendationImpl movieRecSimilar;
 	@Autowired
-	private ApplicationUserRepository appUserRepo;
+	private ApplicationUserDao appUserRepo;
 	@Autowired
 	private MovieRecommendationWithFriendScoreImpl movieRecWithFriends;
 

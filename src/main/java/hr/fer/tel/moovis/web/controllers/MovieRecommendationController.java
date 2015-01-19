@@ -1,6 +1,6 @@
 package hr.fer.tel.moovis.web.controllers;
 
-import hr.fer.tel.moovis.dao.ApplicationUserRepository;
+import hr.fer.tel.moovis.dao.ApplicationUserDao;
 import hr.fer.tel.moovis.model.ApplicationUser;
 import hr.fer.tel.moovis.recommendation.MovieRecommendationImpl;
 import hr.fer.tel.moovis.recommendation.MovieRecommendationOnlyFriendScoreImpl;
@@ -29,7 +29,7 @@ public class MovieRecommendationController {
 	@Autowired
 	private MovieRecommendationImpl movieRecSimilar;
 	@Autowired
-	private ApplicationUserRepository appUserRepo;
+	private ApplicationUserDao appUserRepo;
 	@Autowired
 	private MovieRecommendationWithFriendScoreImpl movieRecAll;
 	

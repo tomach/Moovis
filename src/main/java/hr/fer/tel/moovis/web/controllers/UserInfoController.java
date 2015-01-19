@@ -3,7 +3,7 @@ package hr.fer.tel.moovis.web.controllers;
 import java.util.LinkedList;
 import java.util.List;
 
-import hr.fer.tel.moovis.dao.ApplicationUserRepository;
+import hr.fer.tel.moovis.dao.ApplicationUserDao;
 import hr.fer.tel.moovis.dao.MovieDao;
 import hr.fer.tel.moovis.model.ApplicationUser;
 import hr.fer.tel.moovis.model.movie.Movie;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserInfoController {
 
 	@Autowired
-	private ApplicationUserRepository appUserRepo;
+	private ApplicationUserDao appUserRepo;
 
 	@Autowired
 	private MovieDao movieDao;
