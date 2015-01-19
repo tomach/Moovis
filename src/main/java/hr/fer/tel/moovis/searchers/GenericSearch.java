@@ -2,7 +2,6 @@ package hr.fer.tel.moovis.searchers;
 
 import com.mongodb.*;
 
-
 import java.net.UnknownHostException;
 
 /**
@@ -49,14 +48,14 @@ public abstract class GenericSearch implements Runnable {
 				queue.remove(obj);
 				System.out.println(obj);
 				String movieKey = obj.get("movieKey").toString();
+				int tmdbId = (int) obj.get("tmdbId");
 
 				// Obrada uz TMDB api
-
-				// spremanje u bazu
-				DBObject searchOldMovie = new BasicDBObject().append(
-						"movieKey", movieKey);
-				System.out.println("\t\t" + searchOldMovie);
 				synchronized (SYNC_CONTROLLER) {
+					// spremanje u bazu
+					DBObject searchOldMovie = new BasicDBObject().append(
+							"movieKey", movieKey).append("tmdbId", tmdbId);
+					System.out.println("\t\t" + searchOldMovie);
 					Cursor oldMovieCursor = movies.find(searchOldMovie);
 					if (oldMovieCursor.hasNext()) {
 						BasicDBObject oldMovieObject = (BasicDBObject) oldMovieCursor
@@ -64,7 +63,13 @@ public abstract class GenericSearch implements Runnable {
 						BasicDBObject newMovieObject = (BasicDBObject) oldMovieObject
 								.copy();
 						processMovie(obj, newMovieObject);
-						movies.update(oldMovieObject, newMovieObject);
+						System.out.println("stari objekt\t"
+								+ oldMovieObject.toMap());
+						System.out.println("Novi objekt\t"
+								+ newMovieObject.toMap());
+						System.out.println(movies.update(oldMovieObject,
+								newMovieObject).getN());
+
 						postprocessActions(obj);
 					}
 					oldMovieCursor.close();

@@ -84,11 +84,11 @@ public class RegistrationService {
 					rottenQueue.insert(new BasicDBObject("movieKey",
 							checkedName));
 				}
-				//OVO JE SAMO PRIVREMENO
-				appUser.setName(user.getName());
+				// OVO JE SAMO PRIVREMENO
+				appUser.setName(user.getFirstName());
 				appUser.setSurname(user.getLastName());
 				//
-				
+
 				savedUser = appUserRepo.save(appUser);
 				addFriendToAppUser(friends, savedUser);
 				return appUser;

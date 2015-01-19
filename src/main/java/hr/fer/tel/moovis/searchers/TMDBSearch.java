@@ -21,10 +21,12 @@ public class TMDBSearch extends GenericSearch {
 	private static final String MY_QUEUE = "TMDBSearchQueue";
 
 	private TheMovieDbApi theMovieDbApi;
+	private DBCollection tmdbBackupQueue;
 
 	public TMDBSearch() throws MovieDbException, UnknownHostException {
 		super();
 		theMovieDbApi = new TheMovieDbApi(API_KEY);
+		tmdbBackupQueue = getDb().getCollection("TMDBUpdateProcessUsedObj");
 	}
 
 	@Override
@@ -42,6 +44,7 @@ public class TMDBSearch extends GenericSearch {
 			BasicDBObject movieDetails = new BasicDBObject()
 					.append("id", movie.getId())
 					.append("title", movie.getTitle())
+					.append("originalTitle", movie.getOriginalTitle())
 					.append("budget", movie.getBudget())
 					.append("popularity", movie.getPopularity())
 					.append("userRating", movie.getUserRating())
@@ -85,19 +88,18 @@ public class TMDBSearch extends GenericSearch {
 				TmdbResultsList<MovieDb> simMovies = theMovieDbApi
 						.getSimilarMovies(movie.getId(), null, 0, "");
 				System.out.println("Similar movies:" + simMovies);
-				// DBCollection similarMoviesCollection =
-				// getDb().getCollection("SimilarMovies");
+
 				for (MovieDb simMovie : simMovies.getResults()) {
 					BasicDBObject simMovieDetails = new BasicDBObject().append(
 							"id", simMovie.getId()).append("title",
 							simMovie.getTitle());
 					similarMoviesList.add(simMovieDetails);
-					// similarMoviesCollection.insert(new
-					// BasicDBObject("id",simMovie.getId()));
+
 				}
 				movieDetails.append("similarMovies", similarMoviesList);
 
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 
 			newMovieObject.append("tmdb", movieDetails);
@@ -107,13 +109,15 @@ public class TMDBSearch extends GenericSearch {
 				System.out.println("Get imdbId and put it to IMDB queue");
 				DB db = getDb();
 
-				BasicDBObject imdbObject = new BasicDBObject().append(
-						"movieKey", movieKey).append("imdbId", imdbId);
+				BasicDBObject imdbObject = new BasicDBObject()
+						.append("movieKey", movieKey).append("imdbId", imdbId)
+						.append("tmdbId", movie.getId());
 				DBCollection table = db.getCollection("IMDBSearchQueue");
 				table.insert(imdbObject);
 			}
 
 		} catch (MovieDbException e) {
+			e.printStackTrace();
 		}
 	}
 

@@ -22,7 +22,6 @@ public class TMDBMovieFinder implements Runnable {
 
 	private DB db;
 	private DBCollection movies;
-	private DBCollection rottenSearchQueue;
 	private DBCollection tmdbSearchQueue;
 	private DBCollection ytbSearchQueue;
 
@@ -33,13 +32,12 @@ public class TMDBMovieFinder implements Runnable {
 	public TMDBMovieFinder(Integer startCounter, Integer endCounter)
 			throws UnknownHostException, MovieDbException {
 		theMovieDbApi = new TheMovieDbApi(API_KEY);
-		
+
 		// Since 2.10.0, uses MongoClient
 		MongoClient mongo = new MongoClient("localhost", 27017);
 		db = mongo.getDB(DB_NAME);
 		movies = db.getCollection("movies");
 
-		rottenSearchQueue = db.getCollection("RottenSearchQueue");
 		tmdbSearchQueue = db.getCollection("TMDBSearchQueue");
 		ytbSearchQueue = db.getCollection("YTSearchQueue");
 		ids = new Integer[endCounter - startCounter + 1];
@@ -57,7 +55,6 @@ public class TMDBMovieFinder implements Runnable {
 		db = mongo.getDB(DB_NAME);
 		movies = db.getCollection("movies");
 
-		rottenSearchQueue = db.getCollection("RottenSearchQueue");
 		tmdbSearchQueue = db.getCollection("TMDBSearchQueue");
 		ytbSearchQueue = db.getCollection("YTSearchQueue");
 
@@ -75,7 +72,7 @@ public class TMDBMovieFinder implements Runnable {
 
 				MovieDb movieInfo = theMovieDbApi.getMovieInfo(counter, null);
 				if (movieInfo != null) {
-					
+
 					DBObject dbMovie = new BasicDBObject().append("movieKey",
 							movieInfo.getOriginalTitle()).append("name",
 							movieInfo.getOriginalTitle());
@@ -87,7 +84,6 @@ public class TMDBMovieFinder implements Runnable {
 						movies.insert(dbMovie);
 
 						ytbSearchQueue.insert(dbMovie);
-						rottenSearchQueue.insert(dbMovie);
 						tmdbSearchQueue.insert(dbMovie);
 					}
 				}
@@ -99,7 +95,7 @@ public class TMDBMovieFinder implements Runnable {
 
 	public static void main(String[] args) throws MovieDbException,
 			UnknownHostException {
-		new Thread(new TMDBMovieFinder(335399, 350000)).start();
+		// new Thread(new TMDBMovieFinder(335399, 350000)).start();
 
 	}
 }

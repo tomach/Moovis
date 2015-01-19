@@ -99,41 +99,8 @@ public class YouTubeSearch extends GenericSearch {
 	}
 
 	public static void main(String[] args) throws IOException {
-		// System.out.println(Thread.currentThread().getId());
-		// new Thread(new YouTubeSearch()).start();
-
-		YouTube youtube = new YouTube.Builder(new NetHttpTransport(),
-				new JacksonFactory(), new HttpRequestInitializer() {
-					public void initialize(HttpRequest request)
-							throws IOException {
-					}
-				}).setApplicationName("social-networks-project").build();
-		YouTube.Search.List search = null;
-		try {
-			search = youtube.search().list("id,snippet");
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-
-		String queryTerm = "Interstellar" + " trailer";
-
-		search.setKey(API_KEY);
-		search.setQ(queryTerm);
-		search.setType("video");
-
-		search.setFields("items(id/kind,id/videoId,snippet/title,snippet/description,snippet/thumbnails)");
-		search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
-
-		SearchListResponse searchResponse = null;
-		try {
-			searchResponse = search.execute();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-
-		System.out.println(searchResponse);
+		System.out.println(Thread.currentThread().getId());
+		new Thread(new YouTubeSearch()).start();
 
 	}
 }
