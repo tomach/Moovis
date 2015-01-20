@@ -3,6 +3,7 @@ package hr.fer.tel.moovis.recommendation;
 import hr.fer.tel.moovis.dao.MovieDao;
 import hr.fer.tel.moovis.model.ApplicationUser;
 import hr.fer.tel.moovis.model.movie.Movie;
+import hr.fer.tel.moovis.service.RecomendationResponseNesto;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,6 +21,9 @@ public class MovieRecommendationOnlyFriendScoreImpl implements
 
 	private static final double START_VALUE = 1.0;
 	private static final double STEP = 1.0;
+
+	@Autowired
+	private RecomendationResponseNesto recommendaionNesto;
 
 	@Autowired
 	private MovieDao movieDao;
@@ -123,7 +127,10 @@ public class MovieRecommendationOnlyFriendScoreImpl implements
 			}
 		}
 
-		List<RecommendationRecord> finalRec = new LinkedList<>(friendsMovieRec);
+		Set<RecommendationRecord> filteredSet = recommendaionNesto
+				.removeWatchedAndLikedMovies(friendsMovieRec, user);
+
+		List<RecommendationRecord> finalRec = new LinkedList<>(filteredSet);
 		Collections.sort(finalRec);
 
 		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");

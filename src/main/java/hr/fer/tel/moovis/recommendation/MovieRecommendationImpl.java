@@ -3,7 +3,7 @@ package hr.fer.tel.moovis.recommendation;
 import hr.fer.tel.moovis.dao.MovieDao;
 import hr.fer.tel.moovis.model.ApplicationUser;
 import hr.fer.tel.moovis.model.movie.Movie;
-import hr.fer.tel.moovis.service.FriendsLikesService;
+import hr.fer.tel.moovis.service.RecomendationResponseNesto;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class MovieRecommendationImpl implements MovieRecommendation {
 	@Autowired
 	private MovieDao movieDao;
 	@Autowired
-	private FriendsLikesService friendsService;
+	private RecomendationResponseNesto friendsService;
 
 	@Override
 	public List<RecommendationRecord> calculateRecommendation(
@@ -67,9 +67,12 @@ public class MovieRecommendationImpl implements MovieRecommendation {
 				}
 			}
 		}
-		
-		Set<RecommendationRecord> setWithFriends = friendsService.getRecordsWtihFriendLikes(allSimilars, user);
-		
+
+		Set<RecommendationRecord> setWithFriends = friendsService
+				.getRecordsWtihFriendLikes(allSimilars, user);
+		setWithFriends = friendsService.removeWatchedAndLikedMovies(
+				setWithFriends, user);
+
 		List<RecommendationRecord> finalRec = new LinkedList<>(setWithFriends);
 		Collections.sort(finalRec);
 

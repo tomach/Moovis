@@ -3,7 +3,7 @@ package hr.fer.tel.moovis.recommendation;
 import hr.fer.tel.moovis.dao.MovieDao;
 import hr.fer.tel.moovis.model.ApplicationUser;
 import hr.fer.tel.moovis.model.movie.Movie;
-import hr.fer.tel.moovis.service.FriendsLikesService;
+import hr.fer.tel.moovis.service.RecomendationResponseNesto;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +27,7 @@ public class MovieRecommendationWithFriendScoreImpl implements
 	@Autowired
 	private MovieDao movieDao;
 	@Autowired
-	private FriendsLikesService friendsService;
+	private RecomendationResponseNesto friendsService;
 
 	@Override
 	public List<RecommendationRecord> calculateRecommendation(
@@ -92,44 +92,39 @@ public class MovieRecommendationWithFriendScoreImpl implements
 			}
 		}
 		/*
-		//add friends list  ---- TODO refactor
-//		Set<RecommendationRecord> recordWithFriends = new HashSet<>();
-//		Set<RecommendationRecord> deleteRecommendations = new HashSet<>();
-		Set<RecommendationRecord> setWithFriends = new HashSet<>();
-		
-		for (RecommendationRecord recommendation : allSimilars) {
-			boolean createdNewRecord = false;
-			if (recommendation != null && recommendation.getMovie() != null
-					&& recommendation.getMovie().getTitle() != null) {
-				String movieName = recommendation.getMovie().getTitle();
-				RecommendationRecordWithFriendLikes newRecord = null;
-				
-				for (ApplicationUser friend : friends) {
-					if (friend.getLikedMovieNames().contains(movieName)) {
-						//casted.addFriendName(builder.toString());
-						if (newRecord == null) {
-							newRecord = new RecommendationRecordWithFriendLikes(recommendation.getMovie(), recommendation.getRecScore());
-							setWithFriends.add(newRecord);
-							createdNewRecord = true;
-							
-						}
-						StringBuilder builder = new StringBuilder();
-						builder.append(friend.getName()).append(" ")
-								.append(friend.getSurname());
-						newRecord.addFriendName(builder.toString());
-					}
-				}
-			}
-			
-			if (!createdNewRecord) {
-				setWithFriends.add(recommendation);
-			}
-		}
-		*/
-		//System.out.println(allSimilars);
-		//System.out.println("Pokrecem poziv s frendovima");
-		Set<RecommendationRecord> setWithFriends = friendsService.getRecordsWtihFriendLikes(allSimilars, user);
-
+		 * //add friends list ---- TODO refactor // Set<RecommendationRecord>
+		 * recordWithFriends = new HashSet<>(); // Set<RecommendationRecord>
+		 * deleteRecommendations = new HashSet<>(); Set<RecommendationRecord>
+		 * setWithFriends = new HashSet<>();
+		 * 
+		 * for (RecommendationRecord recommendation : allSimilars) { boolean
+		 * createdNewRecord = false; if (recommendation != null &&
+		 * recommendation.getMovie() != null &&
+		 * recommendation.getMovie().getTitle() != null) { String movieName =
+		 * recommendation.getMovie().getTitle();
+		 * RecommendationRecordWithFriendLikes newRecord = null;
+		 * 
+		 * for (ApplicationUser friend : friends) { if
+		 * (friend.getLikedMovieNames().contains(movieName)) {
+		 * //casted.addFriendName(builder.toString()); if (newRecord == null) {
+		 * newRecord = new
+		 * RecommendationRecordWithFriendLikes(recommendation.getMovie(),
+		 * recommendation.getRecScore()); setWithFriends.add(newRecord);
+		 * createdNewRecord = true;
+		 * 
+		 * } StringBuilder builder = new StringBuilder();
+		 * builder.append(friend.getName()).append(" ")
+		 * .append(friend.getSurname());
+		 * newRecord.addFriendName(builder.toString()); } } }
+		 * 
+		 * if (!createdNewRecord) { setWithFriends.add(recommendation); } }
+		 */
+		// System.out.println(allSimilars);
+		// System.out.println("Pokrecem poziv s frendovima");
+		Set<RecommendationRecord> setWithFriends = friendsService
+				.getRecordsWtihFriendLikes(allSimilars, user);
+		setWithFriends = friendsService.removeWatchedAndLikedMovies(
+				setWithFriends, user);
 		List<RecommendationRecord> finalRec = new LinkedList<>(setWithFriends);
 		Collections.sort(finalRec);
 

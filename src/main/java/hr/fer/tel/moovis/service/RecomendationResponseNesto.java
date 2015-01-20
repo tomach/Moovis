@@ -10,22 +10,37 @@ import hr.fer.tel.moovis.recommendation.RecommendationRecord;
 import hr.fer.tel.moovis.recommendation.RecommendationRecordWithFriendLikes;
 
 @Service
-public class FriendsLikesService {
-	
+public class RecomendationResponseNesto {
+
+	public Set<RecommendationRecord> removeWatchedAndLikedMovies(
+			Set<RecommendationRecord> recommendations, ApplicationUser user) {
+		Set<RecommendationRecord> retSet = new HashSet<>();
+
+		Set<String> likedMovies = user.getLikedMovieNames();
+		Set<String> watchedMovies = user.getWatchedMovieNames();
+		for (RecommendationRecord recomendation : recommendations) {
+			if (!(likedMovies.contains(recomendation) || watchedMovies
+					.contains(recomendation))) {
+				retSet.add(recomendation);
+			}
+		}
+
+		return retSet;
+	}
 
 	public Set<RecommendationRecord> getRecordsWtihFriendLikes(
 			Set<RecommendationRecord> recommendations, ApplicationUser user) {
 
 		Set<ApplicationUser> friends = user.getFriends();
-//		System.out.println(user);
-//		System.out.println(friends);
+		// System.out.println(user);
+		// System.out.println(friends);
 
 		Set<RecommendationRecord> setWithFriends = new HashSet<>();
 
-//		System.out.println(recommendations);
-		
+		// System.out.println(recommendations);
+
 		for (RecommendationRecord recommendation : recommendations) {
-//			System.out.println(recommendation);
+			// System.out.println(recommendation);
 			boolean createdNewRecord = false;
 			if (recommendation != null && recommendation.getMovie() != null
 					&& recommendation.getMovie().getTitle() != null) {
