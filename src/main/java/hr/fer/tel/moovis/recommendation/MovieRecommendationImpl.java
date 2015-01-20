@@ -3,6 +3,7 @@ package hr.fer.tel.moovis.recommendation;
 import hr.fer.tel.moovis.dao.MovieDao;
 import hr.fer.tel.moovis.model.ApplicationUser;
 import hr.fer.tel.moovis.model.movie.Movie;
+import hr.fer.tel.moovis.service.FriendsLikesService;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 public class MovieRecommendationImpl implements MovieRecommendation {
 	@Autowired
 	private MovieDao movieDao;
+	@Autowired
+	private FriendsLikesService friendsService;
 
 	@Override
 	public List<RecommendationRecord> calculateRecommendation(
@@ -64,6 +67,9 @@ public class MovieRecommendationImpl implements MovieRecommendation {
 				}
 			}
 		}
+		
+		Set<RecommendationRecord> setWithFriends = friendsService.getRecordsWtihFriendLikes(allSimilars, user);
+		
 		List<RecommendationRecord> finalRec = new LinkedList<>(allSimilars);
 		Collections.sort(finalRec);
 

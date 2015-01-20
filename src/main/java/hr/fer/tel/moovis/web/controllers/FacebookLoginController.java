@@ -21,7 +21,8 @@ public class FacebookLoginController {
 	@RequestMapping(value = "/facebook_login", method = RequestMethod.PUT)
 	public ResponseEntity<String> facebookLogin(
 			@RequestParam(value = "facebook_access_token") String facebookAccessToken) {
-
+		
+		System.out.println(this);
 		ApplicationUser user;
 		try {
 			user = regService.registerApplicationUser(facebookAccessToken);

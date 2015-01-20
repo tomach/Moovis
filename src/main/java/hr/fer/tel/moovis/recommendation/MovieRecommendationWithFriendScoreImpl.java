@@ -3,6 +3,7 @@ package hr.fer.tel.moovis.recommendation;
 import hr.fer.tel.moovis.dao.MovieDao;
 import hr.fer.tel.moovis.model.ApplicationUser;
 import hr.fer.tel.moovis.model.movie.Movie;
+import hr.fer.tel.moovis.service.FriendsLikesService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +26,8 @@ public class MovieRecommendationWithFriendScoreImpl implements
 
 	@Autowired
 	private MovieDao movieDao;
+	@Autowired
+	private FriendsLikesService friendsService;
 
 	@Override
 	public List<RecommendationRecord> calculateRecommendation(
@@ -88,7 +91,7 @@ public class MovieRecommendationWithFriendScoreImpl implements
 				}
 			}
 		}
-		
+		/*
 		//add friends list  ---- TODO refactor
 //		Set<RecommendationRecord> recordWithFriends = new HashSet<>();
 //		Set<RecommendationRecord> deleteRecommendations = new HashSet<>();
@@ -122,7 +125,10 @@ public class MovieRecommendationWithFriendScoreImpl implements
 				setWithFriends.add(recommendation);
 			}
 		}
-		
+		*/
+		//System.out.println(allSimilars);
+		//System.out.println("Pokrecem poziv s frendovima");
+		Set<RecommendationRecord> setWithFriends = friendsService.getRecordsWtihFriendLikes(allSimilars, user);
 
 		List<RecommendationRecord> finalRec = new LinkedList<>(setWithFriends);
 		Collections.sort(finalRec);
