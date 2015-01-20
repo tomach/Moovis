@@ -63,8 +63,13 @@ public class RegistrationService {
 			System.out.println(appUserRepo);
 			System.out.println(user.getName());
 			System.out.println(user.getLastName());
-			Set<ApplicationUser> friends = getAllFacebookIds(faceApi
-					.getFriends());
+			Set<ApplicationUser> friends;
+			try {
+				friends = getAllFacebookIds(faceApi.getFriends());
+			} catch (Exception e1) {
+				throw new FacebookException(
+						"Error while fetching user friends.");
+			}
 
 			Set<String> likedMovieNames;
 			try {
