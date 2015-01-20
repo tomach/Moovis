@@ -31,11 +31,12 @@ public class UserInfoController {
 	@RequestMapping(value = "/user_info", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationUser> getUser(
 			@RequestParam(value = "access_token") String accessToken) {
-		System.out.println("Get user request!");
-		System.out.println("acess_token:" + accessToken);
+		System.out.println(Logger.getLogString(System.currentTimeMillis(),
+				"GET\t/user_info?access_token=" + accessToken));
+
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
-		System.out.println(user.getName());
-		System.out.println(user.getSurname());
+
+		System.out.println(user.getName() + " " + user.getSurname());
 		return new ResponseEntity<ApplicationUser>(user, HttpStatus.OK);
 
 	}
@@ -44,11 +45,12 @@ public class UserInfoController {
 	public ResponseEntity<String> addWatchedMovie(
 			@RequestParam(value = "access_token") String accessToken,
 			@PathVariable(value = "name") String movieName) {
-		System.out.println("Add wathc movie request!");
-		System.out.println("access token:" + accessToken);
-		System.out.println("Movie name:" + movieName);
+		System.out.println(Logger.getLogString(System.currentTimeMillis(),
+				"POST\t/watched_movies/" + movieName + "?access_token="
+						+ accessToken));
+
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
-		System.out.println(user);
+
 		if (user == null) {
 			JSONObject response = new JSONObject();
 			response.put("sucsess", "false");
@@ -57,6 +59,8 @@ public class UserInfoController {
 			return new ResponseEntity<String>(response.toString(),
 					HttpStatus.BAD_REQUEST);
 		}
+
+		System.out.println(user.getName() + " " + user.getSurname());
 
 		String normalizedName = MovieNamesContainer.getInstance().getMovieName(
 				movieName);
@@ -76,11 +80,10 @@ public class UserInfoController {
 	public ResponseEntity<String> removeWatchedMovie(
 			@RequestParam(value = "access_token") String accessToken,
 			@PathVariable(value = "name") String movieName) {
-		System.out.println("Remove wathc movie request!");
-		System.out.println("access token:" + accessToken);
-		System.out.println("Movie name:" + movieName);
+		System.out.println(Logger.getLogString(System.currentTimeMillis(),
+				"DELETE\t/watched_movies/" + movieName + "?access_token="
+						+ accessToken));
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
-		System.out.println(user);
 		if (user == null) {
 			JSONObject response = new JSONObject();
 			response.put("sucsess", "false");
@@ -89,6 +92,7 @@ public class UserInfoController {
 			return new ResponseEntity<String>(response.toString(),
 					HttpStatus.BAD_REQUEST);
 		}
+		System.out.println(user.getName() + " " + user.getSurname());
 
 		String normalizedName = MovieNamesContainer.getInstance().getMovieName(
 				movieName);
@@ -98,18 +102,16 @@ public class UserInfoController {
 		response.put("sucsess", "true");
 		response.put("status", "Movie removed!");
 		return new ResponseEntity<String>(response.toString(), HttpStatus.OK);
-
 	}
 
 	@RequestMapping(value = "/watchlist/{name}", method = RequestMethod.POST)
 	public ResponseEntity<String> addMovieToWatchList(
 			@RequestParam(value = "access_token") String accessToken,
 			@PathVariable(value = "name") String movieName) {
-		System.out.println("Add movie to watchlst request!");
-		System.out.println("access token:" + accessToken);
-		System.out.println("Movie name:" + movieName);
+		System.out.println(Logger.getLogString(System.currentTimeMillis(),
+				"POST\t/watchlist/" + movieName + "?access_token="
+						+ accessToken));
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
-		System.out.println(user);
 		if (user == null) {
 			JSONObject response = new JSONObject();
 			response.put("sucsess", "false");
@@ -118,6 +120,7 @@ public class UserInfoController {
 			return new ResponseEntity<String>(response.toString(),
 					HttpStatus.BAD_REQUEST);
 		}
+		System.out.println(user.getName() + " " + user.getSurname());
 
 		String normalizedName = MovieNamesContainer.getInstance().getMovieName(
 				movieName);
@@ -134,11 +137,10 @@ public class UserInfoController {
 	public ResponseEntity<String> removeMovieFromWatchList(
 			@RequestParam(value = "access_token") String accessToken,
 			@PathVariable(value = "name") String movieName) {
-		System.out.println("Remove movie from watchlst request!");
-		System.out.println("access token:" + accessToken);
-		System.out.println("Movie name:" + movieName);
+		System.out.println(Logger.getLogString(System.currentTimeMillis(),
+				"DELETE\t/watchlist/" + movieName + "?access_token="
+						+ accessToken));
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
-		System.out.println(user);
 		if (user == null) {
 			JSONObject response = new JSONObject();
 			response.put("sucsess", "false");
@@ -147,6 +149,7 @@ public class UserInfoController {
 			return new ResponseEntity<String>(response.toString(),
 					HttpStatus.BAD_REQUEST);
 		}
+		System.out.println(user.getName() + " " + user.getSurname());
 
 		String normalizedName = MovieNamesContainer.getInstance().getMovieName(
 				movieName);
@@ -162,13 +165,14 @@ public class UserInfoController {
 	@RequestMapping(value = "/watchlist", method = RequestMethod.GET)
 	public ResponseEntity<List<Movie>> getWatchList(
 			@RequestParam(value = "access_token") String accessToken) {
-		System.out.println("Get wathclist request!");
-		System.out.println("access token:" + accessToken);
+		System.out.println(Logger.getLogString(System.currentTimeMillis(),
+				"GET\t/watchlist?access_token=" + accessToken));
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
 		System.out.println(user);
 		if (user == null) {
 			return new ResponseEntity<List<Movie>>(HttpStatus.BAD_REQUEST);
 		}
+		System.out.println(user.getName() + " " + user.getSurname());
 
 		List<Movie> retList = new LinkedList<Movie>();
 		for (String watchlistMovieName : user.getWatchList()) {
@@ -184,13 +188,14 @@ public class UserInfoController {
 	@RequestMapping(value = "/watchedlist", method = RequestMethod.GET)
 	public ResponseEntity<List<Movie>> getWatchedList(
 			@RequestParam(value = "access_token") String accessToken) {
-		System.out.println("Get watchedlist request!");
-		System.out.println("access token:" + accessToken);
+		System.out.println(Logger.getLogString(System.currentTimeMillis(),
+				"GET\t/watchedlist?access_token=" + accessToken));
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
 		System.out.println(user);
 		if (user == null) {
 			return new ResponseEntity<List<Movie>>(HttpStatus.BAD_REQUEST);
 		}
+		System.out.println(user.getName() + " " + user.getSurname());
 
 		List<Movie> retList = new LinkedList<Movie>();
 		for (String watchlistMovieName : user.getWatchedMovieNames()) {

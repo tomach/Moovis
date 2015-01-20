@@ -132,7 +132,7 @@ public class MovieRecommendationOnlyFriendScoreImpl implements
 
 		List<RecommendationRecord> finalRec = new LinkedList<>(filteredSet);
 		Collections.sort(finalRec);
-
+		/*
 		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
 		for (RecommendationRecord recommendationRecord : finalRec) {
 			if (recommendationRecord != null
@@ -143,7 +143,7 @@ public class MovieRecommendationOnlyFriendScoreImpl implements
 						+ recRecord.getRecScore() + "\t"
 						+ recRecord.getFriendNames());
 			}
-		}
+		}*/
 
 		return finalRec;
 	}

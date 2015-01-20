@@ -77,8 +77,11 @@ public class RegistrationService {
 				}
 				MovieNamesContainer movieNamesChecker = MovieNamesContainer
 						.getInstance();
+				System.out.println("Usporedba slicnosti!");
 				for (String movie : likedMovieNames) {
 					String checkedName = movieNamesChecker.getMovieName(movie);
+					System.out.println(movie);
+					System.out.println(checkedName);
 					appUser.addLikedMovie(checkedName);
 					rottenQueue.insert(new BasicDBObject("movieKey",
 							checkedName));
@@ -103,8 +106,12 @@ public class RegistrationService {
 			MovieNamesContainer movieNamesChecker = MovieNamesContainer
 					.getInstance();
 			Set<String> checkedMovieNames = new HashSet<String>();
+			System.out.println("Usporedba slicnosti!");
+
 			for (String movie : likedMovieNames) {
 				String checkedName = movieNamesChecker.getMovieName(movie);
+				System.out.println(movie);
+				System.out.println(checkedName);
 				rottenQueue.insert(new BasicDBObject("movieKey", checkedName));
 				checkedMovieNames.add(checkedName);
 			}

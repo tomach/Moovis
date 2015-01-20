@@ -128,11 +128,12 @@ public class MovieRecommendationWithFriendScoreImpl implements
 		List<RecommendationRecord> finalRec = new LinkedList<>(setWithFriends);
 		Collections.sort(finalRec);
 
+		/*
 		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
 		for (RecommendationRecord recommendationRecord : finalRec) {
 			System.out.println(recommendationRecord.getMovie().getTitle()
 					+ "\t" + recommendationRecord.getRecScore());
-		}
+		}*/
 
 		return finalRec;
 	}

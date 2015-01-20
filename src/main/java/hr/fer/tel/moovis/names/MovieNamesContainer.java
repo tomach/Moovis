@@ -62,7 +62,7 @@ public class MovieNamesContainer {
 		} else {
 			res = getMovieNameWithSimilarity(nameCandidate);
 		}
-		System.out.println(nameCandidate + "\n" + res);
+		// System.out.println(nameCandidate + "\n" + res);
 		return res;
 	}
 

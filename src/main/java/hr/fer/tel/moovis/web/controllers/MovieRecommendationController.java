@@ -7,9 +7,13 @@ import hr.fer.tel.moovis.recommendation.MovieRecommendationOnlyFriendScoreImpl;
 import hr.fer.tel.moovis.recommendation.MovieRecommendationWithFriendScoreImpl;
 import hr.fer.tel.moovis.recommendation.RecommendationRecord;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javassist.expr.NewArray;
+
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,11 +43,16 @@ public class MovieRecommendationController {
 			@RequestParam(value = "access_token") String accessToken,
 			@RequestParam(value = "type") String type) {
 
-		// all, friends, similar
-		// System.out.println(accessToken);
-		// System.out.println(type);
+		System.out.println(Logger.getLogString(System.currentTimeMillis(),
+				"GET\t/rec?access_token=" + accessToken + "&type=" + type));
+
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
-		// System.out.println(user);
+		if (user == null) {
+			return new ResponseEntity<List<RecommendationRecord>>(
+					new ArrayList<RecommendationRecord>(),
+					HttpStatus.BAD_REQUEST);
+		}
+		System.out.println(user.getName() + " " + user.getSurname());
 
 		List<RecommendationRecord> rec = null;
 

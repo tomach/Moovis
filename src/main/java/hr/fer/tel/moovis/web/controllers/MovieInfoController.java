@@ -17,15 +17,15 @@ public class MovieInfoController {
 
 	@Autowired
 	private MovieDao movieDao;
-	
-	
+
 	@RequestMapping(value = "/movie/{name}", method = RequestMethod.GET)
 	public ResponseEntity<Movie> getMovie(
 			@PathVariable(value = "name") String movieName) {
-
+		System.out.println(Logger.getLogString(System.currentTimeMillis(),
+				"GET\t/movie_info/" + movieName));
 		Movie mov = movieDao.findMovieByName(MovieNamesContainer.getInstance()
 				.getMovieName(movieName));
-		System.out.println(mov);
+		// System.out.println(mov);
 		return new ResponseEntity<Movie>(mov, HttpStatus.OK);
 	}
 }
