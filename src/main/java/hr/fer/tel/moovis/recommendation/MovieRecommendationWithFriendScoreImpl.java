@@ -88,8 +88,43 @@ public class MovieRecommendationWithFriendScoreImpl implements
 				}
 			}
 		}
+		
+		//add friends list  ---- TODO refactor
+//		Set<RecommendationRecord> recordWithFriends = new HashSet<>();
+//		Set<RecommendationRecord> deleteRecommendations = new HashSet<>();
+		Set<RecommendationRecord> setWithFriends = new HashSet<>();
+		
+		for (RecommendationRecord recommendation : allSimilars) {
+			boolean createdNewRecord = false;
+			if (recommendation != null && recommendation.getMovie() != null
+					&& recommendation.getMovie().getTitle() != null) {
+				String movieName = recommendation.getMovie().getTitle();
+				RecommendationRecordWithFriendLikes newRecord = null;
+				
+				for (ApplicationUser friend : friends) {
+					if (friend.getLikedMovieNames().contains(movieName)) {
+						//casted.addFriendName(builder.toString());
+						if (newRecord == null) {
+							newRecord = new RecommendationRecordWithFriendLikes(recommendation.getMovie(), recommendation.getRecScore());
+							setWithFriends.add(newRecord);
+							createdNewRecord = true;
+							
+						}
+						StringBuilder builder = new StringBuilder();
+						builder.append(friend.getName()).append(" ")
+								.append(friend.getSurname());
+						newRecord.addFriendName(builder.toString());
+					}
+				}
+			}
+			
+			if (!createdNewRecord) {
+				setWithFriends.add(recommendation);
+			}
+		}
+		
 
-		List<RecommendationRecord> finalRec = new LinkedList<>(allSimilars);
+		List<RecommendationRecord> finalRec = new LinkedList<>(setWithFriends);
 		Collections.sort(finalRec);
 
 		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
