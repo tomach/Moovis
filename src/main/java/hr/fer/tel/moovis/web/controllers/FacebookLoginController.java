@@ -21,8 +21,11 @@ public class FacebookLoginController {
 	@RequestMapping(value = "/facebook_login", method = RequestMethod.PUT)
 	public ResponseEntity<String> facebookLogin(
 			@RequestParam(value = "facebook_access_token") String facebookAccessToken) {
-		
-		System.out.println(this);
+
+		System.out.println("Login start" + this);
+		System.out.println("Login start current thread:"
+				+ Thread.currentThread().getId());
+
 		ApplicationUser user;
 		try {
 			user = regService.registerApplicationUser(facebookAccessToken);
@@ -35,6 +38,9 @@ public class FacebookLoginController {
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("access_token", user.getAccessToken());
 
+		System.out.println("Login end" + this);
+		System.out.println("Login end current thread:"
+				+ Thread.currentThread().getId());
 		return new ResponseEntity<String>(jsonObj.toString(), HttpStatus.OK);
 	}
 }
