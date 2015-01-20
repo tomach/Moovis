@@ -70,7 +70,7 @@ public class MovieRecommendationImpl implements MovieRecommendation {
 		
 		Set<RecommendationRecord> setWithFriends = friendsService.getRecordsWtihFriendLikes(allSimilars, user);
 		
-		List<RecommendationRecord> finalRec = new LinkedList<>(allSimilars);
+		List<RecommendationRecord> finalRec = new LinkedList<>(setWithFriends);
 		Collections.sort(finalRec);
 
 		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
