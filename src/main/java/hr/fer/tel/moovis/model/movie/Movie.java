@@ -23,6 +23,7 @@ public class Movie {
 	private IMDBMovieInfo imdbInfo;
 
 	private TMDBMovieInfo tmdbInfo;
+	private RottenInfo rottenInfo;
 
 	private List<String> genres;
 	private List<Person> cast;
@@ -34,17 +35,26 @@ public class Movie {
 	}
 
 	public Movie(String title, YouTubeInfo ytInfo, IMDBMovieInfo imdbInfo,
-			TMDBMovieInfo tmdbInfo, List<String> genres, List<Person> cast,
-			List<Person> directors, List<Movie> similarMovies) {
+			TMDBMovieInfo tmdbInfo, RottenInfo rtInfo, List<String> genres,
+			List<Person> cast, List<Person> directors, List<Movie> similarMovies) {
 		super();
 		this.title = title;
 		this.ytInfo = ytInfo;
 		this.imdbInfo = imdbInfo;
 		this.tmdbInfo = tmdbInfo;
+		this.rottenInfo = rtInfo;
 		this.genres = genres;
 		this.cast = cast;
 		this.directors = directors;
 		this.similarMovies = similarMovies;
+	}
+
+	public RottenInfo getRtInfo() {
+		return rottenInfo;
+	}
+
+	public void setRtInfo(RottenInfo rtInfo) {
+		this.rottenInfo = rtInfo;
 	}
 
 	public YouTubeInfo getYtInfo() {

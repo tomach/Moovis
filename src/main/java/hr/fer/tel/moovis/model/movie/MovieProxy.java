@@ -26,10 +26,10 @@ public class MovieProxy extends Movie {
 	}
 
 	public MovieProxy(String title, YouTubeInfo ytInfo, IMDBMovieInfo imdbInfo,
-			TMDBMovieInfo tmdbInfo, List<String> genres, List<Person> cast,
-			List<Person> directors, List<Movie> similarMovies) {
-		super(title, ytInfo, imdbInfo, tmdbInfo, genres, cast, directors,
-				similarMovies);
+			TMDBMovieInfo tmdbInfo, RottenInfo rtInfo, List<String> genres,
+			List<Person> cast, List<Person> directors, List<Movie> similarMovies) {
+		super(title, ytInfo, imdbInfo, tmdbInfo, rtInfo, genres, cast,
+				directors, similarMovies);
 	}
 
 	@Override
