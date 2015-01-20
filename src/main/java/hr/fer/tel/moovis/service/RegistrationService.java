@@ -71,8 +71,7 @@ public class RegistrationService {
 				likedMovieNames = getAllMovieNames(faceApi.getMovies(0));
 			} catch (Exception e) {
 				throw new FacebookLoginException(
-						"Error while fetching users movie likes."
-								+ e.getLocalizedMessage());
+						"Error while fetching users movie likes.");
 			}
 
 			if (appUserRepo.findByFacebookId(facebookId) != null) {
