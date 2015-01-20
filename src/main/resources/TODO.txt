@@ -8,7 +8,7 @@ modificirati dodavanje watched movie-a - ako postoji u watchlisti, makni ga
 proces za rotten on demand
 poraditi na sličnosti riječi!
 provjeriti The dark knight i The dark knightfall, čajin film-ovo nejde bolje nikako!!
-
+dodati rotten u front
 
 UNDONE:
 
@@ -16,7 +16,7 @@ UNDONE:
 
 kod preporuke sad osim lajkanih filmova izbaciti i watched movies
 dodati rotten u preporuke
-dodati rotten u front
+
 
 
 

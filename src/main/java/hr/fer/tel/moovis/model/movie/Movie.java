@@ -49,12 +49,12 @@ public class Movie {
 		this.similarMovies = similarMovies;
 	}
 
-	public RottenInfo getRtInfo() {
+	public RottenInfo getRottenInfo() {
 		return rottenInfo;
 	}
 
-	public void setRtInfo(RottenInfo rtInfo) {
-		this.rottenInfo = rtInfo;
+	public void setRottenInfo(RottenInfo rottenInfo) {
+		this.rottenInfo = rottenInfo;
 	}
 
 	public YouTubeInfo getYtInfo() {
