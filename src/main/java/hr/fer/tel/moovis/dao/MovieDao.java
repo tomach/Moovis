@@ -12,6 +12,7 @@ import hr.fer.tel.moovis.model.Person;
 import hr.fer.tel.moovis.model.movie.IMDBMovieInfo;
 import hr.fer.tel.moovis.model.movie.Movie;
 import hr.fer.tel.moovis.model.movie.MovieProxy;
+import hr.fer.tel.moovis.model.movie.RottenInfo;
 import hr.fer.tel.moovis.model.movie.TMDBMovieInfo;
 import hr.fer.tel.moovis.model.movie.YouTubeInfo;
 
@@ -52,11 +53,11 @@ public class MovieDao {
 	}
 
 	public List<String> getSimilarMoviesNames(String name) {
-		List<String> retList = null;
+		Set<String> simNames = null;
 		DBObject movieRecord = movies.findOne(new BasicDBObject("movieKey",
 				name));
 		if (movieRecord == null) {
-			retList = null;
+			simNames = null;
 		} else {
 			if (movieRecord.containsField("tmdb")) {
 				DBObject tmdb = (DBObject) movieRecord.get("tmdb");
@@ -64,16 +65,30 @@ public class MovieDao {
 					BasicDBList similarMovies = (BasicDBList) tmdb
 							.get("similarMovies");
 					if (similarMovies != null) {
-						retList = new ArrayList<>();
+						simNames = new HashSet<>();
 						for (Object object : similarMovies) {
 							DBObject simMo = (DBObject) object;
-							retList.add(simMo.get("title").toString());
+							simNames.add(simMo.get("title").toString());
+						}
+					}
+				}
+			}
+			if (movieRecord.containsField("rottenInfo")) {
+				DBObject rottenInfo = (DBObject) movieRecord.get("rottenInfo");
+				if (rottenInfo.containsField("similar")) {
+					BasicDBList similarMovies = (BasicDBList) rottenInfo
+							.get("similar");
+					if (similarMovies != null) {
+						simNames = new HashSet<>();
+						for (Object object : similarMovies) {
+							DBObject simMo = (DBObject) object;
+							simNames.add(simMo.get("normalizedTitle").toString());
 						}
 					}
 				}
 			}
 		}
-		return retList;
+		return new LinkedList<String>(simNames);
 	}
 
 	private Movie loadMovie(DBObject movieRecord) {
@@ -83,11 +98,13 @@ public class MovieDao {
 		TMDBMovieInfo tmbInfo = loadTMDBMovieInfo(movieRecord);
 		IMDBMovieInfo imdbInfo = loadIMDBInfo(movieRecord);
 		YouTubeInfo ytInfo = loadYTInfo(movieRecord);
+		RottenInfo rottenInfo = loadRottenInfo(movieRecord);
+
 		List<String> genres = loadGenres(movieRecord);
 		List<Person> actors = loadActors(movieRecord);
 		List<Person> directors = loadDirectors(movieRecord);
-		return new MovieProxy(titme, ytInfo, imdbInfo, tmbInfo, genres, actors,
-				directors, null);
+		return new MovieProxy(titme, ytInfo, imdbInfo, tmbInfo, rottenInfo,
+				genres, actors, directors, null);
 	}
 
 	private List<Person> loadDirectors(DBObject movieRecord) {
@@ -239,6 +256,47 @@ public class MovieDao {
 		}
 
 		return ytInfo;
+	}
+
+	private RottenInfo loadRottenInfo(DBObject movieRecord) {
+		RottenInfo rtInfo = new RottenInfo();
+		if (movieRecord.containsField("rottenInfo")
+				&& movieRecord.get("rottenInfo") != null) {
+			movieRecord = (DBObject) movieRecord.get("rottenInfo");
+		} else {
+			return null;
+		}
+
+		if (movieRecord.containsField("id") && movieRecord.get("id") != null) {
+			rtInfo.setRottenId((int) movieRecord.get("id"));
+		}
+
+		if (movieRecord.containsField("title")
+				&& movieRecord.get("title") != null) {
+			rtInfo.setRottenTitle(movieRecord.get("title").toString());
+		}
+		if (movieRecord.containsField("critics_score")
+				&& movieRecord.get("critics_score") != null) {
+			try {
+				rtInfo.setCriticsScore(Long.parseLong(movieRecord.get(
+						"critics_score").toString()));
+			} catch (Exception e) {
+				System.err.println("Critics score cannot create Long from:"
+						+ movieRecord.get("critics_score").toString());
+			}
+		}
+		if (movieRecord.containsField("audience_score")
+				&& movieRecord.get("audience_score") != null) {
+			try {
+				rtInfo.setAudienceScore(Long.parseLong(movieRecord.get(
+						"audience_score").toString()));
+			} catch (Exception e) {
+				System.err.println("Audience score cannot create Long from:"
+						+ movieRecord.get("critics_score").toString());
+			}
+		}
+
+		return rtInfo;
 	}
 
 	private IMDBMovieInfo loadIMDBInfo(DBObject movieRecord) {
