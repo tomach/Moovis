@@ -65,13 +65,21 @@ public class RegistrationService {
 			System.out.println(user.getLastName());
 			Set<ApplicationUser> friends = getAllFacebookIds(faceApi
 					.getFriends());
+
+			Set<String> likedMovieNames;
+			try {
+				likedMovieNames = getAllMovieNames(faceApi.getMovies(0));
+			} catch (Exception e) {
+				throw new FacebookLoginException(
+						"Error while fetching users movie likes."
+								+ e.getLocalizedMessage());
+			}
+
 			if (appUserRepo.findByFacebookId(facebookId) != null) {
 				ApplicationUser appUser = appUserRepo
 						.findByFacebookId(facebookId);
 				appUser.setFacebookAccessToken(facebookAccessToken);
 
-				Set<String> likedMovieNames = getAllMovieNames(faceApi
-						.getMovies(0));
 				if (likedMovieNames != null) {
 					appUser.resetLikedMovies();
 				}
@@ -100,8 +108,6 @@ public class RegistrationService {
 			String surname = user.getLastName();
 			String accessToken = UUID.nameUUIDFromBytes(facebookId.getBytes())
 					.toString();
-
-			Set<String> likedMovieNames = getAllMovieNames(faceApi.getMovies(0));
 
 			MovieNamesContainer movieNamesChecker = MovieNamesContainer
 					.getInstance();
