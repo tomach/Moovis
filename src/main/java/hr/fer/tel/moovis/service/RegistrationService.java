@@ -1,5 +1,6 @@
 package hr.fer.tel.moovis.service;
 
+import hr.fer.tel.moovis.MongoConnections;
 import hr.fer.tel.moovis.apis.FacebookAPI;
 import hr.fer.tel.moovis.dao.ApplicationUserDao;
 import hr.fer.tel.moovis.exceptions.FacebookLoginException;
@@ -32,12 +33,11 @@ public class RegistrationService {
 	@Autowired
 	private ApplicationUserDao appUserRepo;
 
-	// private DBCollection rottenQueue;
+	private DBCollection rottenQueue;
 
 	public RegistrationService() throws UnknownHostException {
-		// MongoClient mongo = new MongoClient("localhost", 27017);
-		// DB db = mongo.getDB("moovis");
-		// rottenQueue = db.getCollection("RottenSearchQueue");
+		DB db = MongoConnections.getInstance().getDb();
+		rottenQueue = db.getCollection("RottenSearchQueue");
 	}
 
 	public ApplicationUser registerApplicationUser(String facebookAccessToken)
@@ -80,8 +80,8 @@ public class RegistrationService {
 				for (String movie : likedMovieNames) {
 					String checkedName = movieNamesChecker.getMovieName(movie);
 					appUser.addLikedMovie(checkedName);
-					// rottenQueue.insert(new BasicDBObject("movieKey",
-					// checkedName));
+					rottenQueue.insert(new BasicDBObject("movieKey",
+							checkedName));
 				}
 				// OVO JE SAMO PRIVREMENO
 				appUser.setName(user.getFirstName());
@@ -105,8 +105,7 @@ public class RegistrationService {
 			Set<String> checkedMovieNames = new HashSet<String>();
 			for (String movie : likedMovieNames) {
 				String checkedName = movieNamesChecker.getMovieName(movie);
-				// rottenQueue.insert(new BasicDBObject("movieKey",
-				// checkedName));
+				rottenQueue.insert(new BasicDBObject("movieKey", checkedName));
 				checkedMovieNames.add(checkedName);
 			}
 

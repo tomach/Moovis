@@ -1,9 +1,11 @@
 package hr.fer.tel.moovis;
 
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import hr.fer.tel.moovis.names.MovieNamesContainer;
+import hr.fer.tel.moovis.searchers.rotten.RottenCollector;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -20,6 +22,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
+import com.omertron.rottentomatoesapi.RottenTomatoesException;
 
 /**
  * Created by filippm on 10.11.14..
@@ -56,6 +59,13 @@ public class StarterApp extends SpringBootServletInitializer {
 			SpringApplicationBuilder application) {
 		System.out.println("Starting...");
 		MovieNamesContainer.getInstance();
+		try {
+			RottenCollector.main(null);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (RottenTomatoesException e) {
+			e.printStackTrace();
+		}
 		return application.sources(applicationClass);
 	}
 
@@ -64,6 +74,14 @@ public class StarterApp extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		System.out.println("Starting...");
 		MovieNamesContainer.getInstance();
+		try {
+			RottenCollector.main(null);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (RottenTomatoesException e) {
+			e.printStackTrace();
+		}
+
 		SpringApplication.run(StarterApp.class, args);
 
 		System.out.println(System.getenv());
