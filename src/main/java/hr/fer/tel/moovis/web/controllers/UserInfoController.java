@@ -168,7 +168,6 @@ public class UserInfoController {
 		System.out.println(Logger.getLogString(System.currentTimeMillis(),
 				"GET\t/watchlist?access_token=" + accessToken));
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
-		System.out.println(user);
 		if (user == null) {
 			return new ResponseEntity<List<Movie>>(HttpStatus.BAD_REQUEST);
 		}
@@ -191,7 +190,6 @@ public class UserInfoController {
 		System.out.println(Logger.getLogString(System.currentTimeMillis(),
 				"GET\t/watchedlist?access_token=" + accessToken));
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
-		System.out.println(user);
 		if (user == null) {
 			return new ResponseEntity<List<Movie>>(HttpStatus.BAD_REQUEST);
 		}
