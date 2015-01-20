@@ -19,8 +19,8 @@ public class RecomendationResponseNesto {
 		Set<String> likedMovies = user.getLikedMovieNames();
 		Set<String> watchedMovies = user.getWatchedMovieNames();
 		for (RecommendationRecord recomendation : recommendations) {
-			if (!(likedMovies.contains(recomendation) || watchedMovies
-					.contains(recomendation))) {
+			if (!(likedMovies.contains(recomendation.getMovie().getTitle()) || watchedMovies
+					.contains(recomendation.getMovie().getTitle()))) {
 				retSet.add(recomendation);
 			}
 		}
