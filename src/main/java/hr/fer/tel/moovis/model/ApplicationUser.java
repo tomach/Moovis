@@ -26,6 +26,7 @@ public class ApplicationUser {
 	private String accessToken;
 	@Column(unique = true)
 	private String facebookId;
+	@Column(length = 1000)
 	private String facebookAccessToken;
 	private String name;
 	private String surname;

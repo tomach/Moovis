@@ -67,16 +67,16 @@ public class RegistrationService {
 			try {
 				friends = getAllFacebookIds(faceApi.getFriends());
 			} catch (Exception e1) {
-				throw new FacebookException(
-						"Error while fetching user friends.");
+				friends = new HashSet<>();
 			}
 
 			Set<String> likedMovieNames;
 			try {
 				likedMovieNames = getAllMovieNames(faceApi.getMovies(0));
 			} catch (Exception e) {
-				throw new FacebookLoginException(
-						"Error while fetching users movie likes.");
+				// throw new FacebookLoginException(
+				// "Error while fetching users movie likes.");
+				likedMovieNames = new HashSet<>();
 			}
 
 			if (appUserRepo.findByFacebookId(facebookId) != null) {
@@ -126,8 +126,8 @@ public class RegistrationService {
 				checkedMovieNames.add(checkedName);
 			}
 
-			System.out.println(faceApi.getFriends());
-			System.out.println(faceApi.getMovies(0));
+			// System.out.println(faceApi.getFriends());
+			// System.out.println(faceApi.getMovies(0));
 
 			ApplicationUser newUser = new ApplicationUser(accessToken,
 					facebookId, facebookAccessToken, name, surname,
@@ -138,8 +138,6 @@ public class RegistrationService {
 			addFriendToAppUser(friends, savedUser);
 
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (FacebookException e) {
 			e.printStackTrace();
 		}
 
@@ -172,4 +170,5 @@ public class RegistrationService {
 			appUserRepo.save(userToAddTo);
 		}
 	}
+
 }
