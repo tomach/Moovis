@@ -102,7 +102,9 @@ public class RegistrationService {
 				appUser.setName(user.getFirstName());
 				appUser.setSurname(user.getLastName());
 				//
-
+				for (ApplicationUser friend : friends) {
+					appUser.addFriend(friend);
+				}
 				savedUser = appUserRepo.save(appUser);
 				addFriendToAppUser(friends, savedUser);
 				return appUser;
