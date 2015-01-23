@@ -68,7 +68,7 @@ public class FacebookProfileUpdater {
 				applicationUserLazyLoaded.setLastMovieLikesUpdateTS(System
 						.currentTimeMillis() - 1000 * 60);
 			}
-		} catch (UnknownHostException | FacebookException e) {
+		} catch (Exception e) {
 			System.out.println(Logger.getLogString(System.currentTimeMillis(),
 					"FacebookLikesUpdater error:" + e.getLocalizedMessage()));
 		}
