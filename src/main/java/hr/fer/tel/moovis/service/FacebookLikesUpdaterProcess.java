@@ -1,15 +1,21 @@
 package hr.fer.tel.moovis.service;
 
 import java.util.List;
+
+import javax.annotation.PostConstruct;
+
 import hr.fer.tel.moovis.dao.ApplicationUserDao;
 import hr.fer.tel.moovis.model.ApplicationUser;
 import hr.fer.tel.moovis.web.controllers.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FacebookLikesUpdaterProcess implements Runnable {
+public class FacebookLikesUpdaterProcess implements Runnable,
+		ApplicationListener<ContextRefreshedEvent> {
 
 	@Autowired
 	private ApplicationUserDao appUserDao;
@@ -17,6 +23,8 @@ public class FacebookLikesUpdaterProcess implements Runnable {
 	private FacebookProfileUpdater fbupdater;
 
 	private volatile boolean isRunning = true;
+
+	private boolean started = false;
 
 	public FacebookLikesUpdaterProcess() {
 	}
@@ -61,4 +69,34 @@ public class FacebookLikesUpdaterProcess implements Runnable {
 		}
 	}
 
+	@PostConstruct
+	public void processStart() {
+
+	}
+
+	@Override
+	public void onApplicationEvent(ContextRefreshedEvent arg0) {
+		if (started) {
+			return;
+		}
+		// pokreni faceupdater i daodaj mu shutdown hook
+		final FacebookLikesUpdaterProcess fbUpdater = arg0
+				.getApplicationContext().getBean(
+						FacebookLikesUpdaterProcess.class);
+		final Thread updaterThread = new Thread(fbUpdater);
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				fbUpdater.setRunning(false);
+				try {
+					updaterThread.join();
+					System.out.println("Fbupdater thread finished");
+				} catch (InterruptedException e) {
+					System.out.println("Fbupdater thread fail");
+					e.printStackTrace();
+				}
+			}
+		});
+		updaterThread.start();
+		started = true;
+	}
 }

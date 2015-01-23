@@ -87,26 +87,7 @@ public class StarterApp extends SpringBootServletInitializer {
 			e.printStackTrace();
 		}
 
-		ConfigurableApplicationContext con = SpringApplication.run(
-				StarterApp.class, args);
-		System.out.println(con);
-		// pokreni faceupdater i daodaj mu shutdown hook
-		final FacebookLikesUpdaterProcess fbUpdater = con
-				.getBean(FacebookLikesUpdaterProcess.class);
-		final Thread updaterThread = new Thread(fbUpdater);
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			public void run() {
-				fbUpdater.setRunning(false);
-				try {
-					updaterThread.join();
-					System.out.println("Fbupdater thread finished");
-				} catch (InterruptedException e) {
-					System.out.println("Fbupdater thread fail");
-					e.printStackTrace();
-				}
-			}
-		});
-		updaterThread.start();
+		SpringApplication.run(StarterApp.class, args);
 
 		System.out.println(System.getenv());
 		System.out.println(System.getProperties().keySet());
