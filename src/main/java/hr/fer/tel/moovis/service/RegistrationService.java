@@ -13,17 +13,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
 
-import facebook4j.FacebookException;
 import facebook4j.Friend;
 import facebook4j.Movie;
 import facebook4j.User;
@@ -32,6 +28,8 @@ import facebook4j.User;
 public class RegistrationService {
 	@Autowired
 	private ApplicationUserDao appUserRepo;
+	@Autowired
+	private FacebookProfileUpdater fbUpdater;
 
 	private DBCollection rottenQueue;
 
@@ -71,33 +69,13 @@ public class RegistrationService {
 			}
 
 			Set<String> likedMovieNames;
-			try {
-				likedMovieNames = getAllMovieNames(faceApi.getMovies(0));
-			} catch (Exception e) {
-				// throw new FacebookLoginException(
-				// "Error while fetching users movie likes.");
-				likedMovieNames = new HashSet<>();
-			}
 
-			if (appUserRepo.findByFacebookId(facebookId) != null) {
-				ApplicationUser appUser = appUserRepo
-						.findByFacebookId(facebookId);
+			ApplicationUser appUser = appUserRepo.findByFacebookId(facebookId);
+			if (appUser != null) {
 				appUser.setFacebookAccessToken(facebookAccessToken);
+				appUser=fbUpdater.updateUserLikes(appUser);
+				
 
-				if (likedMovieNames != null) {
-					appUser.resetLikedMovies();
-				}
-				MovieNamesContainer movieNamesChecker = MovieNamesContainer
-						.getInstance();
-				System.out.println("Usporedba slicnosti!");
-				for (String movie : likedMovieNames) {
-					String checkedName = movieNamesChecker.getMovieName(movie);
-					System.out.println(movie);
-					System.out.println(checkedName);
-					appUser.addLikedMovie(checkedName);
-					rottenQueue.insert(new BasicDBObject("movieKey",
-							checkedName));
-				}
 				// OVO JE SAMO PRIVREMENO
 				appUser.setName(user.getFirstName());
 				appUser.setSurname(user.getLastName());
@@ -105,6 +83,8 @@ public class RegistrationService {
 				for (ApplicationUser friend : friends) {
 					appUser.addFriend(friend);
 				}
+				appUser.setFacebookAccessToken(facebookAccessToken);
+				appUser.setLastMovieLikesUpdateTS(System.currentTimeMillis() - 1000 * 60);
 				savedUser = appUserRepo.save(appUser);
 				addFriendToAppUser(friends, savedUser);
 				return appUser;
@@ -118,6 +98,13 @@ public class RegistrationService {
 			MovieNamesContainer movieNamesChecker = MovieNamesContainer
 					.getInstance();
 			Set<String> checkedMovieNames = new HashSet<String>();
+			try {
+				likedMovieNames = getAllMovieNames(faceApi.getMovies(0));
+			} catch (Exception e) {
+				System.err.println("Error while fetching liked movies!");
+				likedMovieNames = new HashSet<>();
+			}
+
 			System.out.println("Usporedba slicnosti!");
 
 			for (String movie : likedMovieNames) {
@@ -130,10 +117,10 @@ public class RegistrationService {
 
 			// System.out.println(faceApi.getFriends());
 			// System.out.println(faceApi.getMovies(0));
-
+			long lastFaceUpdate = System.currentTimeMillis() - 1000 * 60;
 			ApplicationUser newUser = new ApplicationUser(accessToken,
 					facebookId, facebookAccessToken, name, surname,
-					checkedMovieNames, new HashSet<String>(),
+					lastFaceUpdate, checkedMovieNames, new HashSet<String>(),
 					new HashSet<String>(), friends);
 			savedUser = appUserRepo.save(newUser);
 

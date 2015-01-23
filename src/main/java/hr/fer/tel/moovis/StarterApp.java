@@ -6,14 +6,19 @@ import java.util.Arrays;
 
 import hr.fer.tel.moovis.names.MovieNamesContainer;
 import hr.fer.tel.moovis.searchers.rotten.RottenCollector;
+import hr.fer.tel.moovis.service.FacebookLikesUpdaterProcess;
 
+import org.apache.catalina.core.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -28,7 +33,7 @@ import com.omertron.rottentomatoesapi.RottenTomatoesException;
  * Created by filippm on 10.11.14..
  */
 @EnableAutoConfiguration
-@ComponentScan
+@ComponentScan(basePackages = "hr.fer.tel")
 @Configuration
 public class StarterApp extends SpringBootServletInitializer {
 
@@ -82,7 +87,26 @@ public class StarterApp extends SpringBootServletInitializer {
 			e.printStackTrace();
 		}
 
-		SpringApplication.run(StarterApp.class, args);
+		ConfigurableApplicationContext con = SpringApplication.run(
+				StarterApp.class, args);
+		System.out.println(con);
+		// pokreni faceupdater i daodaj mu shutdown hook
+		final FacebookLikesUpdaterProcess fbUpdater = con
+				.getBean(FacebookLikesUpdaterProcess.class);
+		final Thread updaterThread = new Thread(fbUpdater);
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				fbUpdater.setRunning(false);
+				try {
+					updaterThread.join();
+					System.out.println("Fbupdater thread finished");
+				} catch (InterruptedException e) {
+					System.out.println("Fbupdater thread fail");
+					e.printStackTrace();
+				}
+			}
+		});
+		updaterThread.start();
 
 		System.out.println(System.getenv());
 		System.out.println(System.getProperties().keySet());

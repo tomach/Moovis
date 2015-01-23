@@ -31,6 +31,7 @@ public class ApplicationUser {
 	private String name;
 	private String surname;
 
+	private long lastMovieLikesUpdateTS;
 	@ElementCollection
 	@CollectionTable(name = "liked_movie_names")
 	private Set<String> likedMovieNames = new HashSet<>();
@@ -49,14 +50,16 @@ public class ApplicationUser {
 
 	public ApplicationUser(String accessToken, String facebookId,
 			String facebookAccessToken, String name, String surname,
-			Set<String> likedMovieNames, Set<String> watchedMovieNames,
-			Set<String> watchList, Set<ApplicationUser> friends) {
+			long lastMovieLikesUpdateTS, Set<String> likedMovieNames,
+			Set<String> watchedMovieNames, Set<String> watchList,
+			Set<ApplicationUser> friends) {
 		super();
 		this.accessToken = accessToken;
 		this.facebookId = facebookId;
 		this.facebookAccessToken = facebookAccessToken;
 		this.name = name;
 		this.surname = surname;
+		this.lastMovieLikesUpdateTS = lastMovieLikesUpdateTS;
 		this.likedMovieNames = likedMovieNames;
 		this.watchedMovieNames = watchedMovieNames;
 		this.friends = friends;
@@ -154,6 +157,14 @@ public class ApplicationUser {
 
 	public String getSurname() {
 		return surname;
+	}
+
+	public long getLastMovieLikesUpdateTS() {
+		return lastMovieLikesUpdateTS;
+	}
+
+	public void setLastMovieLikesUpdateTS(long lastMovieLikesUpdateTS) {
+		this.lastMovieLikesUpdateTS = lastMovieLikesUpdateTS;
 	}
 
 	public void setSurname(String surname) {
