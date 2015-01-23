@@ -52,7 +52,9 @@ public class FacebookProfileUpdater {
 
 				System.out.println(Logger.getLogString(
 						System.currentTimeMillis(),
-						"FacebookLikesUpdater process"));
+						"FacebookLikesUpdater process: User status changed!\nUser:"
+								+ applicationUserLazyLoaded.getName() + " "
+								+ applicationUserLazyLoaded.getSurname()));
 				MovieNamesContainer movieNamesChecker = MovieNamesContainer
 						.getInstance();
 				System.out.println(Logger.getLogString(

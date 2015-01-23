@@ -13,6 +13,8 @@ import hr.fer.tel.moovis.recommendation.RecommendationRecord;
 import hr.fer.tel.moovis.service.RegistrationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,45 +36,40 @@ public class DummyController {
 	@Autowired
 	private RegistrationService regService;
 
-	@RequestMapping(value = "/home", method = RequestMethod.GET)
-	public void facebookLogin() {
-
-		try {
-			regService
-					.registerApplicationUser("CAAHplTHhoNABAFzZBQ8BXJMZCEJCtvPdpf6KY0SeiSlVoN8GITAtLwPRy1OUpOIVGcSZBINZBCpyfM2VurfZBw4SgjeG0NIEJ422wxvYfG14syYrjER6o2RVo4D4vGJqgigbEhSfAhbnstXOyV771jgpdyHGzfcqG9ebXmaUP4EnpDx35SaT32GpmBkiFu7Xte25FtAifeaJxAQg1y2WA");
-		} catch (FacebookLoginException e) {
-			e.printStackTrace();
-		}
+	@RequestMapping(value = "/stalk/users", method = RequestMethod.GET)
+	public ResponseEntity<List<ApplicationUser>> testRec() {
+		return new ResponseEntity<List<ApplicationUser>>(appUserRepo.findAll(),
+				HttpStatus.OK);
 	}
-
-	@RequestMapping(value = "/test_rec", method = RequestMethod.GET)
-	public void testRec() {
-
-		// Damjan
-		// ApplicationUser user = appUserRepo
-		// .findByAccessToken("02eb2504-17f8-33c3-8d25-9325b0235201");
-		// Tomislav
-		ApplicationUser user = appUserRepo
-				.findByAccessToken("5785e725-390c-3f84-8637-d6d12b6598a5");
-
-		List<RecommendationRecord> calculateRecommendation = movieRecOnlyFriend
-				.calculateRecommendation(user);
-		for (RecommendationRecord recommendationRecord : calculateRecommendation) {
-			System.out.println(recommendationRecord.getMovie().getTitle());
-			System.out.println(recommendationRecord.getMovie().getTmdbInfo()
-					.getPhoto());
-		}
-
-	}
-
-	@RequestMapping(value = "/test2_rec_all", method = RequestMethod.GET)
-	public void testRecAll() {
-
-		ApplicationUser user = appUserRepo
-				.findByAccessToken("02eb2504-17f8-33c3-8d25-9325b0235201");
-		movieRecWithFriends.calculateRecommendation(user);
-
-	}
+	// @RequestMapping(value = "/test_rec", method = RequestMethod.GET)
+	// public void testRec() {
+	//
+	// // Damjan
+	// // ApplicationUser user = appUserRepo
+	// // .findByAccessToken("02eb2504-17f8-33c3-8d25-9325b0235201");
+	// // Tomislav
+	// ApplicationUser user = appUserRepo
+	// .findByAccessToken("5785e725-390c-3f84-8637-d6d12b6598a5");
+	//
+	// List<RecommendationRecord> calculateRecommendation = movieRecOnlyFriend
+	// .calculateRecommendation(user);
+	// for (RecommendationRecord recommendationRecord : calculateRecommendation)
+	// {
+	// System.out.println(recommendationRecord.getMovie().getTitle());
+	// System.out.println(recommendationRecord.getMovie().getTmdbInfo()
+	// .getPhoto());
+	// }
+	//
+	// }
+	//
+	// @RequestMapping(value = "/test2_rec_all", method = RequestMethod.GET)
+	// public void testRecAll() {
+	//
+	// ApplicationUser user = appUserRepo
+	// .findByAccessToken("02eb2504-17f8-33c3-8d25-9325b0235201");
+	// movieRecWithFriends.calculateRecommendation(user);
+	//
+	// }
 
 	/*
 	 * @RequestMapping(value = "/movie/{name}", method = RequestMethod.GET)

@@ -52,6 +52,7 @@ public class UserInfoController {
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
 
 		if (user == null) {
+			System.out.println("Unknown user");
 			JSONObject response = new JSONObject();
 			response.put("sucsess", "false");
 			response.put("error", "User not found");
@@ -85,6 +86,8 @@ public class UserInfoController {
 						+ accessToken));
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
 		if (user == null) {
+			System.out.println("Unknown user");
+
 			JSONObject response = new JSONObject();
 			response.put("sucsess", "false");
 			response.put("error", "User not found");
@@ -113,6 +116,8 @@ public class UserInfoController {
 						+ accessToken));
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
 		if (user == null) {
+			System.out.println("Unknown user");
+
 			JSONObject response = new JSONObject();
 			response.put("sucsess", "false");
 			response.put("error", "User not found");
@@ -142,6 +147,8 @@ public class UserInfoController {
 						+ accessToken));
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
 		if (user == null) {
+			System.out.println("Unknown user");
+
 			JSONObject response = new JSONObject();
 			response.put("sucsess", "false");
 			response.put("error", "User not found");
@@ -169,6 +176,8 @@ public class UserInfoController {
 				"GET\t/watchlist?access_token=" + accessToken));
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
 		if (user == null) {
+			System.out.println("Unknown user");
+
 			return new ResponseEntity<List<Movie>>(HttpStatus.BAD_REQUEST);
 		}
 		System.out.println(user.getName() + " " + user.getSurname());
@@ -191,6 +200,8 @@ public class UserInfoController {
 				"GET\t/watchedlist?access_token=" + accessToken));
 		ApplicationUser user = appUserRepo.findByAccessToken(accessToken);
 		if (user == null) {
+			System.out.println("Unknown user");
+
 			return new ResponseEntity<List<Movie>>(HttpStatus.BAD_REQUEST);
 		}
 		System.out.println(user.getName() + " " + user.getSurname());
