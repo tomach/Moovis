@@ -67,9 +67,9 @@ public class FacebookProfileUpdater {
 					rottenQueue.insert(new BasicDBObject("movieKey",
 							checkedName));
 				}
-				applicationUserLazyLoaded.setLastMovieLikesUpdateTS(System
-						.currentTimeMillis() - 1000 * 60);
 			}
+			applicationUserLazyLoaded.setLastMovieLikesUpdateTS(System
+					.currentTimeMillis() - 1000 * 60);
 		} catch (Exception e) {
 			System.out.println(Logger.getLogString(System.currentTimeMillis(),
 					"FacebookLikesUpdater error:" + e.getLocalizedMessage()));
