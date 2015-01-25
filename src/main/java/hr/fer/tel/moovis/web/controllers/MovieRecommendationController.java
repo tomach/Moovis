@@ -50,7 +50,7 @@ public class MovieRecommendationController {
 		if (user == null) {
 			return new ResponseEntity<List<RecommendationRecord>>(
 					new ArrayList<RecommendationRecord>(),
-					HttpStatus.BAD_REQUEST);
+					HttpStatus.UNAUTHORIZED);
 		}
 		System.out.println(user.getName() + " " + user.getSurname());
 
@@ -72,7 +72,9 @@ public class MovieRecommendationController {
 		if (rec != null) {
 			rec = adultFilter(rec);
 		}
-
+		System.out.println(Logger.getLogString(System.currentTimeMillis(),
+				"GET\t/rec?access_token=" + accessToken + "&type=" + type)
+				+ " RESPONSED");
 		return new ResponseEntity<List<RecommendationRecord>>(rec,
 				HttpStatus.OK);
 	}
@@ -83,7 +85,8 @@ public class MovieRecommendationController {
 		for (RecommendationRecord recommendationRecord : rec) {
 			if (recommendationRecord.getMovie().getGenres().contains("Adult")
 					|| recommendationRecord.getMovie().getGenres()
-							.contains("adult")) {
+							.contains("adult")
+					|| recommendationRecord.getMovie().getGenres().isEmpty()) {
 				continue;
 			}
 			newRec.add(recommendationRecord);

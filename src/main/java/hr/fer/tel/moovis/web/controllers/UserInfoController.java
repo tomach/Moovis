@@ -58,7 +58,7 @@ public class UserInfoController {
 			response.put("error", "User not found");
 
 			return new ResponseEntity<String>(response.toString(),
-					HttpStatus.BAD_REQUEST);
+					HttpStatus.UNAUTHORIZED);
 		}
 
 		System.out.println(user.getName() + " " + user.getSurname());
@@ -93,7 +93,7 @@ public class UserInfoController {
 			response.put("error", "User not found");
 
 			return new ResponseEntity<String>(response.toString(),
-					HttpStatus.BAD_REQUEST);
+					HttpStatus.UNAUTHORIZED);
 		}
 		System.out.println(user.getName() + " " + user.getSurname());
 
@@ -123,7 +123,7 @@ public class UserInfoController {
 			response.put("error", "User not found");
 
 			return new ResponseEntity<String>(response.toString(),
-					HttpStatus.BAD_REQUEST);
+					HttpStatus.UNAUTHORIZED);
 		}
 		System.out.println(user.getName() + " " + user.getSurname());
 
@@ -154,7 +154,7 @@ public class UserInfoController {
 			response.put("error", "User not found");
 
 			return new ResponseEntity<String>(response.toString(),
-					HttpStatus.BAD_REQUEST);
+					HttpStatus.UNAUTHORIZED);
 		}
 		System.out.println(user.getName() + " " + user.getSurname());
 
@@ -178,7 +178,7 @@ public class UserInfoController {
 		if (user == null) {
 			System.out.println("Unknown user");
 
-			return new ResponseEntity<List<Movie>>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<List<Movie>>(HttpStatus.UNAUTHORIZED);
 		}
 		System.out.println(user.getName() + " " + user.getSurname());
 
@@ -202,7 +202,7 @@ public class UserInfoController {
 		if (user == null) {
 			System.out.println("Unknown user");
 
-			return new ResponseEntity<List<Movie>>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<List<Movie>>(HttpStatus.UNAUTHORIZED);
 		}
 		System.out.println(user.getName() + " " + user.getSurname());
 

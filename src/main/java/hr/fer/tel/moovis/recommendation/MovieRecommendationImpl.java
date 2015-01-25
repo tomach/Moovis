@@ -29,7 +29,11 @@ public class MovieRecommendationImpl implements MovieRecommendation {
 		Map<Movie, Set<RecommendationRecord>> similarsForLikedMovies = new HashMap<>();
 		// dohvati slične filmove
 
-		for (String likedMovieName : user.getLikedMovieNames()) {
+		Set<String> usersPrefferdMovies = new HashSet<String>(
+				user.getLikedMovieNames());
+		usersPrefferdMovies.addAll(user.getWatchedMovieNames());
+
+		for (String likedMovieName : usersPrefferdMovies) {
 			Movie likedMovie = movieDao.findMovieByName(likedMovieName);
 			if (likedMovie == null) {
 				System.out.println("Nema filma za naslov:" + likedMovieName);
@@ -44,12 +48,11 @@ public class MovieRecommendationImpl implements MovieRecommendation {
 			similarsForLikedMovies.put(likedMovie, similarAsRecords);
 		}
 
-		Set<String> likedMovieNames = user.getLikedMovieNames();
 		// napravi jedan set u kojem su svi filmovi koji kandidiraju
 		Set<RecommendationRecord> allSimilars = new HashSet<>();
 		for (Set<RecommendationRecord> value : similarsForLikedMovies.values()) {
 			for (RecommendationRecord val : value) {
-				if (likedMovieNames.contains(val.getMovie().getTitle())) {
+				if (usersPrefferdMovies.contains(val.getMovie().getTitle())) {
 					continue;
 				} else {
 					allSimilars.add(val);
@@ -76,11 +79,11 @@ public class MovieRecommendationImpl implements MovieRecommendation {
 		List<RecommendationRecord> finalRec = new LinkedList<>(setWithFriends);
 		Collections.sort(finalRec);
 		/*
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
-		for (RecommendationRecord recommendationRecord : finalRec) {
-			System.out.println(recommendationRecord.getMovie().getTitle()
-					+ "\t" + recommendationRecord.getRecScore());
-		}*/
+		 * System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!"); for
+		 * (RecommendationRecord recommendationRecord : finalRec) {
+		 * System.out.println(recommendationRecord.getMovie().getTitle() + "\t"
+		 * + recommendationRecord.getRecScore()); }
+		 */
 
 		return finalRec;
 	}
