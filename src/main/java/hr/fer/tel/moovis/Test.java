@@ -2,6 +2,8 @@ package hr.fer.tel.moovis;
 
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.Cursor;

@@ -65,7 +65,18 @@ public class FacebookLikesUpdaterProcess implements Runnable,
 		List<ApplicationUser> users = appUserDao.findAll();
 
 		for (ApplicationUser applicationUser : users) {
-			fbupdater.updateUserLikes(applicationUser);
+			try {
+				fbupdater.updateUserLikes(applicationUser);
+
+			} catch (Exception e) {
+				System.err.print(Logger.getLogString(
+						System.currentTimeMillis(),
+						"Error occurs while updating facebook movie likes for user:"
+								+ applicationUser.getName() + " "
+								+ applicationUser.getSurname()
+								+ "\nException message:"));
+				e.printStackTrace();
+			}
 		}
 	}
 
