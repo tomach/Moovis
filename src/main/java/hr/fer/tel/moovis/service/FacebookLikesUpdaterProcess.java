@@ -62,7 +62,19 @@ public class FacebookLikesUpdaterProcess implements Runnable,
 	}
 
 	public void updateUsers() {
-		List<ApplicationUser> users = appUserDao.findAll();
+
+		List<ApplicationUser> users = null;
+		try {
+			users = appUserDao.findAll();
+		} catch (Exception e1) {
+			System.err
+					.println(Logger.getLogString(
+							System.currentTimeMillis(),
+							this.getClass().getCanonicalName()
+									+ ": error while appUserDao.findAll. Exception message:"
+									+ e1.getMessage()));
+			return;
+		}
 
 		for (ApplicationUser applicationUser : users) {
 			try {
